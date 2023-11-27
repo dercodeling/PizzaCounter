@@ -43,7 +43,7 @@ import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 var viewModel = MainViewModel()
 
 class MainActivity : ComponentActivity() {
-    fun init(){
+    fun init(){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
         viewModel.addType("Salami")
