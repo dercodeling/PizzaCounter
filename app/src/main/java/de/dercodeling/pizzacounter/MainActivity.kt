@@ -94,7 +94,7 @@ class MainActivity : ComponentActivity() {
                                 FloatingActionButton(
                                     containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                                     elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                                    onClick = { showBottomSheet = true }
+                                    onClick = { showBottomSheet = true // TODO: automatically open keyboard }
                                 ){Icon(Icons.Default.Add, contentDescription = "Add")}
                             }
                         )
