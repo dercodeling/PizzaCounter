@@ -4,7 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,30 +18,42 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TextField
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
-
-var viewModel = MainViewModel()
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    fun init(){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
+
+    fun init(viewModel: MainViewModel){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
         viewModel.addType("Salami")
@@ -49,10 +64,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
-        init()
 
         setContent {
             PizzaCounterTheme {
+                var viewModel by remember { mutableStateOf(MainViewModel()) }
+                //var viewModel = MainViewModel()
+                init(viewModel)
+
+                val sheetState = rememberModalBottomSheetState()
+                val scope = rememberCoroutineScope()
+                var showBottomSheet by remember { mutableStateOf(false) }
+
                 Scaffold(
                     topBar = {
                         CenterAlignedTopAppBar(
@@ -65,106 +87,125 @@ class MainActivity : ComponentActivity() {
                             },
                         )
                     },
-                    floatingActionButton = {
-                        FloatingActionButton(onClick = {
-                            // TODO: Onclick: open bottom sheet with text field and submit button → add new PizzaListItem as well as entry in ViewModel
-                        }) {
-                            Icon(Icons.Default.Add, contentDescription = "Add")
-                        }
+                    bottomBar = {
+                        BottomAppBar (
+                            actions = {/* TODO: Clear count and Clear types buttons (Probably as a clear button that opens a second bottom sheet with the to clearing-variants presented; Optional buttons: sort by) */},
+                            floatingActionButton = {
+                                FloatingActionButton(
+                                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                                    onClick = { showBottomSheet = true }
+                                ){Icon(Icons.Default.Add, contentDescription = "Add")}
+                            }
+                        )
                     }
                 ) { innerPadding ->
-                    LazyColumn(
-                        Modifier.padding(innerPadding)
-                            .fillMaxSize()
-                            //.imePadding()
-                            .padding(0.dp,30.dp,0.dp,0.dp)
-                    ) {
-                        items(viewModel.getSize()) { i ->
-                            PizzaListItem(type = viewModel.getType(i))
+                    PizzaList(viewModel, innerPadding)
+
+                    if (showBottomSheet) {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                showBottomSheet = false
+                            },
+                            sheetState = sheetState,
+                            dragHandle = {}
+                        ) {
+                            var text by remember { mutableStateOf("") }
+
+                            Column (
+                                horizontalAlignment = Alignment.End
+                            ) {
+                                TextField(
+                                    value = text,
+                                    label = { Text("New type") },
+
+                                    singleLine = true,
+                                    onValueChange = { text = it },
+                                    modifier = Modifier.fillMaxWidth().background(Color.Transparent))
+                                TextButton(onClick = {
+                                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                                        if (!sheetState.isVisible) {
+                                            showBottomSheet = false
+                                        }
+                                    }
+                                }) {
+                                    Text("Hide bottom sheet")
+                                }
+                            }
                         }
-                        /*item {
-                            Spacer(
-                                Modifier.windowInsetsBottomHeight(
-                                    WindowInsets.systemBars
-                                )
-                            )
-                        }*/
                     }
                 }
             }
         }
     }
-}
 
-@Composable
-fun PizzaListItem(type: String){
-    Card (
-        Modifier.padding(15.dp,10.dp)
-    ){
-        Row(
-            verticalAlignment = CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                //.background(MaterialTheme.colorScheme.primaryContainer)
-                .padding(25.dp, 15.dp)
-        ){
-            Row (
-                horizontalArrangement = Arrangement.Start,
-                verticalAlignment = CenterVertically,
-            ) {
-                Text( // Quantity
-                    text = viewModel.getQuantity(type).toString(),
-                    color = MaterialTheme.colorScheme.primary,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Text(
-                    text = "×",
-                    color = Color.Gray,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(15.dp)
-                )
-                Text( // Type
-                    text = type,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontSize = 20.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-            Row (
-                horizontalArrangement = Arrangement.End,
-                verticalAlignment = CenterVertically,
-                modifier = Modifier.wrapContentWidth()
-            ) {
-                Button(modifier = Modifier.padding(5.dp),onClick = {
-                    viewModel.changeQuantity(type, 1)
-                }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowUp,contentDescription = null)
-                }
-                Button(onClick = {
-                    viewModel.changeQuantity(type, -1)
-                }) {
-                    Icon(imageVector = Icons.Default.KeyboardArrowDown,contentDescription = null)
-                }
+    @Composable
+    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues){
+
+        LazyColumn(
+            Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
+                .padding(0.dp, 30.dp, 0.dp, 0.dp)
+        ) {
+            items(viewModel.getSize()) { i ->
+                PizzaListItem(viewModel, type = viewModel.getType(i))
             }
         }
     }
-}
 
-@Preview(showBackground = true)
-@Composable
-fun PizzaListPreview() {
-    PizzaCounterTheme {
-        LazyColumn(
-            Modifier
-                .padding(25.dp)
-                .fillMaxSize()
-            /*.padding(25.dp)*/
-        ) {
-            items(viewModel.getSize()){ i ->
-                PizzaListItem(type = viewModel.getType(i))
+    @Composable
+    fun PizzaListItem(viewModel: MainViewModel, type: String){
+        Card (
+            Modifier.padding(15.dp,10.dp)
+        ){
+            Row(
+                verticalAlignment = CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(25.dp, 15.dp)
+            ){
+                Row (
+                    horizontalArrangement = Arrangement.Start,
+                    verticalAlignment = CenterVertically,
+                ) {
+                    Text( // Quantity
+                        text = viewModel.getQuantity(type).toString(),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = "×",
+                        color = Color.Gray,
+                        fontSize = 20.sp,
+                        modifier = Modifier.padding(15.dp)
+                    )
+                    Text( // Type
+                        text = type,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        fontSize = 20.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                }
+                Row (
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = CenterVertically,
+                    modifier = Modifier.wrapContentWidth()
+                ) {
+                    Button(modifier = Modifier.padding(5.dp),onClick = {
+                        viewModel.changeQuantity(type, 1)
+                    }) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowUp,contentDescription = null)
+                    }
+                    Button(onClick = {
+                        viewModel.changeQuantity(type, -1)
+                    }) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowDown,contentDescription = null)
+                    }
+                }
             }
         }
     }
