@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,10 +13,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.automirrored.rounded.Sort
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
@@ -27,12 +28,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,6 +46,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -71,8 +76,6 @@ class MainActivity : ComponentActivity() {
                 //var viewModel = MainViewModel()
                 init(viewModel)
 
-                val sheetState = rememberModalBottomSheetState()
-                val scope = rememberCoroutineScope()
                 var showBottomSheet by remember { mutableStateOf(false) }
 
                 Scaffold(
@@ -89,13 +92,23 @@ class MainActivity : ComponentActivity() {
                     },
                     bottomBar = {
                         BottomAppBar (
-                            actions = {/* TODO: Clear count and Clear types buttons (Probably as a clear button that opens a second bottom sheet with the to clearing-variants presented; Optional buttons: sort by) */},
+
+                            actions = {
+                                IconButton(onClick = { /*TODO: Implement sorting*/ }) {
+                                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort")
+                                }
+                                IconButton(onClick = { /*TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types*/ }) {
+                                    Icon(Icons.Rounded.Clear, contentDescription = "Clear")
+                                }
+                            },
                             floatingActionButton = {
                                 FloatingActionButton(
                                     containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                                     elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                                    onClick = { showBottomSheet = true // TODO: automatically open keyboard }
-                                ){Icon(Icons.Default.Add, contentDescription = "Add")}
+                                    onClick = {
+                                        showBottomSheet = true
+                                    }
+                                ){Icon(Icons.Rounded.Add, contentDescription = "Add")}
                             }
                         )
                     }
@@ -103,37 +116,73 @@ class MainActivity : ComponentActivity() {
                     PizzaList(viewModel, innerPadding)
 
                     if (showBottomSheet) {
-                        ModalBottomSheet(
-                            onDismissRequest = {
-                                showBottomSheet = false
-                            },
-                            sheetState = sheetState,
-                            dragHandle = {}
-                        ) {
-                            var text by remember { mutableStateOf("") }
+                        AddTypeBottomSheet({showBottomSheet = false}, viewModel)
+                    }
+                }
+            }
+        }
+    }
 
-                            Column (
-                                horizontalAlignment = Alignment.End
-                            ) {
-                                TextField(
-                                    value = text,
-                                    label = { Text("New type") },
+    @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun AddTypeBottomSheet(onDissmiss: () -> Unit, viewModel: MainViewModel){
+        val sheetState = rememberModalBottomSheetState()
+        val scope = rememberCoroutineScope()
 
-                                    singleLine = true,
-                                    onValueChange = { text = it },
-                                    modifier = Modifier.fillMaxWidth().background(Color.Transparent))
-                                TextButton(onClick = {
-                                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                                        if (!sheetState.isVisible) {
-                                            showBottomSheet = false
-                                        }
-                                    }
-                                }) {
-                                    Text("Hide bottom sheet")
-                                }
-                            }
+
+        ModalBottomSheet(
+            onDismissRequest = { onDissmiss() },
+            sheetState = sheetState,
+            dragHandle = {}
+        ) {
+            Column (
+                horizontalAlignment = Alignment.End
+            ) {
+                var textFieldValue by remember { mutableStateOf("") }
+                val textFieldFocusRequester = FocusRequester()
+
+                fun closeAndAddPizzaType(){
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            onDissmiss()
                         }
                     }
+
+                    viewModel.addType(textFieldValue)
+                }
+
+                TextField(
+                    value = textFieldValue,
+                    placeholder = { Text("New type") },
+
+                    singleLine = true,
+                    onValueChange = { textFieldValue = it },
+
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .focusRequester(textFieldFocusRequester)
+                        .padding(10.dp),
+
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent
+                    ),
+
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            closeAndAddPizzaType()
+                        }
+                    )
+                )
+
+                /*LaunchedEffect(Unit) { // Potential improvement: automatically open keyboard with this and deal with juttering animation (keyboard overlaps bottom sheet for a moment )
+                    textFieldFocusRequester.requestFocus()
+                }*/
+
+                TextButton(onClick = { closeAndAddPizzaType() }) {
+                    Text("Add")
                 }
             }
         }
@@ -169,6 +218,7 @@ class MainActivity : ComponentActivity() {
                 Row (
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = CenterVertically,
+                    modifier = Modifier.weight(1f)
                 ) {
                     Text( // Quantity
                         text = viewModel.getQuantity(type).toString(),
@@ -198,12 +248,12 @@ class MainActivity : ComponentActivity() {
                     Button(modifier = Modifier.padding(5.dp),onClick = {
                         viewModel.changeQuantity(type, 1)
                     }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowUp,contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Add,contentDescription = "Increase")
                     }
                     Button(onClick = {
                         viewModel.changeQuantity(type, -1)
                     }) {
-                        Icon(imageVector = Icons.Default.KeyboardArrowDown,contentDescription = null)
+                        Icon(imageVector = Icons.Rounded.Remove,contentDescription = "Decrease")
                     }
                 }
             }
