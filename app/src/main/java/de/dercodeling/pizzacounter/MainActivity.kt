@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
@@ -50,6 +51,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,7 +60,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    fun init(viewModel: MainViewModel){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
+    private fun init(viewModel: MainViewModel){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
         viewModel.addType("Salami")
@@ -72,11 +74,13 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             PizzaCounterTheme {
-                var viewModel by remember { mutableStateOf(MainViewModel()) }
+                val viewModel by remember { mutableStateOf(MainViewModel()) }
                 //var viewModel = MainViewModel()
                 init(viewModel)
 
-                var showBottomSheet by remember { mutableStateOf(false) }
+                var showAddTypeBottomSheet by remember { mutableStateOf(false) }
+                var showSortBottomSheet by remember { mutableStateOf(false) }
+                var showClearBottomSheet by remember { mutableStateOf(false) }
 
                 Scaffold(
                     topBar = {
@@ -94,10 +98,10 @@ class MainActivity : ComponentActivity() {
                         BottomAppBar (
 
                             actions = {
-                                IconButton(onClick = { /*TODO: Implement sorting*/ }) {
+                                IconButton(onClick = { showSortBottomSheet = true }) {
                                     Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort")
                                 }
-                                IconButton(onClick = { /*TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types*/ }) {
+                                IconButton(onClick = { showClearBottomSheet = true }) {
                                     Icon(Icons.Rounded.Clear, contentDescription = "Clear")
                                 }
                             },
@@ -106,7 +110,7 @@ class MainActivity : ComponentActivity() {
                                     containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                                     elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
                                     onClick = {
-                                        showBottomSheet = true
+                                        showAddTypeBottomSheet = true
                                     }
                                 ){Icon(Icons.Rounded.Add, contentDescription = "Add")}
                             }
@@ -115,9 +119,17 @@ class MainActivity : ComponentActivity() {
                 ) { innerPadding ->
                     PizzaList(viewModel, innerPadding)
 
-                    if (showBottomSheet) {
-                        AddTypeBottomSheet({showBottomSheet = false}, viewModel)
+                    if (showAddTypeBottomSheet) {
+                        AddTypeBottomSheet({showAddTypeBottomSheet = false}, viewModel)
                     }
+
+                    /*if (showSortBottomSheet) { // TODO: Implement sorting
+                        SortBottomSheet({showSortBottomSheet = false}, viewModel)
+                    }*/
+
+                    /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
+                        ClearBottomSheet({showClearBottomSheet = false}, viewModel)
+                    }*/
                 }
             }
         }
@@ -125,13 +137,13 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun AddTypeBottomSheet(onDissmiss: () -> Unit, viewModel: MainViewModel){
+    fun AddTypeBottomSheet(onDismiss: () -> Unit, viewModel: MainViewModel){
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
 
         ModalBottomSheet(
-            onDismissRequest = { onDissmiss() },
+            onDismissRequest = { onDismiss() },
             sheetState = sheetState,
             dragHandle = {}
         ) {
@@ -144,7 +156,7 @@ class MainActivity : ComponentActivity() {
                 fun closeAndAddPizzaType(){
                     scope.launch { sheetState.hide() }.invokeOnCompletion {
                         if (!sheetState.isVisible) {
-                            onDissmiss()
+                            onDismiss()
                         }
                     }
 
@@ -170,6 +182,10 @@ class MainActivity : ComponentActivity() {
                         unfocusedIndicatorColor = Color.Transparent
                     ),
 
+                    keyboardOptions = KeyboardOptions(
+                        capitalization = KeyboardCapitalization.Sentences
+                    ),
+
                     keyboardActions = KeyboardActions(
                         onDone = {
                             closeAndAddPizzaType()
@@ -177,7 +193,7 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
-                /*LaunchedEffect(Unit) { // Potential improvement: automatically open keyboard with this and deal with juttering animation (keyboard overlaps bottom sheet for a moment )
+                /*LaunchedEffect(Unit) { // Potential improvement: automatically open keyboard with this and deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a moment )
                     textFieldFocusRequester.requestFocus()
                 }*/
 
