@@ -128,7 +128,7 @@ class MainActivity : ComponentActivity() {
                     }*/
 
                     /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
-                        ClearBottomSheet({showClearBottomSheet = false}, viewModel)
+                        ClearBottomSheet({showClearBottomSheet = false}, viewModel) // TODO: Maybe try closing keyboard here to prevent it from staying visible so long
                     }*/
                 }
             }
