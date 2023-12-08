@@ -32,6 +32,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -39,6 +40,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -60,7 +62,7 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private fun init(viewModel: MainViewModel){ // TODO: Work with remember keyword to hopefully preserve value across recreation (Tutorial 34:06)
+    private fun init(viewModel: MainViewModel){
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
         viewModel.addType("Salami")
@@ -117,18 +119,24 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    PizzaList(viewModel, innerPadding)
+                    var sortBy by remember{ mutableStateOf("Type") }
+
+                    PizzaList(viewModel, sortBy, innerPadding)
 
                     if (showAddTypeBottomSheet) {
-                        AddTypeBottomSheet({showAddTypeBottomSheet = false}, viewModel)
+                        AddTypeBottomSheet({ showAddTypeBottomSheet = false }, viewModel)
                     }
 
-                    /*if (showSortBottomSheet) { // TODO: Implement sorting
-                        SortBottomSheet({showSortBottomSheet = false}, viewModel)
-                    }*/
+                    if (showSortBottomSheet) {
+                        val onDismiss : (String) -> Unit = {
+                            showSortBottomSheet = false
+                            sortBy = it
+                        }
+                        SortBottomSheet(onDismiss, sortBy)
+                    }
 
                     /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
-                        ClearBottomSheet({showClearBottomSheet = false}, viewModel) // TODO: Maybe try closing keyboard here to prevent it from staying visible so long
+                        ClearBottomSheet({showClearBottomSheet = false}, viewModel)
                     }*/
                 }
             }
@@ -141,7 +149,6 @@ class MainActivity : ComponentActivity() {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
-
         ModalBottomSheet(
             onDismissRequest = { onDismiss() },
             sheetState = sheetState,
@@ -152,15 +159,23 @@ class MainActivity : ComponentActivity() {
             ) {
                 var textFieldValue by remember { mutableStateOf("") }
                 val textFieldFocusRequester = FocusRequester()
+                //val focusManager = LocalFocusManager.current
 
                 fun closeAndAddPizzaType(){
-                    scope.launch { sheetState.hide() }.invokeOnCompletion {
-                        if (!sheetState.isVisible) {
-                            onDismiss()
-                        }
-                    }
+                    if(textFieldValue.isNotEmpty()) {
+                        //focusManager.clearFocus()
 
-                    viewModel.addType(textFieldValue)
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                onDismiss()
+                            }
+                        }
+
+                        viewModel.addType(textFieldValue)
+                    }else{
+                        print("Empty type was not added.")
+                        // TODO: Show snack-bar with empty-type-warning
+                    }
                 }
 
                 TextField(
@@ -193,9 +208,9 @@ class MainActivity : ComponentActivity() {
                     )
                 )
 
-                /*LaunchedEffect(Unit) { // Potential improvement: automatically open keyboard with this and deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a moment )
+                LaunchedEffect(Unit) {
                     textFieldFocusRequester.requestFocus()
-                }*/
+                }
 
                 TextButton(onClick = { closeAndAddPizzaType() }) {
                     Text("Add")
@@ -205,8 +220,56 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues){
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun SortBottomSheet(onDismiss: (sortBy: String) -> Unit, currentSorting: String){
+        val sheetState = rememberModalBottomSheetState()
+        val scope = rememberCoroutineScope()
 
+        var sortBy = currentSorting
+        println("currently: $sortBy")
+
+        ModalBottomSheet(
+            onDismissRequest = { onDismiss(sortBy) },
+            sheetState = sheetState,
+            dragHandle = {}
+        ) {
+            Column (
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier.padding(30.dp)
+            ) {
+                Column ( verticalArrangement = Arrangement.SpaceEvenly) {
+                    fun closeAndSetSort(){
+                        scope.launch { sheetState.hide() }.invokeOnCompletion {
+                            if (!sheetState.isVisible) {
+                                onDismiss(sortBy)
+                            }
+                        }
+                    }
+
+                    Text("Sort by:")
+
+                    val options = listOf<String>("Type","Quantity")
+
+                    for(option in options){
+                        Row (
+                            verticalAlignment = CenterVertically
+                        ){
+                            val optionText = option
+
+                            RadioButton(selected = (sortBy == optionText), onClick = {
+                                sortBy = optionText
+                                closeAndSetSort()
+                            })
+                            Text(optionText)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun PizzaList(viewModel: MainViewModel, sortBy: String, innerPadding: PaddingValues){
         LazyColumn(
             Modifier
                 .padding(innerPadding)
@@ -214,6 +277,7 @@ class MainActivity : ComponentActivity() {
                 .padding(0.dp, 30.dp, 0.dp, 0.dp)
         ) {
             items(viewModel.getSize()) { i ->
+                viewModel.sortBy(sortBy)
                 PizzaListItem(viewModel, type = viewModel.getType(i))
             }
         }

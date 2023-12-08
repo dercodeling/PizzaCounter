@@ -1,11 +1,13 @@
 package de.dercodeling.pizzacounter
 
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
     //var pizzasMap = mutableMapOf<String, Int>()
-    var pizzasMap = mutableStateMapOf<String, Int>()
+    var pizzasMap by mutableStateOf(sortedMapOf<String, Int>())
 
     fun getSize() : Int{
         return pizzasMap.size
@@ -25,5 +27,10 @@ class MainViewModel : ViewModel() {
     }
     fun addType(type: String) {
         pizzasMap[type] = 0
+    }
+
+    fun sortBy(sortBy: String){
+        // TODO: Implement sorting
+        //pizzasMap.toSortedMap()
     }
 }
