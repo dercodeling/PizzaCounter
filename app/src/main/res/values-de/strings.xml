@@ -11,4 +11,5 @@
     <string name="button_increase">Erhöhen</string>
     <string name="button_decrease">Verringern</string>
     <string name="hint_new_type">Neue Sorte</string>
+    <string name="button_settings">Einstellungen</string>
 </resources>

@@ -10,5 +10,6 @@
     <string name="button_increase">Increase</string>
     <string name="button_decrease">Decrease</string>
     <string name="hint_new_type">New type</string>
+    <string name="button_settings">Settings</string>
 
 </resources>

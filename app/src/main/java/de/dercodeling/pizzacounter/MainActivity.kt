@@ -23,6 +23,7 @@ import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
@@ -101,6 +102,12 @@ class MainActivity : ComponentActivity() {
                                     overflow = TextOverflow.Ellipsis,
                                     fontWeight = FontWeight.Bold)
                             },
+                            actions = {
+                                IconButton(onClick = { /*TODO: Create settings dialog*/ }) {
+                                    Icon(Icons.Rounded.Settings, contentDescription = getString(R.string.button_settings))
+                                }
+                            }
+
                         )
                     },
                     bottomBar = {
@@ -258,11 +265,12 @@ class MainActivity : ComponentActivity() {
                     for(option in options){
                         Row (
                             verticalAlignment = CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier
+                                .fillMaxWidth()
                                 .clip(RoundedCornerShape(40))
                                 .clickable {
-                                closeAndSetSort(options.indexOf(option))
-                            }
+                                    closeAndSetSort(options.indexOf(option))
+                                }
                         ){
                             RadioButton(selected = (currentSorting == options.indexOf(option)), onClick = {
                                 closeAndSetSort(options.indexOf(option))
