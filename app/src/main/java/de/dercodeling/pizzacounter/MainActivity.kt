@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -62,6 +63,8 @@ import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
+    private val viewModel by viewModels<MainViewModel>()
+
     private fun init(viewModel: MainViewModel){
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
@@ -75,14 +78,15 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            PizzaCounterTheme {
-                val viewModel by remember { mutableStateOf(MainViewModel()) }
-                //var viewModel = MainViewModel()
-                init(viewModel)
 
+            PizzaCounterTheme {
                 var showAddTypeBottomSheet by remember { mutableStateOf(false) }
                 var showSortBottomSheet by remember { mutableStateOf(false) }
                 var showClearBottomSheet by remember { mutableStateOf(false) }
+
+                if(viewModel.getSize()==0){
+                    init(viewModel)
+                }
 
                 Scaffold(
                     topBar = {
@@ -119,24 +123,23 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    var sortBy by remember{ mutableStateOf("Type") }
-
-                    PizzaList(viewModel, sortBy, innerPadding)
+                    PizzaList(viewModel, viewModel.getSortBy(), innerPadding)
 
                     if (showAddTypeBottomSheet) {
-                        AddTypeBottomSheet({ showAddTypeBottomSheet = false }, viewModel)
+                        val onDismiss: () -> Unit = { showAddTypeBottomSheet = false }
+                        AddTypeBottomSheet(onDismiss)
                     }
 
                     if (showSortBottomSheet) {
                         val onDismiss : (String) -> Unit = {
                             showSortBottomSheet = false
-                            sortBy = it
+                            viewModel.setSortBy(it)
                         }
-                        SortBottomSheet(onDismiss, sortBy)
+                        SortBottomSheet(onDismiss, viewModel.getSortBy())
                     }
 
                     /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
-                        ClearBottomSheet({showClearBottomSheet = false}, viewModel)
+                        ClearBottomSheet({showClearBottomSheet = false})
                     }*/
                 }
             }
@@ -145,7 +148,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun AddTypeBottomSheet(onDismiss: () -> Unit, viewModel: MainViewModel){
+    fun AddTypeBottomSheet(onDismiss: () -> Unit){
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
@@ -226,7 +229,6 @@ class MainActivity : ComponentActivity() {
         val scope = rememberCoroutineScope()
 
         var sortBy = currentSorting
-        println("currently: $sortBy")
 
         ModalBottomSheet(
             onDismissRequest = { onDismiss(sortBy) },
@@ -248,19 +250,17 @@ class MainActivity : ComponentActivity() {
 
                     Text("Sort by:")
 
-                    val options = listOf<String>("Type","Quantity")
+                    val options = listOf("Type","Quantity")
 
                     for(option in options){
                         Row (
                             verticalAlignment = CenterVertically
                         ){
-                            val optionText = option
-
-                            RadioButton(selected = (sortBy == optionText), onClick = {
-                                sortBy = optionText
+                            RadioButton(selected = (sortBy == option), onClick = {
+                                sortBy = option
                                 closeAndSetSort()
                             })
-                            Text(optionText)
+                            Text(option)
                         }
                     }
                 }
@@ -276,9 +276,11 @@ class MainActivity : ComponentActivity() {
                 .fillMaxSize()
                 .padding(0.dp, 30.dp, 0.dp, 0.dp)
         ) {
-            items(viewModel.getSize()) { i ->
-                viewModel.sortBy(sortBy)
-                PizzaListItem(viewModel, type = viewModel.getType(i))
+            viewModel.setSortBy(sortBy)
+            val types = viewModel.getTypes().toList()
+
+            items(types.size) { i ->
+                PizzaListItem(viewModel, type = types[i])
             }
         }
     }
