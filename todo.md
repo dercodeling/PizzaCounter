@@ -3,16 +3,12 @@
 ## Features
 
 ### Functionality
-- Clean up MVVM architecture
-
 - Persistence 
   - Implement database
   - Auto-save list on change
 
 - Clear count functionality
 - Clear types functionality
-
-- Sorting functionality
 
 ### UI
 - Improve AddTypeBottomSheet's animations

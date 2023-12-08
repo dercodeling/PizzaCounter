@@ -6,15 +6,29 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
 class MainViewModel : ViewModel() {
-    private var pizzasMap by mutableStateOf(sortedMapOf<String, Int>())
+    private var pizzasMap by mutableStateOf(mutableMapOf<String, Int>())
 
-    private var sortingBy by mutableStateOf("type")
+    private var sortingBy by mutableStateOf(0)
 
     fun getSize() : Int{
         return pizzasMap.size
     }
-    fun getTypes() : Set<String> {
-        return pizzasMap.keys
+    fun getTypes() : MutableList<String> {
+        var keys = mutableListOf<String>()
+
+        if(sortingBy>0){
+            var pizzasList = pizzasMap.toList().sortedBy { (_, value) -> value }
+
+            if(sortingBy == 2) pizzasList = pizzasList.reversed()
+
+            for(pizza in pizzasList){
+                keys.add(pizza.first)
+            }
+        }else {
+            keys = pizzasMap.toSortedMap().keys.toList().toMutableList()
+        }
+
+        return keys
     }
     fun getQuantity(type: String) : Int? {
         return pizzasMap[type]
@@ -26,6 +40,7 @@ class MainViewModel : ViewModel() {
     fun changeQuantity(type: String, change: Int){
         val current = pizzasMap[type]
         val newQuantity = current?.plus(change)
+
         if (newQuantity != null) {
             if(newQuantity>=0) {
                 // Setting the quantity directly with pizzasMap[type]=newQuantity ist not sufficient to trigger reloading of UI,
@@ -37,13 +52,10 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    fun getSortBy() : String{
+    fun getSortBy() : Int{
         return sortingBy
     }
-    fun setSortBy(newSortBy: String){
+    fun setSortBy(newSortBy: Int){
         sortingBy = newSortBy
-
-        // TODO: Implement sorting
-        //pizzasMap.toSortedMap()
     }
 }

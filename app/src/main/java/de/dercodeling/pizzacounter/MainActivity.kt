@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -50,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
@@ -102,9 +105,8 @@ class MainActivity : ComponentActivity() {
                     },
                     bottomBar = {
                         BottomAppBar (
-
                             actions = {
-                                IconButton(onClick = { showSortBottomSheet = true }) {
+                                IconButton(onClick = { showSortBottomSheet = true }, modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp)) {
                                     Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort")
                                 }
                                 IconButton(onClick = { showClearBottomSheet = true }) {
@@ -123,7 +125,8 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                 ) { innerPadding ->
-                    PizzaList(viewModel, viewModel.getSortBy(), innerPadding)
+
+                    PizzaList(viewModel, innerPadding)
 
                     if (showAddTypeBottomSheet) {
                         val onDismiss: () -> Unit = { showAddTypeBottomSheet = false }
@@ -131,7 +134,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     if (showSortBottomSheet) {
-                        val onDismiss : (String) -> Unit = {
+                        val onDismiss : (Int) -> Unit = {
                             showSortBottomSheet = false
                             viewModel.setSortBy(it)
                         }
@@ -224,14 +227,20 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun SortBottomSheet(onDismiss: (sortBy: String) -> Unit, currentSorting: String){
+    fun SortBottomSheet(onDismiss: (sortBy: Int) -> Unit, currentSorting: Int){
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
-        var sortBy = currentSorting
+        fun closeAndSetSort(sortBy: Int){
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    onDismiss(sortBy)
+                }
+            }
+        }
 
         ModalBottomSheet(
-            onDismissRequest = { onDismiss(sortBy) },
+            onDismissRequest = { closeAndSetSort(currentSorting) },
             sheetState = sheetState,
             dragHandle = {}
         ) {
@@ -240,25 +249,23 @@ class MainActivity : ComponentActivity() {
                 modifier = Modifier.padding(30.dp)
             ) {
                 Column ( verticalArrangement = Arrangement.SpaceEvenly) {
-                    fun closeAndSetSort(){
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onDismiss(sortBy)
-                            }
-                        }
-                    }
 
-                    Text("Sort by:")
 
-                    val options = listOf("Type","Quantity")
+                    Text("Sort by:") // TODO: Stylize (e.g. like in Google Tasks)
+
+                    val options = listOf("Type","Quantity (ascending)","Quantity (descending)")
 
                     for(option in options){
                         Row (
-                            verticalAlignment = CenterVertically
+                            verticalAlignment = CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                                .clip(RoundedCornerShape(40))
+                                .clickable {
+                                closeAndSetSort(options.indexOf(option))
+                            }
                         ){
-                            RadioButton(selected = (sortBy == option), onClick = {
-                                sortBy = option
-                                closeAndSetSort()
+                            RadioButton(selected = (currentSorting == options.indexOf(option)), onClick = {
+                                closeAndSetSort(options.indexOf(option))
                             })
                             Text(option)
                         }
@@ -269,15 +276,14 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaList(viewModel: MainViewModel, sortBy: String, innerPadding: PaddingValues){
+    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues){
         LazyColumn(
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(0.dp, 30.dp, 0.dp, 0.dp)
         ) {
-            viewModel.setSortBy(sortBy)
-            val types = viewModel.getTypes().toList()
+            val types = viewModel.getTypes()
 
             items(types.size) { i ->
                 PizzaListItem(viewModel, type = types[i])
