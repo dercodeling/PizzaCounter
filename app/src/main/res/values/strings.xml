@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">PizzaCounter</string>
+    <string name="button_sort">Sort</string>
+    <string name="button_clear">Clear</string>
+    <string name="button_add">Add</string>
+    <string name="heading_sort">Sort by:</string>
+    <string name="sorting_option_type">Type</string>
+    <string name="sorting_option_quantity_ascending">Quantity (ascending)</string>
+    <string name="sorting_option_quantity_descending">Quantity (descending)</string>
+    <string name="button_increase">Increase</string>
+    <string name="button_decrease">Decrease</string>
+    <string name="hint_new_type">New type</string>
+
 </resources>

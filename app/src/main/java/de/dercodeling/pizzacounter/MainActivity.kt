@@ -107,10 +107,10 @@ class MainActivity : ComponentActivity() {
                         BottomAppBar (
                             actions = {
                                 IconButton(onClick = { showSortBottomSheet = true }, modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp)) {
-                                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = "Sort")
+                                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = getString(R.string.button_sort))
                                 }
                                 IconButton(onClick = { showClearBottomSheet = true }) {
-                                    Icon(Icons.Rounded.Clear, contentDescription = "Clear")
+                                    Icon(Icons.Rounded.Clear, contentDescription = getString(R.string.button_clear))
                                 }
                             },
                             floatingActionButton = {
@@ -120,7 +120,7 @@ class MainActivity : ComponentActivity() {
                                     onClick = {
                                         showAddTypeBottomSheet = true
                                     }
-                                ){Icon(Icons.Rounded.Add, contentDescription = "Add")}
+                                ){Icon(Icons.Rounded.Add, contentDescription = getString(R.string.button_add))}
                             }
                         )
                     }
@@ -186,7 +186,7 @@ class MainActivity : ComponentActivity() {
 
                 TextField(
                     value = textFieldValue,
-                    placeholder = { Text("New type") },
+                    placeholder = { Text(getString(R.string.hint_new_type)) },
 
                     singleLine = true,
                     onValueChange = { textFieldValue = it },
@@ -219,7 +219,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 TextButton(onClick = { closeAndAddPizzaType() }) {
-                    Text("Add")
+                    Text(getString(R.string.button_add))
                 }
             }
         }
@@ -251,9 +251,9 @@ class MainActivity : ComponentActivity() {
                 Column ( verticalArrangement = Arrangement.SpaceEvenly) {
 
 
-                    Text("Sort by:") // TODO: Stylize (e.g. like in Google Tasks)
+                    Text(getString(R.string.heading_sort)) // TODO: Stylize (e.g. like in Google Tasks)
 
-                    val options = listOf("Type","Quantity (ascending)","Quantity (descending)")
+                    val options = listOf(getString(R.string.sorting_option_type),getString(R.string.sorting_option_quantity_ascending),getString(R.string.sorting_option_quantity_descending))
 
                     for(option in options){
                         Row (
@@ -336,12 +336,12 @@ class MainActivity : ComponentActivity() {
                     Button(modifier = Modifier.padding(5.dp),onClick = {
                         viewModel.changeQuantity(type, 1)
                     }) {
-                        Icon(imageVector = Icons.Rounded.Add,contentDescription = "Increase")
+                        Icon(imageVector = Icons.Rounded.Add,contentDescription = getString(R.string.button_increase))
                     }
                     Button(onClick = {
                         viewModel.changeQuantity(type, -1)
                     }) {
-                        Icon(imageVector = Icons.Rounded.Remove,contentDescription = "Decrease")
+                        Icon(imageVector = Icons.Rounded.Remove,contentDescription = getString(R.string.button_decrease))
                     }
                 }
             }

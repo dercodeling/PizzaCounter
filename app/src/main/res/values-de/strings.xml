@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PizzaCounter</string>
+    <string name="button_sort">Sortieren</string>
+    <string name="button_clear">Löschen</string>
+    <string name="button_add">Hinzufügen</string>
+    <string name="heading_sort">Sortieren nach:</string>
+    <string name="sorting_option_type">Sorte</string>
+    <string name="sorting_option_quantity_ascending">Anzahl (aufsteigend)</string>
+    <string name="sorting_option_quantity_descending">Anzahl (absteigend)</string>
+    <string name="button_increase">Erhöhen</string>
+    <string name="button_decrease">Verringern</string>
+    <string name="hint_new_type">Neue Sorte</string>
+</resources>
