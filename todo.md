@@ -1,5 +1,8 @@
 # Todo
 
+## Fixes
+- Quantity descending results in inverse-alphabetical order for types with same quantity 
+
 ## Features
 
 ### Functionality
