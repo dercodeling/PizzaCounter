@@ -1,7 +1,8 @@
 # Todo
 
 ## Fixes
-- Quantity descending results in inverse-alphabetical order for types with same quantity 
+- Sorting by quantity descending results in inverse-alphabetical order for types with same quantity 
+- Add a spacer at the bottom of the LazyColumn so the list can scroll further up (to make it more reachable) => increase "padding" on fully scrolled down list
 
 ## Features
 
