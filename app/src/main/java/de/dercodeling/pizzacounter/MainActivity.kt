@@ -82,84 +82,102 @@ class MainActivity : ComponentActivity() {
         viewModel.addType("Quattro stagioni")*/
     }
 
-    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 
         setContent {
+            // Create PizzaCounterTheme with or without darkMode-Boolean depending whether system theming is followed
 
-            PizzaCounterTheme {
-                var showAddTypeBottomSheet by remember { mutableStateOf(false) }
-                var showSortBottomSheet by remember { mutableStateOf(false) }
-                var showClearBottomSheet by remember { mutableStateOf(false) }
+            val themeSetting = viewModel.getTheme()
 
-                if(viewModel.getSize()==0){
-                    init(viewModel)
-                }
-
-                Scaffold(
-                    topBar = {
-                        CenterAlignedTopAppBar(
-                            title = {
-                                Text(
-                                    "🍕 " + getString(R.string.app_name),
-                                    maxLines = 1,
-                                    overflow = TextOverflow.Ellipsis,
-                                    fontWeight = FontWeight.Bold)
-                            },
-                            actions = {
-                                IconButton(onClick = { /*TODO: Create settings dialog*/ }) {
-                                    Icon(Icons.Rounded.Settings, contentDescription = getString(R.string.button_settings))
-                                }
-                            }
-
-                        )
-                    },
-                    bottomBar = {
-                        BottomAppBar (
-                            actions = {
-                                IconButton(onClick = { showSortBottomSheet = true }, modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp)) {
-                                    Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = getString(R.string.button_sort))
-                                }
-                                IconButton(onClick = { showClearBottomSheet = true }) {
-                                    Icon(Icons.Rounded.Clear, contentDescription = getString(R.string.button_clear))
-                                }
-                            },
-                            floatingActionButton = {
-                                FloatingActionButton(
-                                    containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                                    elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
-                                    onClick = {
-                                        showAddTypeBottomSheet = true
-                                    }
-                                ){Icon(Icons.Rounded.Add, contentDescription = getString(R.string.button_add))}
-                            }
-                        )
-                    }
-                ) { innerPadding ->
-
-                    PizzaList(viewModel, innerPadding)
-
-                    if (showAddTypeBottomSheet) {
-                        val onDismiss: () -> Unit = { showAddTypeBottomSheet = false }
-                        AddTypeBottomSheet(onDismiss)
-                    }
-
-                    if (showSortBottomSheet) {
-                        val onDismiss : (Int) -> Unit = {
-                            showSortBottomSheet = false
-                            viewModel.setSortBy(it)
-                        }
-                        SortBottomSheet(onDismiss, viewModel.getSortBy())
-                    }
-
-                    /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
-                        ClearBottomSheet({showClearBottomSheet = false})
-                    }*/
+            if(themeSetting.isFollowSystem) {
+                PizzaCounterTheme {
+                    PizzaCounterActivity()
                 }
             }
+            else {
+                PizzaCounterTheme ( darkTheme = themeSetting.isDark ){
+                    PizzaCounterActivity()
+                }
+            }
+
+        }
+    }
+
+    @Composable
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun PizzaCounterActivity(){
+        var showAddTypeBottomSheet by remember { mutableStateOf(false) }
+        var showSortBottomSheet by remember { mutableStateOf(false) }
+        var showClearBottomSheet by remember { mutableStateOf(false) }
+
+        if(viewModel.getSize()==0){
+            init(viewModel)
+        }
+
+        Scaffold(
+            topBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "🍕 " + getString(R.string.app_name),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                            fontWeight = FontWeight.Bold)
+                    },
+                    actions = {
+                        IconButton(onClick = {
+                            //TODO: Create settings page
+                        }) {
+                            Icon(Icons.Rounded.Settings, contentDescription = getString(R.string.button_settings))
+                        }
+                    }
+
+                )
+            },
+            bottomBar = {
+                BottomAppBar (
+                    actions = {
+                        IconButton(onClick = { showSortBottomSheet = true }, modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp)) {
+                            Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = getString(R.string.button_sort))
+                        }
+                        IconButton(onClick = { showClearBottomSheet = true }) {
+                            Icon(Icons.Rounded.Clear, contentDescription = getString(R.string.button_clear))
+                        }
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                            onClick = {
+                                showAddTypeBottomSheet = true
+                            }
+                        ){Icon(Icons.Rounded.Add, contentDescription = getString(R.string.button_add))}
+                    }
+                )
+            }
+        ) { innerPadding ->
+
+            PizzaList(viewModel, innerPadding)
+
+            if (showAddTypeBottomSheet) {
+                val onDismiss: () -> Unit = { showAddTypeBottomSheet = false }
+                AddTypeBottomSheet(onDismiss)
+            }
+
+            if (showSortBottomSheet) {
+                val onDismiss : (Int) -> Unit = {
+                    showSortBottomSheet = false
+                    viewModel.setSortBy(it)
+                }
+                SortBottomSheet(onDismiss, viewModel.getSortBy())
+            }
+
+            /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
+                ClearBottomSheet({showClearBottomSheet = false})
+            }*/
         }
     }
 

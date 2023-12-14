@@ -5,10 +5,32 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 
+data class ThemeSetting(
+    val isFollowSystem: Boolean = true,
+    val isDark: Boolean = false
+)
+
 class MainViewModel : ViewModel() {
+    private var themeSetting by mutableStateOf(ThemeSetting())
+
     private var pizzasMap by mutableStateOf(mutableMapOf<String, Int>())
 
     private var sortingBy by mutableStateOf(0)
+
+    // THEME
+
+    fun getTheme() : ThemeSetting {
+        return themeSetting
+    }
+
+    fun setTheme(
+        isFollowSystem: Boolean,
+        isDark: Boolean
+    ){
+        themeSetting = ThemeSetting(isFollowSystem = isFollowSystem, isDark = isDark)
+    }
+
+    // LIST LOGIC
 
     fun getSize() : Int{
         return pizzasMap.size
@@ -66,6 +88,8 @@ class MainViewModel : ViewModel() {
             }
         }
     }
+
+    // SORTING
 
     fun getSortBy() : Int{
         return sortingBy
