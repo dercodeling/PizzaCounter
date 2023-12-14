@@ -16,15 +16,30 @@ class MainViewModel : ViewModel() {
     fun getTypes() : MutableList<String> {
         var keys = mutableListOf<String>()
 
-        if(sortingBy>0){
-            var pizzasList = pizzasMap.toList().sortedBy { (_, value) -> value }
+        // Add keys to List according to sorting setting
 
-            if(sortingBy == 2) pizzasList = pizzasList.reversed()
+        if(sortingBy>0){ // Sort by quantity
+            var pizzasList = pizzasMap.toList()
+
+            // Quantity (ascending)
+            if(sortingBy == 1) pizzasList = pizzasList.sortedWith(
+                compareBy(
+                    { (_,value) -> value },
+                    { (key,_) -> key }
+                )
+            )
+
+            // Quantity (descending)
+            if(sortingBy == 2) pizzasList = pizzasList.sortedWith(
+                compareByDescending<Pair<String,Int>>{ (_,value) -> value }
+                    .thenBy { (key,_) -> key }
+            )
 
             for(pizza in pizzasList){
                 keys.add(pizza.first)
             }
-        }else {
+
+        }else { // Sort by type
             keys = pizzasMap.toSortedMap().keys.toList().toMutableList()
         }
 

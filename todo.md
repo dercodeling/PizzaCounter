@@ -1,7 +1,6 @@
 # Todo
 
 ## Fixes
-- Sorting by quantity descending results in inverse-alphabetical order for types with same quantity 
 
 ## Features
 
@@ -21,10 +20,9 @@
 ### Down the road
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
 
-- Setting: make list of types added in init() changeable
- 
-- Add dark theme settings
-
-- Add language settings
-  - Add in-app language setting (default, de, en)
-  - Enable the system to enact per-app language settings
+- Settings: 
+  - make list of types added in init() changeable
+  - dark theme settings
+  - language settings
+    - Add in-app language setting (default, de, en)
+    - Enable the system to enact per-app language settings
