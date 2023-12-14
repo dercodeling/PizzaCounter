@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -73,6 +74,12 @@ class MainActivity : ComponentActivity() {
         viewModel.addType("Margherita")
         viewModel.addType("Prosciutto")
         viewModel.addType("Salami")
+        /*viewModel.addType("Tonno e cipolla")
+        viewModel.addType("Regina")
+        viewModel.addType("Dalla casa")
+        viewModel.addType("Arrabiata")
+        viewModel.addType("Funghi")
+        viewModel.addType("Quattro stagioni")*/
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
@@ -295,6 +302,9 @@ class MainActivity : ComponentActivity() {
 
             items(types.size) { i ->
                 PizzaListItem(viewModel, type = types[i])
+            }
+            item {
+                Spacer(Modifier.padding(15.dp))
             }
         }
     }
