@@ -29,3 +29,17 @@
   - language settings
     - Add in-app language setting (default, de, en)
     - Enable the system to enact per-app language settings
+
+# Notes
+
+## Git
+
+### Commit messages
+
+Format:
+```markdown
+<type>[optional scope]: <description>
+```
+with type being on of the following: `feat:, fix:, build:, chore:, ci:, docs:, style:, refactor:, perf:, test:`
+
+For details see [https://www.conventionalcommits.org/en/v1.0.0/#summary]
