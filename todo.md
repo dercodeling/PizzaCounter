@@ -6,6 +6,8 @@
 
 ### Functionality
 
+- Create version 1.0.0 and publish on Github
+
 - Persistence
     - Implement database
     - Auto-save list on change
@@ -19,11 +21,6 @@
       causing a transparent screen to remain after closing of bottom sheet (this screen can be
       removed via back gesture)
 
-### Implementation
-
-- Create Unit tests where possible (e.g. sorting logic in MainViewModel;
-  see https://developer.android.com/training/testing/local-tests)
-
 ### Down the road
 
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
@@ -35,6 +32,11 @@
     - language settings
         - Add in-app language setting (default, de, en)
         - Enable the system to enact per-app language settings
+
+## Implementation
+
+- Create Unit tests where possible (e.g. sorting logic in MainViewModel;
+  see https://developer.android.com/training/testing/local-tests)
 
 # Notes
 
