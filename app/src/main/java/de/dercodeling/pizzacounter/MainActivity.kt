@@ -24,7 +24,9 @@ import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
@@ -70,16 +72,8 @@ class MainActivity : ComponentActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
 
-    private fun init(viewModel: MainViewModel){
-        viewModel.addType("Margherita")
-        viewModel.addType("Prosciutto")
-        viewModel.addType("Salami")
-        /*viewModel.addType("Tonno e cipolla")
-        viewModel.addType("Regina")
-        viewModel.addType("Dalla casa")
-        viewModel.addType("Arrabiata")
-        viewModel.addType("Funghi")
-        viewModel.addType("Quattro stagioni")*/
+    private fun init(viewModel: MainViewModel) {
+        viewModel.clearTypes()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,13 +86,12 @@ class MainActivity : ComponentActivity() {
 
             val themeSetting = viewModel.getTheme()
 
-            if(themeSetting.isFollowSystem) {
+            if (themeSetting.isFollowSystem) {
                 PizzaCounterTheme {
                     PizzaCounterActivity()
                 }
-            }
-            else {
-                PizzaCounterTheme ( darkTheme = themeSetting.isDark ){
+            } else {
+                PizzaCounterTheme(darkTheme = themeSetting.isDark) {
                     PizzaCounterActivity()
                 }
             }
@@ -108,12 +101,14 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun PizzaCounterActivity(){
+    fun PizzaCounterActivity() {
         var showAddTypeBottomSheet by remember { mutableStateOf(false) }
         var showSortBottomSheet by remember { mutableStateOf(false) }
         var showClearBottomSheet by remember { mutableStateOf(false) }
+        var showClearQuantitiesDialog by remember { mutableStateOf(false) }
+        var showClearTypesDialog by remember { mutableStateOf(false) }
 
-        if(viewModel.getSize()==0){
+        if (viewModel.getSize() == 0) {
             init(viewModel)
         }
 
@@ -125,26 +120,39 @@ class MainActivity : ComponentActivity() {
                             "🍕 " + getString(R.string.app_name),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
-                            fontWeight = FontWeight.Bold)
+                            fontWeight = FontWeight.Bold
+                        )
                     },
                     actions = {
                         IconButton(onClick = {
                             //TODO: Create settings page
                         }) {
-                            Icon(Icons.Rounded.Settings, contentDescription = getString(R.string.button_settings))
+                            Icon(
+                                Icons.Rounded.Settings,
+                                contentDescription = getString(R.string.button_settings)
+                            )
                         }
                     }
 
                 )
             },
             bottomBar = {
-                BottomAppBar (
+                BottomAppBar(
                     actions = {
-                        IconButton(onClick = { showSortBottomSheet = true }, modifier = Modifier.padding(10.dp,0.dp,0.dp,0.dp)) {
-                            Icon(Icons.AutoMirrored.Rounded.Sort, contentDescription = getString(R.string.button_sort))
+                        IconButton(
+                            onClick = { showSortBottomSheet = true },
+                            modifier = Modifier.padding(10.dp, 0.dp, 0.dp, 0.dp)
+                        ) {
+                            Icon(
+                                Icons.AutoMirrored.Rounded.Sort,
+                                contentDescription = getString(R.string.button_sort)
+                            )
                         }
                         IconButton(onClick = { showClearBottomSheet = true }) {
-                            Icon(Icons.Rounded.Clear, contentDescription = getString(R.string.button_clear))
+                            Icon(
+                                Icons.Rounded.Clear,
+                                contentDescription = getString(R.string.button_clear)
+                            )
                         }
                     },
                     floatingActionButton = {
@@ -154,7 +162,12 @@ class MainActivity : ComponentActivity() {
                             onClick = {
                                 showAddTypeBottomSheet = true
                             }
-                        ){Icon(Icons.Rounded.Add, contentDescription = getString(R.string.button_add))}
+                        ) {
+                            Icon(
+                                Icons.Rounded.Add,
+                                contentDescription = getString(R.string.button_add)
+                            )
+                        }
                     }
                 )
             }
@@ -168,22 +181,108 @@ class MainActivity : ComponentActivity() {
             }
 
             if (showSortBottomSheet) {
-                val onDismiss : (Int) -> Unit = {
+                val onDismiss: (Int) -> Unit = {
                     showSortBottomSheet = false
-                    viewModel.setSortBy(it)
+
+                    if (it >= 0) {
+                        viewModel.setSortBy(it)
+                    }
                 }
                 SortBottomSheet(onDismiss, viewModel.getSortBy())
             }
 
-            /*if (showClearBottomSheet) { // TODO: Implement clearing: bottom sheet with option to clear the quantities or quantities and types
-                ClearBottomSheet({showClearBottomSheet = false})
-            }*/
+            if (showClearBottomSheet) {
+                val onDismiss: (Int) -> Unit = {
+                    when (it) {
+                        0 -> showClearQuantitiesDialog = true
+                        1 -> showClearTypesDialog = true
+                    }
+
+                    showClearBottomSheet = false
+                }
+
+                ClearBottomSheet(onDismiss)
+            }
+
+            val onDismissClearQuantitiesDialog = {
+                showClearQuantitiesDialog = false
+            }
+
+            if (showClearQuantitiesDialog) {
+                AlertDialog(
+                    title = {
+                        Text(text = getString(R.string.clear_quantities_dialog_header))
+                    },
+                    text = {
+                        Text(text = getString(R.string.clear_quantities_dialog_text))
+                    },
+                    onDismissRequest = {
+                        onDismissClearQuantitiesDialog()
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.clearQuantities()
+                                onDismissClearQuantitiesDialog()
+                            }
+                        ) {
+                            Text(getString(R.string.clearing_option_quantities))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                onDismissClearQuantitiesDialog()
+                            }
+                        ) {
+                            Text(getString(R.string.dialog_cancel))
+                        }
+                    }
+                )
+            }
+
+            val onDismissClearTypesDialog = {
+                showClearTypesDialog = false
+            }
+
+            if (showClearTypesDialog) {
+                AlertDialog(
+                    title = {
+                        Text(text = getString(R.string.clear_types_dialog_header))
+                    },
+                    text = {
+                        Text(text = getString(R.string.clear_types_dialog_text))
+                    },
+                    onDismissRequest = {
+                        onDismissClearTypesDialog()
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = {
+                                viewModel.clearTypes()
+                                onDismissClearTypesDialog()
+                            }
+                        ) {
+                            Text(getString(R.string.clearing_option_types))
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(
+                            onClick = {
+                                onDismissClearTypesDialog()
+                            }
+                        ) {
+                            Text(getString(R.string.dialog_cancel))
+                        }
+                    }
+                )
+            }
         }
     }
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun AddTypeBottomSheet(onDismiss: () -> Unit){
+    fun AddTypeBottomSheet(onDismiss: () -> Unit) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
@@ -192,15 +291,15 @@ class MainActivity : ComponentActivity() {
             sheetState = sheetState,
             dragHandle = {}
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.End
             ) {
                 var textFieldValue by remember { mutableStateOf("") }
                 val textFieldFocusRequester = FocusRequester()
                 //val focusManager = LocalFocusManager.current
 
-                fun closeAndAddPizzaType(){
-                    if(textFieldValue.isNotEmpty()) {
+                fun closeAndAddPizzaType() {
+                    if (textFieldValue.isNotEmpty()) {
                         //focusManager.clearFocus()
 
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
@@ -210,7 +309,7 @@ class MainActivity : ComponentActivity() {
                         }
 
                         viewModel.addType(textFieldValue)
-                    }else{
+                    } else {
                         print("Empty type was not added.")
                         // TODO: Show snack-bar with empty-type-warning
                     }
@@ -259,11 +358,11 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun SortBottomSheet(onDismiss: (sortBy: Int) -> Unit, currentSorting: Int){
+    fun SortBottomSheet(onDismiss: (sortBy: Int) -> Unit, currentSorting: Int) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
-        fun closeAndSetSort(sortBy: Int){
+        fun closeAndSetSort(sortBy: Int) {
             scope.launch { sheetState.hide() }.invokeOnCompletion {
                 if (!sheetState.isVisible) {
                     onDismiss(sortBy)
@@ -272,23 +371,27 @@ class MainActivity : ComponentActivity() {
         }
 
         ModalBottomSheet(
-            onDismissRequest = { closeAndSetSort(currentSorting) },
+            onDismissRequest = { closeAndSetSort(-1) },
             sheetState = sheetState,
             dragHandle = {}
         ) {
-            Column (
+            Column(
                 horizontalAlignment = Alignment.End,
                 modifier = Modifier.padding(30.dp)
             ) {
-                Column ( verticalArrangement = Arrangement.SpaceEvenly) {
+                Column(verticalArrangement = Arrangement.SpaceEvenly) {
 
 
                     Text(getString(R.string.heading_sort)) // TODO: Stylize (e.g. like in Google Tasks)
 
-                    val options = listOf(getString(R.string.sorting_option_type),getString(R.string.sorting_option_quantity_ascending),getString(R.string.sorting_option_quantity_descending))
+                    val options = listOf(
+                        getString(R.string.sorting_option_type),
+                        getString(R.string.sorting_option_quantity_ascending),
+                        getString(R.string.sorting_option_quantity_descending)
+                    )
 
-                    for(option in options){
-                        Row (
+                    for (option in options) {
+                        Row(
                             verticalAlignment = CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -296,10 +399,12 @@ class MainActivity : ComponentActivity() {
                                 .clickable {
                                     closeAndSetSort(options.indexOf(option))
                                 }
-                        ){
-                            RadioButton(selected = (currentSorting == options.indexOf(option)), onClick = {
-                                closeAndSetSort(options.indexOf(option))
-                            })
+                        ) {
+                            RadioButton(
+                                selected = (currentSorting == options.indexOf(option)),
+                                onClick = {
+                                    closeAndSetSort(options.indexOf(option))
+                                })
                             Text(option)
                         }
                     }
@@ -309,7 +414,64 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues){
+    @OptIn(ExperimentalMaterial3Api::class)
+    fun ClearBottomSheet(onDismiss: (Int) -> Unit) {
+        val sheetState = rememberModalBottomSheetState()
+        val scope = rememberCoroutineScope()
+
+        fun closeAndClear(clearingOption: Int) {
+            scope.launch { sheetState.hide() }.invokeOnCompletion {
+                if (!sheetState.isVisible) {
+                    onDismiss(clearingOption)
+                }
+            }
+        }
+
+        ModalBottomSheet(
+            onDismissRequest = { closeAndClear(-1) },
+            sheetState = sheetState,
+            dragHandle = {}
+        ) {
+            Column(
+                horizontalAlignment = Alignment.End,
+                modifier = Modifier.padding(30.dp)
+            ) {
+                Column(verticalArrangement = Arrangement.SpaceEvenly) {
+
+                    Text(getString(R.string.heading_clear)) // TODO: Stylize (e.g. like in Google Tasks)
+
+                    val options = listOf(
+                        getString(R.string.clearing_option_quantities),
+                        getString(R.string.clearing_option_types)
+                    )
+                    val icons = listOf(Icons.Rounded.Clear, Icons.Rounded.RestartAlt)
+
+                    for (option in options) {
+                        Row(
+                            verticalAlignment = CenterVertically,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clip(RoundedCornerShape(40))
+                                .clickable {
+                                    closeAndClear(options.indexOf(option))
+                                }
+                                .padding(13.dp)
+                        ) {
+                            Icon(
+                                icons[options.indexOf(option)],
+                                contentDescription = option,
+                                modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+                            )
+                            Text(option)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues) {
         LazyColumn(
             Modifier
                 .padding(innerPadding)
@@ -328,18 +490,18 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaListItem(viewModel: MainViewModel, type: String){
-        Card (
-            Modifier.padding(15.dp,10.dp)
-        ){
+    fun PizzaListItem(viewModel: MainViewModel, type: String) {
+        Card(
+            Modifier.padding(15.dp, 10.dp)
+        ) {
             Row(
                 verticalAlignment = CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(25.dp, 15.dp)
-            ){
-                Row (
+            ) {
+                Row(
                     horizontalArrangement = Arrangement.Start,
                     verticalAlignment = CenterVertically,
                     modifier = Modifier.weight(1f)
@@ -360,24 +522,30 @@ class MainActivity : ComponentActivity() {
                         text = type,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 20.sp,
-                        maxLines = 1,
+                        maxLines = 2,
                         overflow = TextOverflow.Ellipsis
                     )
                 }
-                Row (
+                Row(
                     horizontalArrangement = Arrangement.End,
                     verticalAlignment = CenterVertically,
                     modifier = Modifier.wrapContentWidth()
                 ) {
-                    Button(modifier = Modifier.padding(5.dp),onClick = {
+                    Button(modifier = Modifier.padding(5.dp), onClick = {
                         viewModel.changeQuantity(type, 1)
                     }) {
-                        Icon(imageVector = Icons.Rounded.Add,contentDescription = getString(R.string.button_increase))
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = getString(R.string.button_increase)
+                        )
                     }
                     Button(onClick = {
                         viewModel.changeQuantity(type, -1)
                     }) {
-                        Icon(imageVector = Icons.Rounded.Remove,contentDescription = getString(R.string.button_decrease))
+                        Icon(
+                            imageVector = Icons.Rounded.Remove,
+                            contentDescription = getString(R.string.button_decrease)
+                        )
                     }
                 }
             }
