@@ -16,6 +16,21 @@ class MainViewModel : ViewModel() {
 
     private var pizzasMap by mutableStateOf(mutableMapOf<String, Int>())
 
+    @set:JvmName("setInitialTypesList") // Needed to avoid conflict of automatically generated setter name and manually defined one
+    private var initialTypes by mutableStateOf(
+        listOf(
+            "Margherita",
+            "Prosciutto",
+            "Salami"/*,
+            "Tonno e cipolla",
+            "Regina",
+            "Dalla casa",
+            "Arrabiata",
+            "Funghi",
+            "Quattro stagioni"*/
+        )
+    )
+
     private var sortingBy by mutableIntStateOf(0)
 
     // THEME
@@ -31,7 +46,12 @@ class MainViewModel : ViewModel() {
         themeSetting = ThemeSetting(isFollowSystem = isFollowSystem, isDark = isDark)
     }
 
-    // LIST LOGIC
+    // INITIAL TYPES
+    fun setInitialTypes(newTypesList: List<String>) {
+        if(newTypesList.isNotEmpty()) initialTypes = newTypesList
+    }
+
+    // MAP LOGIC
 
     fun getSize(): Int {
         return pizzasMap.size
@@ -70,8 +90,8 @@ class MainViewModel : ViewModel() {
         return keys
     }
 
-    fun getQuantity(type: String): Int? {
-        return pizzasMap[type]
+    fun getQuantity(type: String): Int {
+        return if (pizzasMap[type] != null) pizzasMap[type]!! else 0
     }
 
     fun addType(type: String) {
@@ -80,16 +100,19 @@ class MainViewModel : ViewModel() {
 
     fun changeQuantity(type: String, change: Int) {
         val current = pizzasMap[type]
-        val newQuantity = current?.plus(change)
 
-        if (newQuantity != null) {
-            if (newQuantity >= 0) {
-                // Setting the quantity directly with pizzasMap[type]=newQuantity ist not sufficient to trigger reloading of UI,
-                // a new Map has to be created as follows:
-                val newPizzasMap = pizzasMap.toSortedMap()
-                newPizzasMap[type] = newQuantity
-                pizzasMap = newPizzasMap
-            }
+        if (current != null) {
+            var newQuantity = current.plus(change)
+
+            if (newQuantity < 0) newQuantity = 0
+
+            // Setting the quantity directly with pizzasMap[type]=newQuantity ist not sufficient
+            // to trigger reloading of UI, a new Map has to be created as follows:
+            val newPizzasMap = pizzasMap.toSortedMap()
+            newPizzasMap[type] = newQuantity
+            pizzasMap = newPizzasMap
+        } else {
+            throw NullPointerException("Type provided to changeQuantity does not exist, cannot change quantity. ")
         }
     }
 
@@ -112,15 +135,8 @@ class MainViewModel : ViewModel() {
     fun clearTypes() {
         pizzasMap = mutableMapOf()
 
-        // Add initial types
-        addType("Margherita")
-        addType("Prosciutto")
-        addType("Salami")
-        /*addType("Ton e cipolla")
-        addType("Regina")
-        addType("Dalla casa")
-        addType("Arrabiata")
-        addType("Funghi")
-        addType("Quattro stagioni")*/
+        for(type in initialTypes){
+            addType(type)
+        }
     }
 }

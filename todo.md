@@ -32,11 +32,9 @@
     - language settings
         - Add in-app language setting (default, de, en)
         - Enable the system to enact per-app language settings
+    - Warning dialogs for resetting quantities/types
 
 ## Implementation
-
-- Create Unit tests where possible (e.g. sorting logic in MainViewModel;
-  see https://developer.android.com/training/testing/local-tests)
 
 # Notes
 
