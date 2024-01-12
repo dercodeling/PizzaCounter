@@ -19,5 +19,5 @@
     <string name="clear_quantities_dialog_text">Sicher, dass du die Mengen aller Sorten auf null zurücksetzen willst?</string>
     <string name="dialog_cancel">Abbrechen</string>
     <string name="clear_types_dialog_header">Alle Sorten zurücksetzen?</string>
-    <string name="clear_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst?</string>
+    <string name="clear_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst, inklusive aller Sorten und Mengen?</string>
 </resources>

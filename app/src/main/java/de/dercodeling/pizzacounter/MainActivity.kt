@@ -127,10 +127,10 @@ class MainActivity : ComponentActivity() {
                         IconButton(onClick = {
                             //TODO: Create settings page
                         }) {
-                            Icon(
+                            /*Icon(
                                 Icons.Rounded.Settings,
                                 contentDescription = getString(R.string.button_settings)
-                            )
+                            )*/
                         }
                     }
 

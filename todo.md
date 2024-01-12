@@ -2,11 +2,13 @@
 
 ## Fixes
 
+- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE as it is on OnePlus 8 Pro
+
 ## Features
 
 ### Functionality
 
-- Create version 1.0.0 and publish on Github
+- Remove single types
 
 - Persistence
     - Implement database
