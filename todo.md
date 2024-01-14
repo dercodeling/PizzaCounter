@@ -8,7 +8,7 @@
 
 ### Functionality
 
-- Remove single types
+- Make it possible to remove single typesc
 
 - Persistence
     - Implement database
