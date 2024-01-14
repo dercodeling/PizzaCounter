@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PizzaTypeDao {
-    // TODO: Add functions for resetting quantities to 0 and clearing table
+    // TODO: Add functions for resetting quantities to 0, clearing table, getting list size
 
     @Upsert
     suspend fun upsertPizzaType(pizzaType: PizzaType)

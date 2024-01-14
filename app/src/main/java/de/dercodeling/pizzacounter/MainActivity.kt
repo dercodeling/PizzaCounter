@@ -65,12 +65,31 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.room.Room
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
-    private val viewModel by viewModels<MainViewModel>()
+    private val db by lazy {
+        Room.databaseBuilder(
+            applicationContext,
+            PizzaListDatabase::class.java,
+            "pizza_list.db"
+        ).build()
+    }
+
+    private val viewModel by viewModels<MainViewModel>(
+        factoryProducer = {
+            object : ViewModelProvider.Factory {
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return MainViewModel(db.dao) as T
+                }
+            }
+        }
+    )
 
     private fun init(viewModel: MainViewModel) {
         viewModel.clearTypes()

@@ -8,11 +8,17 @@
 
 ### Functionality
 
-- Make it possible to remove single types
-
-- Persistence
-    - Implement database
+- Persistence & state improvements
+    - Rework state management → follow Database Tutorial: https://youtu.be/bOd3wO0uFr8 ~ 18:10
+        - Separate state data class
+        - Events in viewModel
+        - ...
+    - Create missing functions in dao
+    - Exchange usage of PizzasMap for actual database
     - Auto-save list on change
+    - Implement Dagger/Hilt to simplify and improve db and viewModel-creation at the beginning of MainActivity.kt
+
+- Create UI to remove types individually
 
 ### UI
 
@@ -28,19 +34,18 @@
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
 
-- Settings:
-    - make list of types added in init() changeable
+- Settings: → new database table → see tutorials regarding database migration
+    - list of initial types (added in clearTypes())
     - dark theme settings
     - language settings
         - Add in-app language setting (default, de, en)
         - Enable the system to enact per-app language settings
-    - Warning dialogs for resetting quantities/types
+    - toggle warning dialogs for resetting quantities/types
 
 ## Implementation
 
 - Refactor MainActivity.kt for better readability → split up into multiple files (e.g. PizzaList, PizzaListItem, ...)
-
-- Rework state management with a separate State data class, events etc. (like in Database Tutorial: https://youtu.be/bOd3wO0uFr8 ~ 18:10)
+   + Rename MainActivity and MainMainViewModel accordingly
 
 # Notes
 

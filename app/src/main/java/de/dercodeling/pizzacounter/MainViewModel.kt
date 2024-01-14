@@ -4,13 +4,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 data class ThemeSetting(
     val isFollowSystem: Boolean = true,
     val isDark: Boolean = false
 )
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val dao: PizzaTypeDao
+) : ViewModel() {
     private var themeSetting by mutableStateOf(ThemeSetting())
 
     private var pizzasMap by mutableStateOf(mutableMapOf<String, Int>())
@@ -61,7 +65,6 @@ class MainViewModel : ViewModel() {
 
         // Add keys to List according to sorting setting
 
-
         when(sortingBy) {
             SortType.NAME -> keys = pizzasMap.toSortedMap().keys.toList().toMutableList()
 
@@ -97,16 +100,20 @@ class MainViewModel : ViewModel() {
         return keys
     }
 
-    fun getQuantity(type: String): Int {
-        return if (pizzasMap[type] != null) pizzasMap[type]!! else 0
+    fun getQuantity(name: String): Int {
+        return if (pizzasMap[name] != null) pizzasMap[name]!! else 0
     }
 
-    fun addType(type: String) {
-        pizzasMap[type] = 0
+    fun addType(name: String) {
+        pizzasMap[name] = 0
+
+        viewModelScope.launch {
+            dao.upsertPizzaType(PizzaType(name,0))
+        }
     }
 
-    fun changeQuantity(type: String, change: Int) {
-        val current = pizzasMap[type]
+    fun changeQuantity(name: String, change: Int) {
+        val current = pizzasMap[name]
 
         if (current != null) {
             var newQuantity = current.plus(change)
@@ -116,7 +123,7 @@ class MainViewModel : ViewModel() {
             // Setting the quantity directly with pizzasMap[type]=newQuantity ist not sufficient
             // to trigger reloading of UI, a new Map has to be created as follows:
             val newPizzasMap = pizzasMap.toSortedMap()
-            newPizzasMap[type] = newQuantity
+            newPizzasMap[name] = newQuantity
             pizzasMap = newPizzasMap
         } else {
             throw NullPointerException("Type provided to changeQuantity does not exist, cannot change quantity. ")
