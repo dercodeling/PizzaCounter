@@ -5,7 +5,7 @@
     <string name="button_clear">Löschen</string>
     <string name="button_add">Hinzufügen</string>
     <string name="heading_sort">Sortieren nach:</string>
-    <string name="sorting_option_type">Sorte</string>
+    <string name="sorting_option_name">Name</string>
     <string name="sorting_option_quantity_ascending">Anzahl (aufsteigend)</string>
     <string name="sorting_option_quantity_descending">Anzahl (absteigend)</string>
     <string name="button_increase">Erhöhen</string>

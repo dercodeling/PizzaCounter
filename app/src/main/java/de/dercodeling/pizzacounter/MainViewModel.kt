@@ -1,7 +1,6 @@
 package de.dercodeling.pizzacounter
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -31,7 +30,7 @@ class MainViewModel : ViewModel() {
         )
     )
 
-    private var sortingBy by mutableIntStateOf(0)
+    private var sortingBy by mutableStateOf(SortType.NAME)
 
     // THEME
 
@@ -62,29 +61,37 @@ class MainViewModel : ViewModel() {
 
         // Add keys to List according to sorting setting
 
-        if (sortingBy > 0) { // Sort by quantity
-            var pizzasList = pizzasMap.toList()
 
-            // Quantity (ascending)
-            if (sortingBy == 1) pizzasList = pizzasList.sortedWith(
-                compareBy(
-                    { (_, value) -> value },
-                    { (key, _) -> key }
+        when(sortingBy) {
+            SortType.NAME -> keys = pizzasMap.toSortedMap().keys.toList().toMutableList()
+
+            SortType.QUANTITY_ASC -> {
+                var pizzasList = pizzasMap.toList()
+
+                pizzasList = pizzasList.sortedWith(
+                    compareBy(
+                        { (_, value) -> value },
+                        { (key, _) -> key }
+                    )
                 )
-            )
 
-            // Quantity (descending)
-            if (sortingBy == 2) pizzasList = pizzasList.sortedWith(
-                compareByDescending<Pair<String, Int>> { (_, value) -> value }
-                    .thenBy { (key, _) -> key }
-            )
-
-            for (pizza in pizzasList) {
-                keys.add(pizza.first)
+                for (pizza in pizzasList) {
+                    keys.add(pizza.first)
+                }
             }
 
-        } else { // Sort by type
-            keys = pizzasMap.toSortedMap().keys.toList().toMutableList()
+            SortType.QUANTITY_DESC -> {
+                var pizzasList = pizzasMap.toList()
+
+                pizzasList = pizzasList.sortedWith(
+                    compareByDescending<Pair<String, Int>> { (_, value) -> value }
+                        .thenBy { (key, _) -> key }
+                )
+
+                for (pizza in pizzasList) {
+                    keys.add(pizza.first)
+                }
+            }
         }
 
         return keys
@@ -118,11 +125,11 @@ class MainViewModel : ViewModel() {
 
     // SORTING
 
-    fun getSortBy(): Int {
+    fun getSortBy(): SortType {
         return sortingBy
     }
 
-    fun setSortBy(newSortBy: Int) {
+    fun setSortBy(newSortBy: SortType) {
         sortingBy = newSortBy
     }
 

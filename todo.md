@@ -8,7 +8,7 @@
 
 ### Functionality
 
-- Make it possible to remove single typesc
+- Make it possible to remove single types
 
 - Persistence
     - Implement database
@@ -37,6 +37,10 @@
     - Warning dialogs for resetting quantities/types
 
 ## Implementation
+
+- Refactor MainActivity.kt for better readability → split up into multiple files (e.g. PizzaList, PizzaListItem, ...)
+
+- Rework state management with a separate State data class, events etc. (like in Database Tutorial: https://youtu.be/bOd3wO0uFr8 ~ 18:10)
 
 # Notes
 

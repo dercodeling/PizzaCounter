@@ -181,10 +181,10 @@ class MainActivity : ComponentActivity() {
             }
 
             if (showSortBottomSheet) {
-                val onDismiss: (Int) -> Unit = {
+                val onDismiss: (SortType?) -> Unit = {
                     showSortBottomSheet = false
 
-                    if (it >= 0) {
+                    if (it != null) {
                         viewModel.setSortBy(it)
                     }
                 }
@@ -358,11 +358,11 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun SortBottomSheet(onDismiss: (sortBy: Int) -> Unit, currentSorting: Int) {
+    fun SortBottomSheet(onDismiss: (sortBy: SortType?) -> Unit, currentSorting: SortType) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
-        fun closeAndSetSort(sortBy: Int) {
+        fun closeAndSetSort(sortBy: SortType?) {
             scope.launch { sheetState.hide() }.invokeOnCompletion {
                 if (!sheetState.isVisible) {
                     onDismiss(sortBy)
@@ -371,7 +371,7 @@ class MainActivity : ComponentActivity() {
         }
 
         ModalBottomSheet(
-            onDismissRequest = { closeAndSetSort(-1) },
+            onDismissRequest = { closeAndSetSort(null) },
             sheetState = sheetState,
             dragHandle = {}
         ) {
@@ -384,28 +384,37 @@ class MainActivity : ComponentActivity() {
 
                     Text(getString(R.string.heading_sort)) // TODO: Stylize (e.g. like in Google Tasks)
 
-                    val options = listOf(
-                        getString(R.string.sorting_option_type),
-                        getString(R.string.sorting_option_quantity_ascending),
-                        getString(R.string.sorting_option_quantity_descending)
+                    val sortTypes = mapOf(
+                        Pair(
+                            SortType.NAME,
+                            getString(R.string.sorting_option_name)
+                        ),
+                        Pair(
+                            SortType.QUANTITY_ASC,
+                            getString(R.string.sorting_option_quantity_ascending)
+                        ),
+                        Pair(
+                            SortType.QUANTITY_DESC,
+                            getString(R.string.sorting_option_quantity_descending)
+                        )
                     )
 
-                    for (option in options) {
+                    for (sortType in sortTypes) {
                         Row(
                             verticalAlignment = CenterVertically,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(40))
                                 .clickable {
-                                    closeAndSetSort(options.indexOf(option))
+                                    closeAndSetSort(sortType.key)
                                 }
                         ) {
                             RadioButton(
-                                selected = (currentSorting == options.indexOf(option)),
+                                selected = (currentSorting == sortType.key),
                                 onClick = {
-                                    closeAndSetSort(options.indexOf(option))
+                                    closeAndSetSort(sortType.key)
                                 })
-                            Text(option)
+                            Text(sortType.value)
                         }
                     }
                 }
