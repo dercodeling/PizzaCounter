@@ -48,6 +48,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -68,6 +69,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.room.Room
+import de.dercodeling.pizzacounter.model.PizzaType
+import de.dercodeling.pizzacounter.model.SortType
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 import kotlinx.coroutines.launch
 
@@ -81,19 +84,15 @@ class MainActivity : ComponentActivity() {
         ).build()
     }
 
-    private val viewModel by viewModels<MainViewModel>(
+    private val viewModel by viewModels<PizzaListViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return MainViewModel(db.dao) as T
+                    return PizzaListViewModel(db.dao) as T
                 }
             }
         }
     )
-
-    private fun init(viewModel: MainViewModel) {
-        viewModel.clearTypes()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -103,15 +102,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             // Create PizzaCounterTheme with or without darkMode-Boolean depending whether system theming is followed
 
-            val themeSetting = viewModel.getTheme()
+            val state by viewModel.state.collectAsState()
+            val themeSetting = state.themeSetting
 
             if (themeSetting.isFollowSystem) {
                 PizzaCounterTheme {
-                    PizzaCounterActivity()
+                    PizzaCounterActivity(state, viewModel::onEvent)
                 }
             } else {
                 PizzaCounterTheme(darkTheme = themeSetting.isDark) {
-                    PizzaCounterActivity()
+                    PizzaCounterActivity(state, viewModel::onEvent)
                 }
             }
 
@@ -120,15 +120,18 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun PizzaCounterActivity() {
+    fun PizzaCounterActivity(
+        state: PizzaListState,
+        onEvent: (PizzaListEvent) -> Unit
+    ) {
         var showAddTypeBottomSheet by remember { mutableStateOf(false) }
         var showSortBottomSheet by remember { mutableStateOf(false) }
         var showClearBottomSheet by remember { mutableStateOf(false) }
         var showClearQuantitiesDialog by remember { mutableStateOf(false) }
-        var showClearTypesDialog by remember { mutableStateOf(false) }
+        var showResetTypesDialog by remember { mutableStateOf(false) }
 
-        if (viewModel.getSize() == 0) {
-            init(viewModel)
+        if (state.pizzaTypes.isEmpty()) {
+            onEvent(PizzaListEvent.ResetTypes)
         }
 
         Scaffold(
@@ -192,10 +195,15 @@ class MainActivity : ComponentActivity() {
             }
         ) { innerPadding ->
 
-            PizzaList(viewModel, innerPadding)
+            PizzaList(state, onEvent, innerPadding)
 
             if (showAddTypeBottomSheet) {
-                val onDismiss: () -> Unit = { showAddTypeBottomSheet = false }
+                val onDismiss: (PizzaType?) -> Unit = {
+                    if(it != null) {
+                        onEvent(PizzaListEvent.AddPizzaType(it))
+                    }
+                    showAddTypeBottomSheet = false
+                }
                 AddTypeBottomSheet(onDismiss)
             }
 
@@ -204,17 +212,18 @@ class MainActivity : ComponentActivity() {
                     showSortBottomSheet = false
 
                     if (it != null) {
-                        viewModel.setSortBy(it)
+                        onEvent(PizzaListEvent.SetSortType(it))
+                        //viewModel.setSortBy(it)
                     }
                 }
-                SortBottomSheet(onDismiss, viewModel.getSortBy())
+                SortBottomSheet(onDismiss, state.sortType)
             }
 
             if (showClearBottomSheet) {
                 val onDismiss: (Int) -> Unit = {
                     when (it) {
                         0 -> showClearQuantitiesDialog = true
-                        1 -> showClearTypesDialog = true
+                        1 -> showResetTypesDialog = true
                     }
 
                     showClearBottomSheet = false
@@ -241,7 +250,7 @@ class MainActivity : ComponentActivity() {
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                viewModel.clearQuantities()
+                                onEvent(PizzaListEvent.ClearQuantities)
                                 onDismissClearQuantitiesDialog()
                             }
                         ) {
@@ -260,11 +269,11 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            val onDismissClearTypesDialog = {
-                showClearTypesDialog = false
+            val onDismissResetTypesDialog = {
+                showResetTypesDialog = false
             }
 
-            if (showClearTypesDialog) {
+            if (showResetTypesDialog) {
                 AlertDialog(
                     title = {
                         Text(text = getString(R.string.clear_types_dialog_header))
@@ -273,13 +282,13 @@ class MainActivity : ComponentActivity() {
                         Text(text = getString(R.string.clear_types_dialog_text))
                     },
                     onDismissRequest = {
-                        onDismissClearTypesDialog()
+                        onDismissResetTypesDialog()
                     },
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                viewModel.clearTypes()
-                                onDismissClearTypesDialog()
+                                onEvent(PizzaListEvent.ResetTypes)
+                                onDismissResetTypesDialog()
                             }
                         ) {
                             Text(getString(R.string.clearing_option_types))
@@ -288,7 +297,7 @@ class MainActivity : ComponentActivity() {
                     dismissButton = {
                         TextButton(
                             onClick = {
-                                onDismissClearTypesDialog()
+                                onDismissResetTypesDialog()
                             }
                         ) {
                             Text(getString(R.string.dialog_cancel))
@@ -301,12 +310,12 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun AddTypeBottomSheet(onDismiss: () -> Unit) {
+    fun AddTypeBottomSheet(onDismiss: (PizzaType?) -> Unit) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
         ModalBottomSheet(
-            onDismissRequest = { onDismiss() },
+            onDismissRequest = { onDismiss(null) },
             sheetState = sheetState,
             dragHandle = {}
         ) {
@@ -323,11 +332,9 @@ class MainActivity : ComponentActivity() {
 
                         scope.launch { sheetState.hide() }.invokeOnCompletion {
                             if (!sheetState.isVisible) {
-                                onDismiss()
+                                onDismiss(PizzaType(textFieldValue, 0))
                             }
                         }
-
-                        viewModel.addType(textFieldValue)
                     } else {
                         print("Empty type was not added.")
                         // TODO: Show snack-bar with empty-type-warning
@@ -499,17 +506,17 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaList(viewModel: MainViewModel, innerPadding: PaddingValues) {
+    fun PizzaList(state: PizzaListState, onEvent: (PizzaListEvent) -> Unit, innerPadding: PaddingValues) {
         LazyColumn(
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(0.dp, 30.dp, 0.dp, 0.dp)
         ) {
-            val types = viewModel.getTypes()
+            val types = state.pizzaTypes
 
             items(types.size) { i ->
-                PizzaListItem(viewModel, type = types[i])
+                PizzaListItem(types[i], onEvent)
             }
             item {
                 Spacer(Modifier.padding(15.dp))
@@ -518,7 +525,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun PizzaListItem(viewModel: MainViewModel, type: String) {
+    fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
         Card(
             Modifier.padding(15.dp, 10.dp)
         ) {
@@ -535,7 +542,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.weight(1f)
                 ) {
                     Text( // Quantity
-                        text = viewModel.getQuantity(type).toString(),
+                        text = pizzaType.quantity.toString(),
                         color = MaterialTheme.colorScheme.primary,
                         fontSize = 30.sp,
                         fontWeight = FontWeight.Bold
@@ -547,7 +554,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(15.dp)
                     )
                     Text( // Type
-                        text = type,
+                        text = pizzaType.name,
                         color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontSize = 20.sp,
                         maxLines = 2,
@@ -560,7 +567,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.wrapContentWidth()
                 ) {
                     Button(modifier = Modifier.padding(5.dp), onClick = {
-                        viewModel.changeQuantity(type, 1)
+                        onEvent(PizzaListEvent.IncreaseQuantity(pizzaType))
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
@@ -568,7 +575,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     Button(onClick = {
-                        viewModel.changeQuantity(type, -1)
+                        onEvent(PizzaListEvent.DecreaseQuantity(pizzaType))
                     }) {
                         Icon(
                             imageVector = Icons.Rounded.Remove,

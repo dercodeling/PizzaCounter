@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter
+package de.dercodeling.pizzacounter.model
 
 enum class SortType {
     NAME,

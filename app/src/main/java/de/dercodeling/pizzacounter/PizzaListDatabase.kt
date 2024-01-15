@@ -2,6 +2,7 @@ package de.dercodeling.pizzacounter
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import de.dercodeling.pizzacounter.model.PizzaType
 
 @Database(
     entities = [PizzaType::class],

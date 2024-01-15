@@ -8,15 +8,7 @@
 
 ### Functionality
 
-- Persistence & state improvements
-    - Rework state management → follow Database Tutorial: https://youtu.be/bOd3wO0uFr8 ~ 18:10
-        - Separate state data class
-        - Events in viewModel
-        - ...
-    - Create missing functions in dao
-    - Exchange usage of PizzasMap for actual database
-    - Auto-save list on change
-    - Implement Dagger/Hilt to simplify and improve db and viewModel-creation at the beginning of MainActivity.kt
+- Implement Dagger/Hilt to simplify and improve db and viewModel-creation at the beginning of MainActivity.kt
 
 - Create UI to remove types individually
 
@@ -42,10 +34,12 @@
         - Enable the system to enact per-app language settings
     - toggle warning dialogs for resetting quantities/types
 
+- Potentially generalize to non-specific counter app 
+
 ## Implementation
 
 - Refactor MainActivity.kt for better readability → split up into multiple files (e.g. PizzaList, PizzaListItem, ...)
-   + Rename MainActivity and MainMainViewModel accordingly
+   + Rename MainActivity accordingly
 
 # Notes
 
