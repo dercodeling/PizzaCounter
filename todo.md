@@ -28,13 +28,14 @@
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
 
-- Settings: → new database table → see tutorials regarding database migration
+- Settings: → new database table → see tutorials on database migration
     - list of initial types (added in clearTypes())
     - dark theme settings
     - language settings
         - Add in-app language setting (default, de, en)
         - Enable the system to enact per-app language settings
     - toggle warning dialogs for resetting quantities/types
+    - about-dialog (version, GitHub, license?)
 
 - Potentially generalize to non-specific counter app 
 
