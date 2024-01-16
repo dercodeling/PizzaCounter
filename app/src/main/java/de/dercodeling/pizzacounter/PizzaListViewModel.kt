@@ -44,9 +44,9 @@ class PizzaListViewModel(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
     private val _state = MutableStateFlow(PizzaListState())
-    val state = combine(_state, _sortType, _pizzaTypes) {state, sortType, pizzaType ->
+    val state = combine(_state, _sortType, _pizzaTypes) {state, sortType, pizzaTypes ->
         state.copy(
-            pizzaTypes = pizzaType,
+            pizzaTypes = pizzaTypes,
             sortType = sortType
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), PizzaListState())
@@ -54,9 +54,17 @@ class PizzaListViewModel(
 
     fun onEvent(event: PizzaListEvent) {
         when(event) {
+            PizzaListEvent.LoadInitialPizzaTypes -> {
+                viewModelScope.launch {
+                    for (initialType in initialTypes.value) {
+                        dao.insertPizzaType(PizzaType(initialType,0))
+                    }
+                }
+            }
+
             is PizzaListEvent.AddPizzaType -> {
                 viewModelScope.launch {
-                    dao.upsertPizzaType(event.pizzaType)
+                    dao.insertPizzaType(event.pizzaType)
                 }
             }
 
@@ -69,7 +77,7 @@ class PizzaListViewModel(
             is PizzaListEvent.IncreaseQuantity -> {
                 viewModelScope.launch {
                     val current = event.pizzaType
-                    dao.upsertPizzaType(current.copy(quantity = current.quantity+1))
+                    dao.updatePizzaType(current.copy(quantity = current.quantity+1))
                 }
             }
 
@@ -77,7 +85,7 @@ class PizzaListViewModel(
                 viewModelScope.launch {
                     val current = event.pizzaType
                     if (current.quantity > 0) {
-                        dao.upsertPizzaType(current.copy(quantity = current.quantity-1))
+                        dao.updatePizzaType(current.copy(quantity = current.quantity-1))
                     }
                 }
             }
@@ -96,7 +104,7 @@ class PizzaListViewModel(
                 viewModelScope.launch {
                     dao.clearTypes()
                     for (initialType in initialTypes.value) {
-                        dao.upsertPizzaType(PizzaType(initialType,0))
+                        dao.insertPizzaType(PizzaType(initialType,0))
                     }
                 }
             }

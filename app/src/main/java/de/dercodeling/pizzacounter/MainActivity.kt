@@ -26,6 +26,7 @@ import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
@@ -61,6 +62,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
@@ -68,7 +70,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.room.Room
 import de.dercodeling.pizzacounter.model.PizzaType
 import de.dercodeling.pizzacounter.model.SortType
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
@@ -77,18 +78,14 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     private val db by lazy {
-        Room.databaseBuilder(
-            applicationContext,
-            PizzaListDatabase::class.java,
-            "pizza_list.db"
-        ).build()
+        PizzaListDatabase.getDatabase(context = applicationContext)
     }
 
     private val viewModel by viewModels<PizzaListViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                    return PizzaListViewModel(db.dao) as T
+                    return PizzaListViewModel(db.getDao()) as T
                 }
             }
         }
@@ -131,7 +128,7 @@ class MainActivity : ComponentActivity() {
         var showResetTypesDialog by remember { mutableStateOf(false) }
 
         if (state.pizzaTypes.isEmpty()) {
-            onEvent(PizzaListEvent.ResetTypes)
+            onEvent(PizzaListEvent.LoadInitialPizzaTypes)
         }
 
         Scaffold(
@@ -146,13 +143,16 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     actions = {
-                        IconButton(onClick = {
-                            //TODO: Create settings page
-                        }) {
-                            /*Icon(
+                        IconButton(
+                            onClick = {
+                                //TODO: Create settings page
+                            },
+                            enabled = false
+                        ) {
+                            Icon(
                                 Icons.Rounded.Settings,
-                                contentDescription = getString(R.string.button_settings)
-                            )*/
+                                contentDescription = getString(R.string.button_settings),
+                            )
                         }
                     }
 
@@ -174,6 +174,14 @@ class MainActivity : ComponentActivity() {
                             Icon(
                                 Icons.Rounded.Clear,
                                 contentDescription = getString(R.string.button_clear)
+                            )
+                        }
+                        IconButton(
+                            onClick = { TODO() },
+                            enabled = false) {
+                            Icon(
+                                Icons.Rounded.Share,
+                                contentDescription = getString(R.string.button_share)
                             )
                         }
                     },
@@ -198,13 +206,15 @@ class MainActivity : ComponentActivity() {
             PizzaList(state, onEvent, innerPadding)
 
             if (showAddTypeBottomSheet) {
-                val onDismiss: (PizzaType?) -> Unit = {
-                    if(it != null) {
-                        onEvent(PizzaListEvent.AddPizzaType(it))
+                val onDismiss: (PizzaType?) -> Unit = {newPizzaType ->
+
+                    if (newPizzaType != null) {
+                        onEvent(PizzaListEvent.AddPizzaType(newPizzaType))
                     }
+
                     showAddTypeBottomSheet = false
                 }
-                AddTypeBottomSheet(onDismiss)
+                AddTypeBottomSheet(state, onDismiss)
             }
 
             if (showSortBottomSheet) {
@@ -310,7 +320,7 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun AddTypeBottomSheet(onDismiss: (PizzaType?) -> Unit) {
+    fun AddTypeBottomSheet(state: PizzaListState, onDismiss: (PizzaType?) -> Unit) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
@@ -327,17 +337,12 @@ class MainActivity : ComponentActivity() {
                 //val focusManager = LocalFocusManager.current
 
                 fun closeAndAddPizzaType() {
-                    if (textFieldValue.isNotEmpty()) {
-                        //focusManager.clearFocus()
+                    //focusManager.clearFocus()
 
-                        scope.launch { sheetState.hide() }.invokeOnCompletion {
-                            if (!sheetState.isVisible) {
-                                onDismiss(PizzaType(textFieldValue, 0))
-                            }
+                    scope.launch { sheetState.hide() }.invokeOnCompletion {
+                        if (!sheetState.isVisible) {
+                            onDismiss(PizzaType(textFieldValue, 0))
                         }
-                    } else {
-                        print("Empty type was not added.")
-                        // TODO: Show snack-bar with empty-type-warning
                     }
                 }
 
@@ -375,7 +380,14 @@ class MainActivity : ComponentActivity() {
                     textFieldFocusRequester.requestFocus()
                 }
 
-                TextButton(onClick = { closeAndAddPizzaType() }) {
+                val currentPizzaTypeNames = state.pizzaTypes.map { pizzaType -> pizzaType.name }
+
+                TextButton(
+                    onClick = {
+                        closeAndAddPizzaType()
+                    },
+                    enabled = textFieldValue.isNotEmpty() && !currentPizzaTypeNames.contains(textFieldValue)
+                ) {
                     Text(getString(R.string.button_add))
                 }
             }
@@ -479,7 +491,6 @@ class MainActivity : ComponentActivity() {
                         getString(R.string.clearing_option_quantities),
                         getString(R.string.clearing_option_types)
                     )
-                    val icons = listOf(Icons.Rounded.Clear, Icons.Rounded.RestartAlt)
 
                     for (option in options) {
                         Row(
@@ -492,11 +503,22 @@ class MainActivity : ComponentActivity() {
                                 }
                                 .padding(13.dp)
                         ) {
-                            Icon(
-                                icons[options.indexOf(option)],
-                                contentDescription = option,
-                                modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                            )
+                            when(options.indexOf(option)) {
+                                0 -> {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.material_icon_counter_0),
+                                        contentDescription = getString(R.string.clearing_option_quantities),
+                                        modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                    )
+                                }
+                                1 -> {
+                                    Icon(
+                                        Icons.Rounded.RestartAlt,
+                                        contentDescription = getString(R.string.clearing_option_types),
+                                        modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
+                                    )
+                                }
+                            }
                             Text(option)
                         }
                     }

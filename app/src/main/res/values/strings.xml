@@ -19,5 +19,6 @@
     <string name="dialog_cancel">Cancel</string>
     <string name="clear_types_dialog_header">Reset all types?</string>
     <string name="clear_types_dialog_text">Are you sure you want to reset the entire list, including all added types and quantities?</string>
+    <string name="button_share">Share</string>
 
 </resources>

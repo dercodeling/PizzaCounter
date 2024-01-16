@@ -4,6 +4,8 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE as it is on OnePlus 8 Pro
 
+- Name text is to narrow on some devices → smaller buttons? smaller padding?
+
 ## Features
 
 ### Functionality
@@ -12,7 +14,9 @@
 
 - Create UI to remove types individually
 
-- Allow user to share list as Text
+- Create logic to share list as Text
+
+- Create release 1.1.0
 
 ### UI
 

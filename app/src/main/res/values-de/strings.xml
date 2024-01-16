@@ -20,4 +20,5 @@
     <string name="dialog_cancel">Abbrechen</string>
     <string name="clear_types_dialog_header">Alle Sorten zurücksetzen?</string>
     <string name="clear_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst, inklusive aller Sorten und Mengen?</string>
+    <string name="button_share">Teilen</string>
 </resources>

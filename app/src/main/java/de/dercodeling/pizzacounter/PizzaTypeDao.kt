@@ -2,8 +2,10 @@ package de.dercodeling.pizzacounter
 
 import androidx.room.Dao
 import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Upsert
+import androidx.room.Update
 import de.dercodeling.pizzacounter.model.PizzaType
 import kotlinx.coroutines.flow.Flow
 
@@ -11,8 +13,11 @@ import kotlinx.coroutines.flow.Flow
 interface PizzaTypeDao {
     // TODO: Add functions for resetting quantities to 0, clearing table, getting list size
 
-    @Upsert
-    suspend fun upsertPizzaType(pizzaType: PizzaType)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertPizzaType(pizzaType: PizzaType)
+
+    @Update
+    suspend fun updatePizzaType(pizzaType: PizzaType)
 
     @Delete
     suspend fun deletePizzaType(pizzaType: PizzaType)
