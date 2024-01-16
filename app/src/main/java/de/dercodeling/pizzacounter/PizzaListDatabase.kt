@@ -24,7 +24,6 @@ abstract class PizzaListDatabase: RoomDatabase() {
                     PizzaListDatabase::class.java,
                     "pizza_list.db"
                 )
-                    .createFromAsset("pizza_list_initial.db")
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }

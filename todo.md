@@ -10,13 +10,9 @@
 
 ### Functionality
 
-- Implement Dagger/Hilt to simplify and improve db and viewModel-creation at the beginning of MainActivity.kt
-
 - Create UI to remove types individually
 
 - Create logic to share list as Text
-
-- Create release 1.1.0
 
 ### UI
 
@@ -40,8 +36,6 @@
         - Enable the system to enact per-app language settings
     - toggle warning dialogs for resetting quantities/types
     - about-dialog (version, GitHub, license?)
-
-- Potentially generalize to non-specific counter app 
 
 ## Implementation
 

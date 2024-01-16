@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">PizzaCounter</string>
     <string name="button_sort">Sortieren</string>
-    <string name="button_clear">Löschen</string>
+    <string name="button_reset">Zurücksetzen</string>
     <string name="button_add">Hinzufügen</string>
     <string name="heading_sort">Sortieren nach:</string>
     <string name="sorting_option_name">Name</string>
@@ -12,13 +12,13 @@
     <string name="button_decrease">Verringern</string>
     <string name="hint_new_type">Neue Sorte</string>
     <string name="button_settings">Einstellungen</string>
-    <string name="heading_clear">Zurücksetzen:</string>
-    <string name="clearing_option_quantities">Mengen zurücksetzen</string>
-    <string name="clearing_option_types">Sorten zurücksetzen</string>
-    <string name="clear_quantities_dialog_header">Alle Mengen zurücksetzen?</string>
-    <string name="clear_quantities_dialog_text">Sicher, dass du die Mengen aller Sorten auf null zurücksetzen willst?</string>
+    <string name="heading_reset">Zurücksetzen:</string>
+    <string name="reset_option_quantities">Mengen zurücksetzen</string>
+    <string name="reset_option_types">Sorten zurücksetzen</string>
+    <string name="reset_quantities_dialog_header">Alle Mengen zurücksetzen?</string>
+    <string name="reset_quantities_dialog_text">Sicher, dass du die Mengen aller Sorten auf null zurücksetzen willst?</string>
     <string name="dialog_cancel">Abbrechen</string>
-    <string name="clear_types_dialog_header">Alle Sorten zurücksetzen?</string>
-    <string name="clear_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst, inklusive aller Sorten und Mengen?</string>
+    <string name="reset_types_dialog_header">Alle Sorten zurücksetzen?</string>
+    <string name="reset_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst, inklusive aller Sorten und Mengen?</string>
     <string name="button_share">Teilen</string>
 </resources>

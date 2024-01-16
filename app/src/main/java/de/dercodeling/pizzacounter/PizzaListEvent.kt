@@ -10,6 +10,6 @@ sealed interface PizzaListEvent {
     data class IncreaseQuantity(val pizzaType: PizzaType): PizzaListEvent
     data class DecreaseQuantity(val pizzaType: PizzaType): PizzaListEvent
     data class SetSortType(val sortType: SortType): PizzaListEvent
-    data object ClearQuantities: PizzaListEvent
+    data object ResetQuantities: PizzaListEvent
     data object ResetTypes: PizzaListEvent
 }

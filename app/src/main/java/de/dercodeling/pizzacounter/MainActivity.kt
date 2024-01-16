@@ -22,7 +22,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Settings
@@ -62,7 +61,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.style.TextOverflow
@@ -80,7 +78,6 @@ class MainActivity : ComponentActivity() {
     private val db by lazy {
         PizzaListDatabase.getDatabase(context = applicationContext)
     }
-
     private val viewModel by viewModels<PizzaListViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
@@ -97,7 +94,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            // Create PizzaCounterTheme with or without darkMode-Boolean depending whether system theming is followed
+            // Create PizzaCounterTheme with or without darkMode-Boolean
+            // depending on whether system theming is followed
 
             val state by viewModel.state.collectAsState()
             val themeSetting = state.themeSetting
@@ -123,8 +121,8 @@ class MainActivity : ComponentActivity() {
     ) {
         var showAddTypeBottomSheet by remember { mutableStateOf(false) }
         var showSortBottomSheet by remember { mutableStateOf(false) }
-        var showClearBottomSheet by remember { mutableStateOf(false) }
-        var showClearQuantitiesDialog by remember { mutableStateOf(false) }
+        var showResetBottomSheet by remember { mutableStateOf(false) }
+        var showResetQuantitiesDialog by remember { mutableStateOf(false) }
         var showResetTypesDialog by remember { mutableStateOf(false) }
 
         if (state.pizzaTypes.isEmpty()) {
@@ -170,10 +168,10 @@ class MainActivity : ComponentActivity() {
                                 contentDescription = getString(R.string.button_sort)
                             )
                         }
-                        IconButton(onClick = { showClearBottomSheet = true }) {
+                        IconButton(onClick = { showResetBottomSheet = true }) {
                             Icon(
-                                Icons.Rounded.Clear,
-                                contentDescription = getString(R.string.button_clear)
+                                Icons.Rounded.RestartAlt,
+                                contentDescription = getString(R.string.button_reset)
                             )
                         }
                         IconButton(
@@ -229,48 +227,48 @@ class MainActivity : ComponentActivity() {
                 SortBottomSheet(onDismiss, state.sortType)
             }
 
-            if (showClearBottomSheet) {
+            if (showResetBottomSheet) {
                 val onDismiss: (Int) -> Unit = {
                     when (it) {
-                        0 -> showClearQuantitiesDialog = true
+                        0 -> showResetQuantitiesDialog = true
                         1 -> showResetTypesDialog = true
                     }
 
-                    showClearBottomSheet = false
+                    showResetBottomSheet = false
                 }
 
-                ClearBottomSheet(onDismiss)
+                ResetBottomSheet(onDismiss)
             }
 
-            val onDismissClearQuantitiesDialog = {
-                showClearQuantitiesDialog = false
+            val onDismissResetQuantitiesDialog = {
+                showResetQuantitiesDialog = false
             }
 
-            if (showClearQuantitiesDialog) {
+            if (showResetQuantitiesDialog) {
                 AlertDialog(
                     title = {
-                        Text(text = getString(R.string.clear_quantities_dialog_header))
+                        Text(text = getString(R.string.reset_quantities_dialog_header))
                     },
                     text = {
-                        Text(text = getString(R.string.clear_quantities_dialog_text))
+                        Text(text = getString(R.string.reset_quantities_dialog_text))
                     },
                     onDismissRequest = {
-                        onDismissClearQuantitiesDialog()
+                        onDismissResetQuantitiesDialog()
                     },
                     confirmButton = {
                         TextButton(
                             onClick = {
-                                onEvent(PizzaListEvent.ClearQuantities)
-                                onDismissClearQuantitiesDialog()
+                                onEvent(PizzaListEvent.ResetQuantities)
+                                onDismissResetQuantitiesDialog()
                             }
                         ) {
-                            Text(getString(R.string.clearing_option_quantities))
+                            Text(getString(R.string.reset_option_quantities))
                         }
                     },
                     dismissButton = {
                         TextButton(
                             onClick = {
-                                onDismissClearQuantitiesDialog()
+                                onDismissResetQuantitiesDialog()
                             }
                         ) {
                             Text(getString(R.string.dialog_cancel))
@@ -286,10 +284,10 @@ class MainActivity : ComponentActivity() {
             if (showResetTypesDialog) {
                 AlertDialog(
                     title = {
-                        Text(text = getString(R.string.clear_types_dialog_header))
+                        Text(text = getString(R.string.reset_types_dialog_header))
                     },
                     text = {
-                        Text(text = getString(R.string.clear_types_dialog_text))
+                        Text(text = getString(R.string.reset_types_dialog_text))
                     },
                     onDismissRequest = {
                         onDismissResetTypesDialog()
@@ -301,7 +299,7 @@ class MainActivity : ComponentActivity() {
                                 onDismissResetTypesDialog()
                             }
                         ) {
-                            Text(getString(R.string.clearing_option_types))
+                            Text(getString(R.string.reset_option_types))
                         }
                     },
                     dismissButton = {
@@ -462,20 +460,20 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     @OptIn(ExperimentalMaterial3Api::class)
-    fun ClearBottomSheet(onDismiss: (Int) -> Unit) {
+    fun ResetBottomSheet(onDismiss: (Int) -> Unit) {
         val sheetState = rememberModalBottomSheetState()
         val scope = rememberCoroutineScope()
 
-        fun closeAndClear(clearingOption: Int) {
+        fun closeAndReset(resetOption: Int) {
             scope.launch { sheetState.hide() }.invokeOnCompletion {
                 if (!sheetState.isVisible) {
-                    onDismiss(clearingOption)
+                    onDismiss(resetOption)
                 }
             }
         }
 
         ModalBottomSheet(
-            onDismissRequest = { closeAndClear(-1) },
+            onDismissRequest = { closeAndReset(-1) },
             sheetState = sheetState,
             dragHandle = {}
         ) {
@@ -485,11 +483,9 @@ class MainActivity : ComponentActivity() {
             ) {
                 Column(verticalArrangement = Arrangement.SpaceEvenly) {
 
-                    Text(getString(R.string.heading_clear)) // TODO: Stylize (e.g. like in Google Tasks)
-
                     val options = listOf(
-                        getString(R.string.clearing_option_quantities),
-                        getString(R.string.clearing_option_types)
+                        getString(R.string.reset_option_quantities),
+                        getString(R.string.reset_option_types)
                     )
 
                     for (option in options) {
@@ -499,26 +495,10 @@ class MainActivity : ComponentActivity() {
                                 .fillMaxWidth()
                                 .clip(RoundedCornerShape(40))
                                 .clickable {
-                                    closeAndClear(options.indexOf(option))
+                                    closeAndReset(options.indexOf(option))
                                 }
-                                .padding(13.dp)
+                                .padding(15.dp)
                         ) {
-                            when(options.indexOf(option)) {
-                                0 -> {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.material_icon_counter_0),
-                                        contentDescription = getString(R.string.clearing_option_quantities),
-                                        modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                                    )
-                                }
-                                1 -> {
-                                    Icon(
-                                        Icons.Rounded.RestartAlt,
-                                        contentDescription = getString(R.string.clearing_option_types),
-                                        modifier = Modifier.padding(0.dp, 0.dp, 10.dp, 0.dp)
-                                    )
-                                }
-                            }
                             Text(option)
                         }
                     }

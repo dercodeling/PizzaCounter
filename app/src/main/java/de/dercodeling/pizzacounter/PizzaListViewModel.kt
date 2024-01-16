@@ -94,7 +94,7 @@ class PizzaListViewModel(
                 _sortType.value = event.sortType
             }
 
-            PizzaListEvent.ClearQuantities -> {
+            PizzaListEvent.ResetQuantities -> {
                 viewModelScope.launch {
                     dao.clearQuantities()
                 }
