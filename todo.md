@@ -12,6 +12,8 @@
 
 - Create UI to remove types individually
 
+- Allow user to share list as Text
+
 ### UI
 
 - Improve AddTypeBottomSheet's animations
