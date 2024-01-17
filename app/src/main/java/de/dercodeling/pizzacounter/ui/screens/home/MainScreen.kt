@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -104,9 +105,12 @@ fun MainScreen(
                             contentDescription = stringResource(R.string.button_reset)
                         )
                     }
+
+                    val shareStringPrefix = stringResource(R.string.share_string_prefix)
+                    val context = LocalContext.current
                     IconButton(
-                        onClick = { TODO() },
-                        enabled = false) {
+                        onClick = { onEvent(PizzaListEvent.ShareList(shareStringPrefix, context)) }
+                    ) {
                         Icon(
                             Icons.Rounded.Share,
                             contentDescription = stringResource(R.string.button_share)

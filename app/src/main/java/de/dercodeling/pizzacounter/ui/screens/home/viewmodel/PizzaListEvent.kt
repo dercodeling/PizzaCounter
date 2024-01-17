@@ -1,5 +1,6 @@
 package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
 
+import android.content.Context
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.SortType
 
@@ -12,4 +13,5 @@ sealed interface PizzaListEvent {
     data class SetSortType(val sortType: SortType): PizzaListEvent
     data object ResetQuantities: PizzaListEvent
     data object ResetTypes: PizzaListEvent
+    data class ShareList(val shareStringPrefix: String, val context: Context): PizzaListEvent
 }

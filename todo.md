@@ -4,15 +4,13 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE as it is on OnePlus 8 Pro
 
-- Name text is to narrow on some devices → smaller buttons? smaller padding?
+**- Name text is to narrow on some devices → smaller buttons? smaller padding?**
 
 ## Features
 
 ### Functionality
 
 - Create UI to remove types individually
-
-- Create logic to share list as Text
 
 - Settings: → new database table → see tutorials on database migration
     - list of initial types (added in clearTypes())
@@ -39,7 +37,7 @@
 
 ## Implementation
 
-- Check de.dercodeling.pizzacounter.ui.screens for potentially needed refactoring
+- Check .ui.screens for potentially needed refactoring
 
 # Notes
 

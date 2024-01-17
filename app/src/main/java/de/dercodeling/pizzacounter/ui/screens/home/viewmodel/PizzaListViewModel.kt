@@ -1,5 +1,7 @@
 package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
 
+import android.content.Intent
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dercodeling.pizzacounter.data.local.PizzaTypeDao
@@ -107,6 +109,25 @@ class PizzaListViewModel(
                     for (initialType in initialTypes.value) {
                         dao.insertPizzaType(PizzaType(initialType,0))
                     }
+                }
+            }
+
+            is PizzaListEvent.ShareList -> {
+                viewModelScope.launch {
+                    var outString = event.shareStringPrefix
+
+                    for (pizzaType in _pizzaTypes.value) {
+                        if(pizzaType.quantity>0) outString += "\n${pizzaType.quantity}× ${pizzaType.name}"
+                    }
+
+                    val sendIntent: Intent = Intent().apply {
+                        action = Intent.ACTION_SEND
+                        putExtra(Intent.EXTRA_TEXT, outString)
+                        type = "text/plain"
+                    }
+
+                    val shareIntent = Intent.createChooser(sendIntent, null)
+                    startActivity(event.context, shareIntent, null)
                 }
             }
         }
