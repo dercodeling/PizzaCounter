@@ -1,10 +1,10 @@
-package de.dercodeling.pizzacounter
+package de.dercodeling.pizzacounter.data.local
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import de.dercodeling.pizzacounter.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.PizzaType
 
 @Database(
     entities = [PizzaType::class],

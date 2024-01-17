@@ -14,6 +14,15 @@
 
 - Create logic to share list as Text
 
+- Settings: → new database table → see tutorials on database migration
+    - list of initial types (added in clearTypes())
+    - dark theme settings
+    - language settings
+        - Add in-app language setting (default, de, en)
+        - Enable the system to enact per-app language settings
+    - toggle warning dialogs for resetting quantities/types
+    - about-dialog (version, GitHub, license?)
+
 ### UI
 
 - Improve AddTypeBottomSheet's animations
@@ -28,19 +37,9 @@
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
 
-- Settings: → new database table → see tutorials on database migration
-    - list of initial types (added in clearTypes())
-    - dark theme settings
-    - language settings
-        - Add in-app language setting (default, de, en)
-        - Enable the system to enact per-app language settings
-    - toggle warning dialogs for resetting quantities/types
-    - about-dialog (version, GitHub, license?)
-
 ## Implementation
 
-- Refactor MainActivity.kt for better readability → split up into multiple files (e.g. PizzaList, PizzaListItem, ...)
-   + Rename MainActivity accordingly
+- Check de.dercodeling.pizzacounter.ui.screens for potentially needed refactoring
 
 # Notes
 

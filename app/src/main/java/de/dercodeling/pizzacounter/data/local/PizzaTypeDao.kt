@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter
+package de.dercodeling.pizzacounter.data.local
 
 import androidx.room.Dao
 import androidx.room.Delete
@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import de.dercodeling.pizzacounter.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.PizzaType
 import kotlinx.coroutines.flow.Flow
 
 @Dao

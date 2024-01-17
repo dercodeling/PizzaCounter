@@ -12,7 +12,6 @@
     <string name="button_decrease">Verringern</string>
     <string name="hint_new_type">Neue Sorte</string>
     <string name="button_settings">Einstellungen</string>
-    <string name="heading_reset">Zurücksetzen:</string>
     <string name="reset_option_quantities">Mengen zurücksetzen</string>
     <string name="reset_option_types">Sorten zurücksetzen</string>
     <string name="reset_quantities_dialog_header">Alle Mengen zurücksetzen?</string>

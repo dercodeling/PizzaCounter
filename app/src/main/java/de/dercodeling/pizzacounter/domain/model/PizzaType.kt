@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.model
+package de.dercodeling.pizzacounter.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

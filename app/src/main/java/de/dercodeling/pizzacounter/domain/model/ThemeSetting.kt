@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.model
+package de.dercodeling.pizzacounter.domain.model
 
 data class ThemeSetting(
     val isFollowSystem: Boolean = true,

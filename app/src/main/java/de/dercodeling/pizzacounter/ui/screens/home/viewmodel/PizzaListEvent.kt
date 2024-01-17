@@ -1,7 +1,7 @@
-package de.dercodeling.pizzacounter
+package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
 
-import de.dercodeling.pizzacounter.model.PizzaType
-import de.dercodeling.pizzacounter.model.SortType
+import de.dercodeling.pizzacounter.domain.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.SortType
 
 sealed interface PizzaListEvent {
     data object LoadInitialPizzaTypes: PizzaListEvent

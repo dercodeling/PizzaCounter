@@ -1,9 +1,10 @@
-package de.dercodeling.pizzacounter
+package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import de.dercodeling.pizzacounter.model.PizzaType
-import de.dercodeling.pizzacounter.model.SortType
+import de.dercodeling.pizzacounter.data.local.PizzaTypeDao
+import de.dercodeling.pizzacounter.domain.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.SortType
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
