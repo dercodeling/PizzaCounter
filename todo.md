@@ -10,16 +10,16 @@
 
 ### Functionality
 
-- Create UI to remove types individually
-
 - Settings: → new database table → see tutorials on database migration
-    - list of initial types (added in clearTypes())
-    - dark theme settings
+      - list of initial types (added in clearTypes())
+      - dark theme settings
     - language settings
         - Add in-app language setting (default, de, en)
         - Enable the system to enact per-app language settings
     - toggle warning dialogs for resetting quantities/types
     - about-dialog (version, GitHub, license?)
+
+- Create UI to remove types individually
 
 ### UI
 

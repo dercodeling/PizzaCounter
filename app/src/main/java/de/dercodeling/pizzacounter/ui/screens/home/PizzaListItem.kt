@@ -10,6 +10,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,7 +30,8 @@ import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListEvent
 @Composable
 fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
     Card(
-        Modifier.padding(15.dp, 10.dp)
+        modifier = Modifier.padding(15.dp, 10.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -45,7 +47,7 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
             ) {
                 Text( // Quantity
                     text = pizzaType.quantity.toString(),
-                    color = MaterialTheme.colorScheme.primary,
+                    color = if (pizzaType.quantity == 0) Color.Gray else MaterialTheme.colorScheme.primary,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
@@ -63,26 +65,22 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
                     overflow = TextOverflow.Ellipsis
                 )
             }
+
             Row(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.wrapContentWidth()
             ) {
-                Button(modifier = Modifier.padding(5.dp), onClick = {
-                    onEvent(PizzaListEvent.IncreaseQuantity(pizzaType))
-                }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.button_increase)
-                    )
+                Button(
+                    modifier = Modifier.padding(5.dp),
+                    onClick = { onEvent(PizzaListEvent.IncreaseQuantity(pizzaType)) }
+                ) {
+                    Icon( Icons.Rounded.Add, stringResource(R.string.button_increase))
                 }
-                Button(onClick = {
-                    onEvent(PizzaListEvent.DecreaseQuantity(pizzaType))
-                }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Remove,
-                        contentDescription = stringResource(R.string.button_decrease)
-                    )
+
+                Button(onClick = { onEvent(PizzaListEvent.DecreaseQuantity(pizzaType)) }
+                ) {
+                    Icon( Icons.Rounded.Remove, stringResource(R.string.button_decrease))
                 }
             }
         }
