@@ -4,7 +4,7 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE as it is on OnePlus 8 Pro
 
-- **Name text is to narrow on some devices → smaller buttons? smaller padding?**
+- **Name text is to narrow on some devices → smaller buttons? smaller padding? two rows?**
 
 ## Features
 
@@ -34,6 +34,8 @@
 
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
+
+(- Update app icon to reflect (hopefully) stable status)
 
 ## Implementation
 
