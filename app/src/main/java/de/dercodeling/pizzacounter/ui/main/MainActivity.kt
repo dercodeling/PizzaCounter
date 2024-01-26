@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home
+package de.dercodeling.pizzacounter.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,14 +9,15 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import de.dercodeling.pizzacounter.data.local.PizzaListDatabase
-import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListViewModel
+import de.dercodeling.pizzacounter.data.local.PizzaCounterDatabase
+import de.dercodeling.pizzacounter.ui.main.navigation.Navigation
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListViewModel
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 
 class MainActivity : ComponentActivity() {
 
     private val db by lazy {
-        PizzaListDatabase.getDatabase(context = applicationContext)
+        PizzaCounterDatabase.getDatabase(context = applicationContext)
     }
     private val viewModel by viewModels<PizzaListViewModel>(
         factoryProducer = {
@@ -42,11 +43,11 @@ class MainActivity : ComponentActivity() {
 
             if (themeSetting.isFollowSystem) {
                 PizzaCounterTheme {
-                    MainScreen(state, viewModel::onEvent)
+                    Navigation(viewModel)
                 }
             } else {
                 PizzaCounterTheme(darkTheme = themeSetting.isDark) {
-                    MainScreen(state, viewModel::onEvent)
+                    Navigation(viewModel)
                 }
             }
         }

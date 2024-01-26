@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home
+package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -13,17 +13,18 @@ import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
-import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,18 +38,22 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.ResetOption
 import de.dercodeling.pizzacounter.domain.model.SortType
-import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListEvent
-import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListState
+import de.dercodeling.pizzacounter.ui.main.navigation.Screen
+import de.dercodeling.pizzacounter.ui.screens.components.OptionsBottomSheet
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun MainScreen(
     state: PizzaListState,
-    onEvent: (PizzaListEvent) -> Unit
+    onEvent: (PizzaListEvent) -> Unit,
+    navController: NavController
 ) {
     var showAddTypeBottomSheet by remember { mutableStateOf(false) }
     var showSortBottomSheet by remember { mutableStateOf(false) }
@@ -74,17 +79,17 @@ fun MainScreen(
                 actions = {
                     IconButton(
                         onClick = {
-                            //TODO: Create settings page
+                            navController.navigate(Screen.SettingsScreen.route)
                         },
-                        enabled = false
                     ) {
                         Icon(
                             Icons.Rounded.Settings,
                             contentDescription = stringResource(R.string.button_settings),
+
                         )
                     }
-                }
-
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
             )
         },
         bottomBar = {
@@ -119,7 +124,6 @@ fun MainScreen(
                 },
                 floatingActionButton = {
                     FloatingActionButton(
-                        containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
                         onClick = {
                             showAddTypeBottomSheet = true
@@ -132,7 +136,7 @@ fun MainScreen(
                     }
                 }
             )
-        }
+        },
     ) { innerPadding ->
 
         PizzaList(state, onEvent, innerPadding)

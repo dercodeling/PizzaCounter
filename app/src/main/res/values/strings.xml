@@ -21,5 +21,12 @@
     <string name="button_share">Share</string>
     <string name="share_string_prefix">Pizzas:</string>
     <string name="button_delete">Delete</string>
+    <string name="button_back">Back</string>
+    <string name="button_about">About</string>
+    <string name="language_setting_en">English</string>
+    <string name="language_setting_de">German</string>
+    <string name="dialog_close">Close</string>
+    <string name="info_dialog">Version %1$</string>
+    <string name="dialog_github">GitHub</string>
 
 </resources>

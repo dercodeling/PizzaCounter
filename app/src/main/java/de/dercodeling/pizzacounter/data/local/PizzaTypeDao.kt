@@ -11,8 +11,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PizzaTypeDao {
-    // TODO: Add functions for resetting quantities to 0, clearing table, getting list size
-
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPizzaType(pizzaType: PizzaType)
 

@@ -10,18 +10,18 @@ import de.dercodeling.pizzacounter.domain.model.PizzaType
     entities = [PizzaType::class],
     version = 1
 )
-abstract class PizzaListDatabase: RoomDatabase() {
+abstract class PizzaCounterDatabase: RoomDatabase() {
     abstract fun getDao(): PizzaTypeDao
 
     companion object {
         @Volatile
-        private var Instance: PizzaListDatabase? = null
+        private var Instance: PizzaCounterDatabase? = null
 
-        fun getDatabase(context: Context): PizzaListDatabase {
+        fun getDatabase(context: Context): PizzaCounterDatabase {
             return Instance ?: synchronized(this) {
                 Room.databaseBuilder(
                     context,
-                    PizzaListDatabase::class.java,
+                    PizzaCounterDatabase::class.java,
                     "pizza_list.db"
                 )
                     .fallbackToDestructiveMigration()

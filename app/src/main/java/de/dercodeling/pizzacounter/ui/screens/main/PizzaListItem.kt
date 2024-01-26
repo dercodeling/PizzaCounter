@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home
+package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -9,10 +9,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,20 +24,19 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 
 @Composable
 fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
-    Card(
-        modifier = Modifier.padding(15.dp, 10.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+    OutlinedCard(
+        modifier = Modifier.padding(0.dp, 8.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(25.dp, 15.dp)
+                .padding(25.dp, 15.dp) // TODO: Possibly reduce (only on small screens?) to prevent unnecessary line breaks
         ) {
             Row(
                 horizontalArrangement = Arrangement.Start,

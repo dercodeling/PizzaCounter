@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home
+package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,7 +29,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.ui.screens.home.viewmodel.PizzaListState
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 import kotlinx.coroutines.launch
 
 @Composable

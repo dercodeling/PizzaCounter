@@ -22,4 +22,11 @@
     <string name="button_share">Teilen</string>
     <string name="share_string_prefix">Pizzen:</string>
     <string name="button_delete">Löschen</string>
+    <string name="button_back">Zurück</string>
+    <string name="button_about">Über diese App</string>
+    <string name="language_setting_en">Englisch</string>
+    <string name="language_setting_de">Deutsch</string>
+    <string name="dialog_close">Schließen</string>
+    <string name="info_dialog">Version %1$</string>
+    <string name="dialog_github">GitHub</string>
 </resources>

@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
+package de.dercodeling.pizzacounter.ui.screens.main.viewmodel
 
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.SortType

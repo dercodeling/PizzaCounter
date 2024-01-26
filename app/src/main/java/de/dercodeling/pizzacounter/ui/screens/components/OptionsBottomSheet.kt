@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home
+package de.dercodeling.pizzacounter.ui.screens.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,6 +12,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import de.dercodeling.pizzacounter.ui.screens.main.BottomSheetOption
 import kotlinx.coroutines.launch
 
 @Composable

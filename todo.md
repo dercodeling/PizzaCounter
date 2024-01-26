@@ -10,25 +10,23 @@
 
 ### Functionality
 
+- Improve settings page navigation transition
+
 - Settings: → new database table → see tutorials on database migration
-      - list of initial types (added in clearTypes())
-      - dark theme settings
-    - language settings
-        - Add in-app language setting (default, de, en)
-        - Enable the system to enact per-app language settings
-    - toggle warning dialogs for resetting quantities/types
-    - about-dialog (version, GitHub, license?)
+  -> initial types, theme, language (in-app setting + system per-app settings), reset warnings, about-dialog (version, GitHub, license?)
+  - create ui for all settings
+  - create new database table, handle database migration and changes in view model, dao, etc. (new view model and state?)
 
 - Create UI to remove types individually
 
 ### UI
 
 - Improve AddTypeBottomSheet's animations
-    - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a
-      moment ) in LaunchEffect towards the end of AddTypeBottomSheet
-    - Closing: Somehow hide keyboard in closeAndAddPizzaType for smoother animation without it
-      causing a transparent screen to remain after closing of bottom sheet (this screen can be
-      removed via back gesture)
+  - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a
+    moment ) in LaunchEffect towards the end of AddTypeBottomSheet
+  - Closing: Somehow hide keyboard in closeAndAddPizzaType for smoother animation without it
+    causing a transparent screen to remain after closing of bottom sheet (this screen can be
+    removed via back gesture)
 
 ### Down the road
 
@@ -40,6 +38,8 @@
 ## Implementation
 
 - Check .ui.screens for potentially needed refactoring
+
+- Recreate tests for new database
 
 # Notes
 

@@ -1,4 +1,4 @@
-package de.dercodeling.pizzacounter.ui.screens.home.viewmodel
+package de.dercodeling.pizzacounter.ui.screens.main.viewmodel
 
 import android.content.Context
 import de.dercodeling.pizzacounter.domain.model.PizzaType
