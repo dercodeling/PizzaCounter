@@ -10,6 +10,8 @@
 
 ### Functionality
 
+- Maybe switch increase/decrease buttons' and fabs color (esp. nice in dark theme)
+
 - Improve settings page navigation transition
 
 - Don't navigate back to Settings page on back gesture from MainScreen
