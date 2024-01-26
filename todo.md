@@ -12,6 +12,8 @@
 
 - Improve settings page navigation transition
 
+- Don't navigate back to Settings page on back gesture from MainScreen
+
 - Settings: → new database table → see tutorials on database migration
   -> initial types, theme, language (in-app setting + system per-app settings), reset warnings, about-dialog (version, GitHub, license?)
   - create ui for all settings
