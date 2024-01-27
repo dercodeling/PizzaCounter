@@ -1,7 +1,6 @@
 package de.dercodeling.pizzacounter.ui.screens.settings
 
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,10 +9,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,28 +23,25 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import de.dercodeling.pizzacounter.R
-import de.dercodeling.pizzacounter.domain.model.LanguageSetting
-import de.dercodeling.pizzacounter.ui.main.navigation.Screen
+import de.dercodeling.pizzacounter.domain.model.LanguageOption
+import de.dercodeling.pizzacounter.domain.model.ThemeOption
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
-    navController: NavController
+    onNavigateUp: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
     var showInfoDialog by remember { mutableStateOf(false) }
-    var showLanguageBottomSheet by remember { mutableStateOf(false) }
-    var showThemeBottomSheet by remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -59,7 +55,7 @@ fun SettingsScreen(
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = { navController.navigate(Screen.MainScreen.route) }) {
+                    IconButton(onClick = onNavigateUp) {
                         Icon(Icons.AutoMirrored.Rounded.ArrowBack, stringResource(R.string.button_back))
                     }
                 },
@@ -81,30 +77,63 @@ fun SettingsScreen(
             contentPadding = PaddingValues(20.dp)
         ){
             item {
-                SettingsGroup ("Appearance") {
+                SettingsGroup (stringResource(R.string.settings_group_appearance)) {
 
-                    // Make clickable area like in Lawnchair settings that opens OptionsBottomSheet for language, for theme, etc.
-
-                    Text("Language")
-
-                    val options = mapOf(
-                        Pair(LanguageSetting.EN, stringResource(R.string.language_setting_en)),
-                        Pair(LanguageSetting.DE, stringResource(R.string.language_setting_de))
-                    )
-
-                    for (option in options) {
-                        Row (
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            RadioButton(selected = false, onClick = { /*TODO*/ })
-                            Text(
-                                option.value
+                    OptionsBottomSheetSetting(
+                        stringResource(R.string.setting_language),
+                        mapOf(
+                            Pair(
+                                LanguageOption.SYSTEM,
+                                stringResource(R.string.settings_option_system)
+                            ),
+                            Pair(
+                                LanguageOption.EN,
+                                stringResource(R.string.language_option_en)
+                            ),
+                            Pair(
+                                LanguageOption.DE,
+                                stringResource(R.string.language_option_de)
                             )
-                        }
+                        ),
+                        LanguageOption.SYSTEM // TODO: Get actual current setting
+                    ) {
+                        // TODO: Save and apply
+                    }
+
+                    HorizontalDivider(Modifier.padding(15.dp, 0.dp))
+
+                    OptionsBottomSheetSetting(
+                        heading = stringResource(R.string.setting_theme),
+                        optionsMap = mapOf(
+                            Pair(
+                                ThemeOption.SYSTEM,
+                                stringResource(R.string.settings_option_system)
+                            ),
+                            Pair(
+                                ThemeOption.LIGHT,
+                                stringResource(R.string.theme_option_light)
+                            ),Pair(
+                                ThemeOption.DARK,
+                                stringResource(R.string.theme_option_dark)
+                            )
+                        ),
+                        currentOption = ThemeOption.SYSTEM // TODO: Get actual current setting
+                    ) {
+                        // TODO: Save and apply
                     }
                 }
 
-                SettingsGroup("Behavior") {}
+                SettingsGroup(stringResource(R.string.settings_group_behavior)) {
+                    BottomSheetSetting(
+                        heading = stringResource(R.string.setting_default_types),
+                        label = stringResource(R.string.setting_label_default_types)
+                    ) { onDismiss ->
+                        DefaultTypesBottomSheet {
+                            onDismiss()
+                            // TODO: Save and apply
+                        }
+                    }
+                }
             }
         }
 
@@ -112,13 +141,15 @@ fun SettingsScreen(
             showInfoDialog = false
         }
 
-
         if (showInfoDialog) {
+            val uriHandler = LocalUriHandler.current
+
             AlertDialog(
                 title = {
                     Text(text = stringResource(R.string.app_name))
                 },
                 text = {
+                    // TODO: Show app version
                     Text(text = stringResource(R.string.info_dialog))
                 },
                 onDismissRequest = {
@@ -127,20 +158,20 @@ fun SettingsScreen(
                 confirmButton = {
                     TextButton(
                         onClick = {
-                            // TODO: Open link to GitHub page
                             onDismissInfoDialog()
                         }
                     ) {
-                        Text(stringResource(R.string.dialog_github))
+                        Text(stringResource(R.string.dialog_close))
                     }
                 },
                 dismissButton = {
                     TextButton(
                         onClick = {
+                            uriHandler.openUri("https://github.com/dercodeling/PizzaCounter")
                             onDismissInfoDialog()
                         }
                     ) {
-                        Text(stringResource(R.string.dialog_close))
+                        Text(stringResource(R.string.dialog_github))
                     }
                 }
             )

@@ -16,14 +16,25 @@ fun Navigation(
 ) {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Screen.SettingsScreen.route) {
-        composable(route = Screen.MainScreen.route) {
+    val onNavigateToSettings: () -> Unit = {
+        navController.navigate(Screen.SettingsScreen.route)
+    }
+
+    val onNavigateUpFromSettings: () -> Unit = {
+        if (navController.previousBackStackEntry != null)
+            navController.navigateUp()
+        else
+            navController.navigate(Screen.MainScreen.route)
+    }
+
+    NavHost(navController, startDestination = Screen.SettingsScreen.route) {
+        composable(Screen.MainScreen.route) {
             val state by viewModel.state.collectAsState()
 
-            MainScreen(state, viewModel::onEvent, navController)
+            MainScreen(state, viewModel::onEvent, onNavigateToSettings)
         }
-        composable(route = Screen.SettingsScreen.route) {
-            SettingsScreen(navController)
+        composable(Screen.SettingsScreen.route) {
+            SettingsScreen(onNavigateUpFromSettings)
         }
     }
 

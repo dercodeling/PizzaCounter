@@ -1,6 +1,7 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
@@ -41,7 +42,8 @@ fun AddTypeBottomSheet(state: PizzaListState, onDismiss: (PizzaType?) -> Unit) {
     ModalBottomSheet(
         onDismissRequest = { onDismiss(null) },
         sheetState = sheetState,
-        dragHandle = {}
+        dragHandle = {},
+        windowInsets = WindowInsets(0,0,0,0)
     ) {
         Column(
             horizontalAlignment = Alignment.End

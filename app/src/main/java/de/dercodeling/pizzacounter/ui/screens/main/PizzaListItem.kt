@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
@@ -16,18 +17,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 
 @Composable
 fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
+    val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
+
     OutlinedCard(
         modifier = Modifier.padding(0.dp, 8.dp),
     ) {
@@ -45,13 +49,13 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
             ) {
                 Text( // Quantity
                     text = pizzaType.quantity.toString(),
-                    color = if (pizzaType.quantity == 0) Color.Gray else MaterialTheme.colorScheme.primary,
+                    color = if (pizzaType.quantity == 0) onSurfaceDisabled else MaterialTheme.colorScheme.primary,
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = "×",
-                    color = Color.Gray,
+                    color = onSurfaceDisabled,
                     fontSize = 20.sp,
                     modifier = Modifier.padding(15.dp)
                 )
@@ -64,6 +68,9 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
                 )
             }
 
+            val buttonColor = MaterialTheme.colorScheme.primaryContainer
+            val onButtonColor = MaterialTheme.colorScheme.onPrimaryContainer
+
             Row(
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically,
@@ -71,16 +78,24 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
             ) {
                 Button(
                     modifier = Modifier.padding(5.dp),
-                    onClick = { onEvent(PizzaListEvent.IncreaseQuantity(pizzaType)) }
+                    onClick = { onEvent(PizzaListEvent.IncreaseQuantity(pizzaType)) },
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                 ) {
-                    Icon( Icons.Rounded.Add, stringResource(R.string.button_increase))
+                    Icon( Icons.Rounded.Add, stringResource(R.string.button_increase), tint = onButtonColor)
                 }
 
-                Button(onClick = { onEvent(PizzaListEvent.DecreaseQuantity(pizzaType)) }
+                Button(onClick = { onEvent(PizzaListEvent.DecreaseQuantity(pizzaType)) },
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                 ) {
-                    Icon( Icons.Rounded.Remove, stringResource(R.string.button_decrease))
+                    Icon( Icons.Rounded.Remove, stringResource(R.string.button_decrease), tint = onButtonColor)
                 }
             }
         }
     }
+}
+
+@Preview
+@Composable
+fun PizzaListItemPreview() {
+    PizzaListItem(PizzaType("Margherita",4)) {}
 }

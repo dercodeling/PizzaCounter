@@ -16,19 +16,17 @@ fun SettingsGroup (heading: String, content: @Composable () -> Unit) {
 
     if(heading.isNotEmpty()) Text(heading,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(15.dp,0.dp,0.dp,5.dp))
+        modifier = Modifier.padding(15.dp,0.dp,0.dp,0.dp))
     Card(
         modifier = Modifier
-            .padding(0.dp, 8.dp)
+            .padding(0.dp, 10.dp, 0.dp, 20.dp)
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
     ) {
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(15.dp)
         ) {
-
             content()
         }
     }

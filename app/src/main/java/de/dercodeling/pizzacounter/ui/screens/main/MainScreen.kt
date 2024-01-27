@@ -1,10 +1,6 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
@@ -25,25 +21,24 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import de.dercodeling.pizzacounter.R
+import de.dercodeling.pizzacounter.domain.model.BottomSheetOption
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.ResetOption
 import de.dercodeling.pizzacounter.domain.model.SortType
-import de.dercodeling.pizzacounter.ui.main.navigation.Screen
 import de.dercodeling.pizzacounter.ui.screens.components.OptionsBottomSheet
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
@@ -53,7 +48,7 @@ import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 fun MainScreen(
     state: PizzaListState,
     onEvent: (PizzaListEvent) -> Unit,
-    navController: NavController
+    onNavigateToSettings: () -> Unit
 ) {
     var showAddTypeBottomSheet by remember { mutableStateOf(false) }
     var showSortBottomSheet by remember { mutableStateOf(false) }
@@ -64,6 +59,8 @@ fun MainScreen(
     if (state.pizzaTypes.isEmpty()) {
         onEvent(PizzaListEvent.LoadInitialPizzaTypes)
     }
+
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         topBar = {
@@ -78,9 +75,7 @@ fun MainScreen(
                 },
                 actions = {
                     IconButton(
-                        onClick = {
-                            navController.navigate(Screen.SettingsScreen.route)
-                        },
+                        onClick = onNavigateToSettings,
                     ) {
                         Icon(
                             Icons.Rounded.Settings,
@@ -89,7 +84,8 @@ fun MainScreen(
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                //colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                scrollBehavior = scrollBehavior
             )
         },
         bottomBar = {
@@ -125,6 +121,7 @@ fun MainScreen(
                 floatingActionButton = {
                     FloatingActionButton(
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
+                        containerColor = MaterialTheme.colorScheme.primary,
                         onClick = {
                             showAddTypeBottomSheet = true
                         }
@@ -137,6 +134,7 @@ fun MainScreen(
                 }
             )
         },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
 
         PizzaList(state, onEvent, innerPadding)
@@ -180,22 +178,11 @@ fun MainScreen(
                     )
                 )
             ) { option, closeAndApply ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(40))
-                        .clickable {
-                            closeAndApply(option.first)
-                        }
-                ) {
-                    RadioButton(
-                        selected = (state.sortType == option.first),
-                        onClick = {
-                            closeAndApply(option.first)
-                        })
-                    Text(option.second)
-                }
+                RadioButton(
+                    selected = (state.sortType == option.first),
+                    onClick = {
+                        closeAndApply(option.first)
+                    })
             }
         }
 
@@ -223,20 +210,7 @@ fun MainScreen(
                         stringResource(R.string.reset_option_types)
                     )
                 )
-            ) { option, closeAndApply ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(40))
-                        .clickable {
-                            closeAndApply(option.first)
-                        }
-                        .padding(15.dp)
-                ) {
-                    Text(option.second)
-                }
-            }
+            )
         }
 
         val onDismissResetQuantitiesDialog = {

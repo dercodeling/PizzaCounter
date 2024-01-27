@@ -23,10 +23,20 @@
     <string name="button_delete">Delete</string>
     <string name="button_back">Back</string>
     <string name="button_about">About</string>
-    <string name="language_setting_en">English</string>
-    <string name="language_setting_de">German</string>
+    <string name="language_option_en">English</string>
+    <string name="language_option_de">German</string>
     <string name="dialog_close">Close</string>
     <string name="info_dialog">Version %1$</string>
     <string name="dialog_github">GitHub</string>
+    <string name="theme_option_light">Light theme</string>
+    <string name="theme_option_dark">Dark theme</string>
+    <string name="settings_group_appearance">Appearance</string>
+    <string name="setting_language">Language</string>
+    <string name="setting_theme">Theme</string>
+    <string name="settings_group_behavior">Behavior</string>
+    <string name="settings_option_system">Follow system</string>
+    <string name="setting_default_types">Default types</string>
+    <string name="setting_explanation_default_types">This is the types of pizza that remain when the list is reset.</string>
+    <string name="setting_label_default_types">Pizza types that remain after reset</string>
 
 </resources>

@@ -10,18 +10,14 @@
 
 ### Functionality
 
-- Maybe switch increase/decrease buttons' and fabs color (esp. nice in dark theme)
-
-- Improve settings page navigation transition
-
-- Don't navigate back to Settings page on back gesture from MainScreen
-
-- Settings: → new database table → see tutorials on database migration
-  -> initial types, theme, language (in-app setting + system per-app settings), reset warnings, about-dialog (version, GitHub, license?)
-  - create ui for all settings
+- Settings:
+  -> initial types, theme, language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig), reset warnings, about-dialog (version, GitHub, license?)
+  - continue creating ui for the remaining settings
   - create new database table, handle database migration and changes in view model, dao, etc. (new view model and state?)
 
 - Create UI to remove types individually
+
+- Improve settings page navigation transition
 
 ### UI
 
@@ -40,6 +36,10 @@
 (- Update app icon to reflect (hopefully) stable status)
 
 ## Implementation
+
+- Organize and extract Typography and Padding values into respective files in .ui.theme
+
+- Create previews for reusable composables
 
 - Check .ui.screens for potentially needed refactoring
 
