@@ -27,7 +27,7 @@ fun Navigation(
             navController.navigate(Screen.MainScreen.route)
     }
 
-    NavHost(navController, startDestination = Screen.SettingsScreen.route) {
+    NavHost(navController, startDestination = Screen.MainScreen.route) {
         composable(Screen.MainScreen.route) {
             val state by viewModel.state.collectAsState()
 

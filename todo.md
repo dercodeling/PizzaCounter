@@ -37,9 +37,7 @@
 
 ## Implementation
 
-- Organize and extract Typography and Padding values into respective files in .ui.theme
-
-- Create previews for reusable composables
+- Organize and extract Padding values (and other "style numbers"?)  into respective files in .ui.theme
 
 - Check .ui.screens for potentially needed refactoring
 

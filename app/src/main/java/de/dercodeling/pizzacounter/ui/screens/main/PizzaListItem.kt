@@ -18,11 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
@@ -50,19 +48,18 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
                 Text( // Quantity
                     text = pizzaType.quantity.toString(),
                     color = if (pizzaType.quantity == 0) onSurfaceDisabled else MaterialTheme.colorScheme.primary,
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.titleLarge,
                 )
                 Text(
                     text = "×",
                     color = onSurfaceDisabled,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(15.dp)
                 )
                 Text( // Type
                     text = pizzaType.name,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    fontSize = 20.sp,
+                    style = MaterialTheme.typography.titleMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -97,5 +94,5 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
 @Preview
 @Composable
 fun PizzaListItemPreview() {
-    PizzaListItem(PizzaType("Margherita",4)) {}
+    PizzaListItem(PizzaType("Margherita", 4)) {}
 }

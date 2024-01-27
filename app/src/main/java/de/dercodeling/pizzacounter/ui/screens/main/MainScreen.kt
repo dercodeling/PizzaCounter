@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
@@ -70,7 +69,7 @@ fun MainScreen(
                         "🍕 " + stringResource(R.string.app_name),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
-                        fontWeight = FontWeight.Bold
+                        style = MaterialTheme.typography.displayLarge
                     )
                 },
                 actions = {
