@@ -4,8 +4,6 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro
 
-- **Name text is to narrow on some devices → smaller buttons? smaller padding? two rows?**
-
 ## Features
 
 ### Functionality
