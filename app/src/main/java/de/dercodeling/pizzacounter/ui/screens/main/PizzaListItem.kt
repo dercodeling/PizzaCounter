@@ -1,6 +1,8 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,8 +30,11 @@ import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 
 @Composable
-fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
+fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCompressLayout: () -> Unit, isCompactLayout: Boolean) {
     val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
+
+    val outlinePadding = if(isCompactLayout) PaddingValues(20.dp, 10.dp) else PaddingValues(25.dp, 15.dp)
+    val xPadding = if(isCompactLayout) 10.dp else 15.dp
 
     OutlinedCard(
         modifier = Modifier.padding(0.dp, 8.dp),
@@ -38,7 +44,7 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(25.dp, 15.dp) // TODO: Possibly reduce (only on small screens?) to prevent unnecessary line breaks
+                .padding(outlinePadding)
         ) {
             Row(
                 horizontalArrangement = Arrangement.Start,
@@ -52,16 +58,22 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
                 )
                 Text(
                     text = "×",
-                    color = onSurfaceDisabled,
+                    color = /*if (isCompactLayout) Color.Red else*/ onSurfaceDisabled,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(15.dp)
+                    modifier = Modifier.padding(xPadding)
                 )
                 Text( // Type
-                    text = pizzaType.name,
+                    text = pizzaType.name+"",
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    onTextLayout = { textLayoutResult ->
+                        // This doesn't allow for layout to expand if no strings are to long anymore,
+                        // but that is expected behavior meant to hide the layout changes from the user
+                        // to prevent unnecessary visual disturbances.
+                        if (textLayoutResult.lineCount > 1) onCompressLayout()
+                    }
                 )
             }
 
@@ -94,5 +106,11 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit) {
 @Preview
 @Composable
 fun PizzaListItemPreview() {
-    PizzaListItem(PizzaType("Margherita", 4)) {}
+    Column {
+        Text("Normal", color = Color.Gray)
+        PizzaListItem(PizzaType("Margherita", 4),{},{},false)
+
+        Text("Compressed", color = Color.Gray)
+        PizzaListItem(PizzaType("Margherita", 4),{},{},true)
+    }
 }

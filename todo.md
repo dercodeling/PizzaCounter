@@ -2,7 +2,7 @@
 
 ## Fixes
 
-- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE as it is on OnePlus 8 Pro
+- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro
 
 - **Name text is to narrow on some devices → smaller buttons? smaller padding? two rows?**
 
@@ -10,12 +10,18 @@
 
 ### Functionality
 
+- Add adaptive layout for windowSizeClass.Medium with list on one side and 
+  menu with bottom app bar and permanently shown add-type-dialog on the other
+  using Jetpack WindowManager library
+
 - Settings:
   -> initial types, theme, language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig), reset warnings, about-dialog (version, GitHub, license?)
   - continue creating ui for the remaining settings
   - create new database table, handle database migration and changes in view model, dao, etc. (new view model and state?)
 
 - Create UI to remove types individually
+  (long press → increase/decrease-buttons replaced by delete button with icon and label to make it same size
+  → scrim appears behind pizzaListItem → on button press type is delete, on scrim press everything reverses)
 
 - Improve settings page navigation transition
 
