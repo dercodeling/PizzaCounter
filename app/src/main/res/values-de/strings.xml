@@ -39,4 +39,5 @@
     <string name="setting_default_types">Standardsorten</string>
     <string name="setting_explanation_default_types">Dies ist die Liste von Pizzasorten, die bleiben, wenn man die Liste vollständig zurücksetzt.</string>
     <string name="setting_label_default_types">Pizzasorten mit denen man beginnt</string>
+    <string name="heading_settings">Einstellungen</string>
 </resources>
