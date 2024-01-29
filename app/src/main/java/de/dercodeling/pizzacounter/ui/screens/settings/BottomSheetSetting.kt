@@ -42,7 +42,7 @@ fun BottomSheetSetting (
             if (label.isNotEmpty()) {
                 Text(
                     label,
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     color = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
                 )
