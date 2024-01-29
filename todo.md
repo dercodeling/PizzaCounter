@@ -2,7 +2,7 @@
 
 ## Fixes
 
-- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro
+- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
 
 ## Features
 
@@ -41,7 +41,7 @@
 
 ## Implementation
 
-- Organize and extract Padding values (and other "style numbers"?)  into respective files in .ui.theme
+- Organize and extract Padding values (and other style values?) into respective dedicated files in .ui.theme
 
 - Check .ui.screens for potentially needed refactoring
 

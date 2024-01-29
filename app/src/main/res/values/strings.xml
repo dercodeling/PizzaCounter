@@ -26,8 +26,8 @@
     <string name="language_option_en">English</string>
     <string name="language_option_de">German</string>
     <string name="dialog_close">Close</string>
-    <string name="info_dialog">Version %1$</string>
-    <string name="dialog_github">GitHub</string>
+    <string name="info_dialog_version">Version %1$s</string>
+    <string name="info_dialog_github">Give feedback on GitHub:</string>
     <string name="theme_option_light">Light theme</string>
     <string name="theme_option_dark">Dark theme</string>
     <string name="settings_group_appearance">Appearance</string>
@@ -39,4 +39,9 @@
     <string name="setting_explanation_default_types">This is the types of pizza that remain when the list is reset.</string>
     <string name="setting_label_default_types">Pizza types that remain after reset</string>
     <string name="heading_settings">Settings</string>
+    <string name="info_dialog_developer">Developed by dercodeling</string>
+    <string name="info_dialog_icon_github">Open this apps GitHub page</string>
+    <string name="list_item_quantity_separator">×</string>
+    <string name="info_dialog_license">Licensed under the GNU General Public License 3.0:</string>
+    <string name="info_dialog_icon_gpl">Open this apps license</string>
 </resources>

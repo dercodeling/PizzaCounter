@@ -27,8 +27,8 @@
     <string name="language_option_en">Englisch</string>
     <string name="language_option_de">Deutsch</string>
     <string name="dialog_close">Schließen</string>
-    <string name="info_dialog">Version %1$</string>
-    <string name="dialog_github">GitHub</string>
+    <string name="info_dialog_version">Version %1$s</string>
+    <string name="info_dialog_github">Gib gerne auf GitHub feedback:</string>
     <string name="theme_option_light">Hell</string>
     <string name="theme_option_dark">Dunkel</string>
     <string name="settings_group_appearance">Erscheinungsbild</string>
@@ -40,4 +40,9 @@
     <string name="setting_explanation_default_types">Dies ist die Liste von Pizzasorten, die bleiben, wenn man die Liste vollständig zurücksetzt.</string>
     <string name="setting_label_default_types">Pizzasorten mit denen man beginnt</string>
     <string name="heading_settings">Einstellungen</string>
+    <string name="info_dialog_developer">Entwickelt von dercodeling</string>
+    <string name="info_dialog_icon_github">GitHub-Seite dieser App öffnen</string>
+    <string name="list_item_quantity_separator">×</string>
+    <string name="info_dialog_license">Lizenziert unter der GNU General Public License 3.0:</string>
+    <string name="info_dialog_icon_gpl">Lizenz dieser App öffnen</string>
 </resources>

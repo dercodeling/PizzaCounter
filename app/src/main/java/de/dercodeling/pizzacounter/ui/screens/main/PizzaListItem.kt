@@ -34,7 +34,7 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCom
     val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
 
     val outlinePadding = if(isCompactLayout) PaddingValues(20.dp, 10.dp) else PaddingValues(25.dp, 15.dp)
-    val xPadding = if(isCompactLayout) 10.dp else 15.dp
+    val separatorPadding = if(isCompactLayout) 10.dp else 15.dp
 
     OutlinedCard(
         modifier = Modifier.padding(0.dp, 8.dp),
@@ -57,13 +57,13 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCom
                     style = MaterialTheme.typography.titleLarge,
                 )
                 Text(
-                    text = "×",
+                    text = stringResource(R.string.list_item_quantity_separator),
                     color = /*if (isCompactLayout) Color.Red else*/ onSurfaceDisabled,
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(xPadding)
+                    modifier = Modifier.padding(separatorPadding)
                 )
                 Text( // Type
-                    text = pizzaType.name+"",
+                    text = pizzaType.name,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 2,

@@ -1,5 +1,6 @@
 package de.dercodeling.pizzacounter.ui.main.navigation
 
+import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -12,6 +13,7 @@ import de.dercodeling.pizzacounter.ui.screens.settings.SettingsScreen
 
 @Composable
 fun Navigation(
+    context: Context,
     viewModel: PizzaListViewModel
 ) {
     val navController = rememberNavController()
@@ -27,14 +29,14 @@ fun Navigation(
             navController.navigate(Screen.MainScreen.route)
     }
 
-    NavHost(navController, startDestination = Screen.MainScreen.route) {
+    NavHost(navController, startDestination = Screen.SettingsScreen.route) {
         composable(Screen.MainScreen.route) {
             val state by viewModel.state.collectAsState()
 
             MainScreen(state, viewModel::onEvent, onNavigateToSettings)
         }
         composable(Screen.SettingsScreen.route) {
-            SettingsScreen(onNavigateUpFromSettings)
+            SettingsScreen(context, onNavigateUpFromSettings)
         }
     }
 

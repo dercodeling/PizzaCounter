@@ -16,23 +16,25 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SettingsGroup (heading: String, content: @Composable () -> Unit) {
 
-    if(heading.isNotEmpty()) {
-        Text(heading,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(15.dp,0.dp,0.dp,0.dp),
-        )
-    }
-    Card(
-        modifier = Modifier
-            .padding(0.dp, 10.dp, 0.dp, 20.dp)
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
-    ) {
-        Column (
+    Column {
+        if(heading.isNotEmpty()) {
+            Text(heading,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(15.dp,0.dp,0.dp,0.dp),
+            )
+        }
+        Card(
             modifier = Modifier
-                .fillMaxWidth()
+                .padding(0.dp, 10.dp, 0.dp, 20.dp)
+                .fillMaxWidth(),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh),
         ) {
-            content()
+            Column (
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                content()
+            }
         }
     }
 }
