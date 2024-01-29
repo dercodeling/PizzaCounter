@@ -38,5 +38,5 @@
     <string name="setting_default_types">Default types</string>
     <string name="setting_explanation_default_types">This is the types of pizza that remain when the list is reset.</string>
     <string name="setting_label_default_types">Pizza types that remain after reset</string>
-
+    <string name="heading_settings">Settings</string>
 </resources>
