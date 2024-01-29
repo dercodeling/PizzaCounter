@@ -48,7 +48,7 @@ fun SettingsScreen(
             MediumTopAppBar(
                 title = {
                     Text(
-                        "Settings",
+                        stringResource(R.string.heading_settings),
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.displayMedium
