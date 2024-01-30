@@ -69,9 +69,9 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCom
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     onTextLayout = { textLayoutResult ->
-                        // This doesn't allow for layout to expand if no strings are to long anymore,
-                        // but that is expected behavior meant to hide the layout changes from the user
-                        // to prevent unnecessary visual disturbances.
+                        // This doesn't allow for layout to expand again if all overly long names get deleted,
+                        // but that is intended in order to to hide the layout changes from the user
+                        // and prevent unnecessary visual disturbances.
                         if (textLayoutResult.lineCount > 1) onCompressLayout()
                     }
                 )
@@ -90,13 +90,13 @@ fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCom
                     onClick = { onEvent(PizzaListEvent.IncreaseQuantity(pizzaType)) },
                     colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                 ) {
-                    Icon( Icons.Rounded.Add, stringResource(R.string.button_increase), tint = onButtonColor)
+                    Icon(Icons.Rounded.Add, stringResource(R.string.button_increase), tint = onButtonColor)
                 }
 
                 Button(onClick = { onEvent(PizzaListEvent.DecreaseQuantity(pizzaType)) },
                     colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                 ) {
-                    Icon( Icons.Rounded.Remove, stringResource(R.string.button_decrease), tint = onButtonColor)
+                    Icon(Icons.Rounded.Remove, stringResource(R.string.button_decrease), tint = onButtonColor)
                 }
             }
         }

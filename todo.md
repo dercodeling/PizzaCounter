@@ -2,8 +2,6 @@
 
 ## Fixes
 
-- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
-
 ## Features
 
 ### Functionality
@@ -36,6 +34,8 @@
 
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
+
+- Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
 
 (- Update app icon to reflect (hopefully) stable status)
 
