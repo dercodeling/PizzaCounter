@@ -52,4 +52,5 @@
     <string name="setting_reset_warnings">Warnungen vor dem Zurücksetzen</string>
     <string name="setting_reset_warnings_label">Bestätigung vor dem Zurücksetzen aktivieren oder deaktivieren</string>
     <string name="setting_explanation_reset_warnings">Zeige vor dem Zurücksetzeen eine Warnung an</string>
+    <string name="info_dialog_version_long_press">Versionsnummer kopieren</string>
 </resources>
