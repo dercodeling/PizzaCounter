@@ -10,7 +10,10 @@
   menu with bottom app bar and permanently shown add-type-dialog on the other
   using Jetpack WindowManager library
 
+- Create reusable Snackbar composable
+
 - Settings:
+  - make long pressing the version number copy the version (and maybe show a snackbar)
   - create new database table, handle database migration and changes in view model, dao, etc. (new view model and state?)
   - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
 
