@@ -19,7 +19,6 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -116,7 +115,7 @@ fun SettingsScreen(
                         // TODO: Save and apply
                     }
 
-                    HorizontalDivider(Modifier.padding(15.dp, 0.dp))
+                    SettingsDivider()
 
                     OptionsBottomSheetSetting(
                         heading = stringResource(R.string.setting_theme),
@@ -138,13 +137,27 @@ fun SettingsScreen(
                         // TODO: Save and apply
                     }
                 }
+            }
 
+            item {
                 SettingsGroup(stringResource(R.string.settings_group_behavior)) {
                     BottomSheetSetting(
                         heading = stringResource(R.string.setting_default_types),
                         label = stringResource(R.string.setting_label_default_types)
                     ) { onDismiss ->
-                        DefaultTypesBottomSheet {
+                        DefaultTypesBottomSheet { _ -> //initialTypesInput ->
+                            onDismiss()
+                            // TODO: Save and apply
+                        }
+                    }
+
+                    SettingsDivider()
+
+                    BottomSheetSetting(
+                        heading = stringResource(R.string.setting_reset_warnings),
+                        label = stringResource(R.string.setting_reset_warnings_label)
+                    ) { onDismiss ->
+                        ResetWarningsBottomSheet { _, _ -> //isQuantitiesWarningEnabled, isTypesWarningEnabled ->
                             onDismiss()
                             // TODO: Save and apply
                         }
@@ -188,7 +201,9 @@ fun InfoDialog(appVersion: String?, onDismiss: () -> Unit) {
                     Text(
                         stringResource(R.string.info_dialog_version, appVersion),
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.fillMaxWidth().padding(0.dp, 10.dp, 0.dp, 20.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(0.dp, 10.dp, 0.dp, 20.dp),
                         textAlign = TextAlign.Center
                     )
                 }

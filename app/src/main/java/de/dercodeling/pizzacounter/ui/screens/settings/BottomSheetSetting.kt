@@ -20,7 +20,7 @@ import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 @Composable
 fun BottomSheetSetting (
     heading: String,
-    label: String,
+    label: String = "",
     bottomSheet: @Composable (() -> Unit) -> Unit
 ) {
     var showBottomSheet by remember { mutableStateOf(false) }

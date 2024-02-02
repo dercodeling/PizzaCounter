@@ -136,7 +136,7 @@ fun MainScreen(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
 
-        PizzaList(state, onEvent, innerPadding)
+        PizzaList(state, onEvent, Modifier.padding(innerPadding))
 
         if (showAddTypeBottomSheet) {
             val onDismiss: (PizzaType?) -> Unit = { newPizzaType ->

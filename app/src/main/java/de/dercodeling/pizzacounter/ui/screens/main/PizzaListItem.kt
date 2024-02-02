@@ -30,15 +30,18 @@ import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 
 @Composable
-fun PizzaListItem(pizzaType: PizzaType, onEvent: (PizzaListEvent) -> Unit, onCompressLayout: () -> Unit, isCompactLayout: Boolean) {
+fun PizzaListItem(
+    pizzaType: PizzaType,
+    onEvent: (PizzaListEvent) -> Unit,
+    onCompressLayout: () -> Unit,
+    isCompactLayout: Boolean
+) {
     val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
 
     val outlinePadding = if(isCompactLayout) PaddingValues(20.dp, 10.dp) else PaddingValues(25.dp, 15.dp)
     val separatorPadding = if(isCompactLayout) 10.dp else 15.dp
 
-    OutlinedCard(
-        modifier = Modifier.padding(0.dp, 8.dp),
-    ) {
+    OutlinedCard {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween,

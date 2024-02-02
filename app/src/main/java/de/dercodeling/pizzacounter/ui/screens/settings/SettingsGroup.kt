@@ -39,12 +39,17 @@ fun SettingsGroup (heading: String, content: @Composable () -> Unit) {
     }
 }
 
+@Composable
+fun SettingsDivider() {
+    HorizontalDivider(Modifier.padding(15.dp, 0.dp))
+}
+
 @Preview
 @Composable
 fun SettingsGroupPreview() {
     SettingsGroup("Heading") {
         BottomSheetSetting(heading = "Setting", label = "Option") {}
-        HorizontalDivider(Modifier.padding(15.dp, 0.dp))
+        SettingsDivider()
         BottomSheetSetting(heading = "Lorem ipsum", label = "Other") {}
     }
 }
