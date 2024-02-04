@@ -61,7 +61,8 @@ fun InfoDialog(appVersion: String?, onDismiss: () -> Unit) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Box (
-                            Modifier.clip(RoundedCornerShape(20))
+                            Modifier
+                                .clip(RoundedCornerShape(20))
                                 .combinedClickable(
                                     onClick = {},
                                     onLongClick = {

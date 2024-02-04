@@ -1,11 +1,11 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -30,12 +30,12 @@ fun PizzaList(
     LazyColumn(
         modifier.fillMaxWidth(),
         contentPadding = PaddingValues(15.dp,20.dp),
-        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        val types = state.pizzaTypes
-
-        items(types.size) { i ->
-            PizzaListItem(types[i], onEvent, { isCompactLayout = true }, isCompactLayout)
+        items(
+            items = state.pizzaTypes,
+            key = { it.name }
+        ) { pizzaType ->
+            PizzaListItem(pizzaType, onEvent, { isCompactLayout = true }, isCompactLayout)
         }
     }
 }
@@ -50,7 +50,7 @@ fun PizzaListPreview() {
             PizzaType("Tonno", 4)
         )
     )
-    val onEvent: (PizzaListEvent) -> Unit = { _: PizzaListEvent -> }
+    val onEvent: (PizzaListEvent) -> Unit = { _ -> }
 
     Box (
         Modifier.background(MaterialTheme.colorScheme.surface)

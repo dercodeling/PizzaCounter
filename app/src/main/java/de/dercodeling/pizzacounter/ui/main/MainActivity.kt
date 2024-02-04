@@ -43,11 +43,11 @@ class MainActivity : ComponentActivity() {
 
             if (themeSetting.isFollowSystem) {
                 PizzaCounterTheme {
-                    Navigation(applicationContext, viewModel)
+                    Navigation(applicationContext, state, viewModel::onEvent)
                 }
             } else {
                 PizzaCounterTheme(darkTheme = themeSetting.isDark) {
-                    Navigation(applicationContext, viewModel)
+                    Navigation(applicationContext, state, viewModel::onEvent)
                 }
             }
         }

@@ -2,9 +2,13 @@
 
 ## Fixes
 
+- *Fix problem where removing and adding a type back to back will result in it appearing swiped away*
+
 ## Features
 
 ### Functionality
+
+- Add undo-Snackbar after deleting single type
 
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
@@ -17,8 +21,6 @@
     - plus a function that provides the actual setting object from .domain.model)
   - use database table via changes in view model, dao, etc. (new view model and state?)
   - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
-
-- Create UI to remove types individually (e.g. with Modifier.swipeable - currently not well documented though)
 
 - Improve settings page navigation transition
 

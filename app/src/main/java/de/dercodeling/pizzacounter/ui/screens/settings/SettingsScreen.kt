@@ -73,7 +73,6 @@ fun SettingsScreen(
             Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
-
             contentPadding = PaddingValues(20.dp)
         ){
             item {
@@ -95,10 +94,11 @@ fun SettingsScreen(
                                 stringResource(R.string.language_option_de)
                             )
                         ),
-                        LanguageOption.SYSTEM // TODO: Get actual current setting
-                    ) {
-                        // TODO: Save and apply
-                    }
+                        LanguageOption.SYSTEM, // TODO: Get actual current setting
+                        onSelected = {
+                            // TODO: Save and apply
+                        }
+                    )
 
                     SettingsDivider()
 
@@ -117,10 +117,11 @@ fun SettingsScreen(
                                 stringResource(R.string.theme_option_dark)
                             )
                         ),
-                        currentOption = ThemeOption.SYSTEM // TODO: Get actual current setting
-                    ) {
-                        // TODO: Save and apply
-                    }
+                        currentOption = ThemeOption.SYSTEM, // TODO: Get actual current setting
+                        onSelected = {
+                            // TODO: Save and apply
+                        }
+                    )
                 }
             }
 
@@ -130,10 +131,12 @@ fun SettingsScreen(
                         heading = stringResource(R.string.setting_default_types),
                         label = stringResource(R.string.setting_label_default_types)
                     ) { onDismiss ->
-                        DefaultTypesBottomSheet { _ -> //initialTypesInput ->
-                            onDismiss()
-                            // TODO: Save and apply
-                        }
+                        DefaultTypesBottomSheet (
+                            onDismiss = { _ -> //initialTypesInput ->
+                                onDismiss()
+                                // TODO: Save and apply
+                            }
+                        )
                     }
 
                     SettingsDivider()
@@ -142,10 +145,12 @@ fun SettingsScreen(
                         heading = stringResource(R.string.setting_reset_warnings),
                         label = stringResource(R.string.setting_reset_warnings_label)
                     ) { onDismiss ->
-                        ResetWarningsBottomSheet { _, _ -> //isQuantitiesWarningEnabled, isTypesWarningEnabled ->
-                            onDismiss()
-                            // TODO: Save and apply
-                        }
+                        ResetWarningsBottomSheet (
+                            onDismiss = { _, _ -> //isQuantitiesWarningEnabled, isTypesWarningEnabled ->
+                                onDismiss()
+                                // TODO: Save and apply
+                            }
+                        )
                     }
                 }
             }

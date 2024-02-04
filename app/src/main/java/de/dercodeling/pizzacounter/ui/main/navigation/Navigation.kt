@@ -2,19 +2,19 @@ package de.dercodeling.pizzacounter.ui.main.navigation
 
 import android.content.Context
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListViewModel
 import de.dercodeling.pizzacounter.ui.screens.main.MainScreen
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 import de.dercodeling.pizzacounter.ui.screens.settings.SettingsScreen
 
 @Composable
 fun Navigation(
     context: Context,
-    viewModel: PizzaListViewModel
+    state: PizzaListState,
+    onEvent: (PizzaListEvent) -> Unit
 ) {
     val navController = rememberNavController()
 
@@ -29,11 +29,9 @@ fun Navigation(
             navController.navigate(Screen.MainScreen.route)
     }
 
-    NavHost(navController, startDestination = Screen.SettingsScreen.route) {
+    NavHost(navController, startDestination = Screen.MainScreen.route) {
         composable(Screen.MainScreen.route) {
-            val state by viewModel.state.collectAsState()
-
-            MainScreen(state, viewModel::onEvent, onNavigateToSettings)
+            MainScreen(state, onEvent, onNavigateToSettings)
         }
         composable(Screen.SettingsScreen.route) {
             SettingsScreen(context, onNavigateUpFromSettings)
