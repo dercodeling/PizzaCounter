@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class PizzaType(
-    @PrimaryKey()
+    @PrimaryKey
     val name: String,
     val quantity: Int
 )

@@ -66,8 +66,10 @@ class PizzaListViewModel(
             }
 
             is PizzaListEvent.AddPizzaType -> {
+                val pizzaType = event.pizzaType
+
                 viewModelScope.launch {
-                    dao.insertPizzaType(event.pizzaType)
+                    dao.insertPizzaType(pizzaType.copy(name = pizzaType.name.trim()))
                 }
             }
 

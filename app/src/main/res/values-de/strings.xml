@@ -47,10 +47,13 @@
     <string name="info_dialog_icon_gpl">Lizenz dieser App öffnen</string>
     <string name="setting_default_types_input_label">z.B. Margherita, Prosciutto, …</string>
     <string name="button_save">Speichern</string>
-    <string name="setting_reset_quantities_warning">Warnung bei Mengen zurücksetzen</string>
-    <string name="setting_reset_types_warning">Warnung bei Sorten zurücksetzen</string>
+    <string name="setting_reset_quantities_warning">Bei Mengen zurücksetzen</string>
+    <string name="setting_reset_types_warning">Bei Sorten zurücksetzen</string>
     <string name="setting_reset_warnings">Warnungen vor dem Zurücksetzen</string>
     <string name="setting_reset_warnings_label">Bestätigung vor dem Zurücksetzen aktivieren oder deaktivieren</string>
     <string name="setting_explanation_reset_warnings">Zeige vor dem Zurücksetzeen eine Warnung an</string>
     <string name="info_dialog_version_long_press">Versionsnummer kopieren</string>
+    <string name="snackbar_delete_button">Rückgängig</string>
+    <string name="snackbar_delete_message_name_prefix">Sorte „</string>
+    <string name="snackbar_delete_message_name_suffix">“ gelöscht</string>
 </resources>

@@ -52,4 +52,7 @@
     <string name="setting_reset_warnings_label">Enable or disable warnings before resetting</string>
     <string name="setting_explanation_reset_warnings">Show a warning before resetting:</string>
     <string name="info_dialog_version_long_press">Copy version number</string>
+    <string name="snackbar_delete_button">Undo</string>
+    <string name="snackbar_delete_message_name_prefix">Deleted type \"</string>
+    <string name="snackbar_delete_message_name_suffix">\"</string>
 </resources>

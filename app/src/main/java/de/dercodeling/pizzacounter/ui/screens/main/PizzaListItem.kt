@@ -35,7 +35,7 @@ fun PizzaListItem(
     pizzaType: PizzaType,
     onEvent: (PizzaListEvent) -> Unit,
     onCompressLayout: () -> Unit,
-    isCompactLayout: Boolean
+    isCompactLayout: Boolean = false,
 ) {
     val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
 
@@ -46,7 +46,6 @@ fun PizzaListItem(
         item = pizzaType,
         onDelete = {
             onEvent(PizzaListEvent.DeletePizzaType(pizzaType))
-            // TODO: Open SnackBar with undo action
         },
         modifier = Modifier.padding(0.dp, 8.dp)
     ) {

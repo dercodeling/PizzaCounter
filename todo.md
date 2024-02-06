@@ -6,8 +6,6 @@
 
 ### Functionality
 
-- Add undo-Snackbar after deleting single type
-
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
   using Jetpack WindowManager library
@@ -38,7 +36,7 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
 
-(- Update app icon to reflect (hopefully) stable status)
+(- Update app icon to reflect (hopefully :)) stable status)
 
 ## Implementation
 

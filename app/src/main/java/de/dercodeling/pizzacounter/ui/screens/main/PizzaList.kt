@@ -35,7 +35,12 @@ fun PizzaList(
             items = state.pizzaTypes,
             key = { it.name }
         ) { pizzaType ->
-            PizzaListItem(pizzaType, onEvent, { isCompactLayout = true }, isCompactLayout)
+            PizzaListItem(
+                pizzaType,
+                onEvent,
+                onCompressLayout = { isCompactLayout = true },
+                isCompactLayout
+            )
         }
     }
 }
