@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxState
 import androidx.compose.material3.SwipeToDismissBoxValue
-import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -30,6 +29,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 import kotlinx.coroutines.delay
@@ -43,25 +44,32 @@ fun <T> SwipeToDeleteContainer(
     animationDuration: Int = 500,
     content: @Composable (T) -> Unit,
 ) {
+    val context = LocalContext.current
     var isRemoved by remember { mutableStateOf(false) }
 
-    val state = rememberSwipeToDismissBoxState(
-        confirmValueChange = { value ->
-            if (value == SwipeToDismissBoxValue.StartToEnd) {
-                isRemoved = true
-                true
-            } else {
-                false
-            }
-        },
-        positionalThreshold = { totalDistance -> totalDistance * 0.5f },
-    )
+    // Note: Not using the recommended state = rememberSwipeToDismissBoxState() because that caused an issue
+    // where deleting and immediately re-adding items would make them be added in swiped-away position
+    val state by remember {
+        mutableStateOf(
+            SwipeToDismissBoxState(
+                confirmValueChange = { value ->
+                    if (value == SwipeToDismissBoxValue.StartToEnd) {
+                        isRemoved = true
+                        true
+                    } else {
+                        false
+                    }
+                },
+                positionalThreshold = { totalDistance -> totalDistance * (1/3f) },
+                initialValue = SwipeToDismissBoxValue.Settled,
+                density = Density(context)
+            )
+        )
+    }
 
     LaunchedEffect(isRemoved) {
         if (isRemoved) {
             delay(animationDuration.toLong())
-            state.snapTo(SwipeToDismissBoxValue.Settled)
-            // TODO: The above attempt doesn't work, find other fix for wrong initial value when re-adding a type just removed
             onDelete(item)
         }
     }

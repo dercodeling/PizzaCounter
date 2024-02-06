@@ -2,8 +2,6 @@
 
 ## Fixes
 
-- *Fix problem where removing and adding a type back to back will result in it appearing swiped away*
-
 ## Features
 
 ### Functionality
