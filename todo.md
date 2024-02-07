@@ -13,8 +13,6 @@
 - Settings:
   - create new database table + handle database migration:
     - table should have only columns key and value and a row for each settings can then be added flexibly;
-    - the entity-object databaseSetting can then have those two fields 
-    - plus a function that provides the actual setting object from .domain.model)
   - use database table via changes in view model, dao, etc. (new view model and state?)
   - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
 
@@ -44,7 +42,7 @@
 
 - Check .ui.screens for potentially needed refactoring
 
-- Recreate tests for new database
+- Recreate tests for new database and add other tests like UI tests
 
 # Notes
 

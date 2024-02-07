@@ -41,14 +41,8 @@ class MainActivity : ComponentActivity() {
             val state by viewModel.state.collectAsState()
             val themeSetting = state.themeSetting
 
-            if (themeSetting.isFollowSystem) {
-                PizzaCounterTheme {
-                    Navigation(applicationContext, state, viewModel::onEvent)
-                }
-            } else {
-                PizzaCounterTheme(darkTheme = themeSetting.isDark) {
-                    Navigation(applicationContext, state, viewModel::onEvent)
-                }
+            PizzaCounterTheme(themeSetting) {
+                Navigation(applicationContext, state, viewModel::onEvent)
             }
         }
     }
