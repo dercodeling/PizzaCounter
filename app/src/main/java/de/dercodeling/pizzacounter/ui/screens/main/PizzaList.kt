@@ -1,5 +1,6 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PizzaList(
     state: PizzaListState,
@@ -39,7 +41,8 @@ fun PizzaList(
                 pizzaType,
                 onEvent,
                 onCompressLayout = { isCompactLayout = true },
-                isCompactLayout
+                isCompactLayout,
+                Modifier.animateItemPlacement() // Doesn't seem to do anything
             )
         }
     }

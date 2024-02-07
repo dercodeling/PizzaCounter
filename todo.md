@@ -18,8 +18,6 @@
   - use database table via changes in view model, dao, etc. (new view model and state?)
   - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
 
-- Improve settings page navigation transition
-
 ### UI
 
 - Improve AddTypeBottomSheet's animations

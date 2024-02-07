@@ -35,7 +35,8 @@ fun PizzaListItem(
     pizzaType: PizzaType,
     onEvent: (PizzaListEvent) -> Unit,
     onCompressLayout: () -> Unit,
-    isCompactLayout: Boolean = false,
+    isCompactLayout: Boolean,
+    modifier: Modifier = Modifier
 ) {
     val onSurfaceDisabled = MaterialTheme.colorScheme.onSurface.makeDeemphasizedVariant()
 
@@ -47,7 +48,7 @@ fun PizzaListItem(
         onDelete = {
             onEvent(PizzaListEvent.DeletePizzaType(pizzaType))
         },
-        modifier = Modifier.padding(0.dp, 8.dp)
+        modifier = modifier.padding(0.dp, 8.dp)
     ) {
         OutlinedCard(
             Modifier.padding(0.dp, 8.dp)
