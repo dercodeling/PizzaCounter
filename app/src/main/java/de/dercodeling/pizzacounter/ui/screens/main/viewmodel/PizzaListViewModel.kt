@@ -1,12 +1,15 @@
 package de.dercodeling.pizzacounter.ui.screens.main.viewmodel
 
 import android.content.Intent
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dercodeling.pizzacounter.data.local.PizzaTypeDao
+import de.dercodeling.pizzacounter.domain.model.LanguageOption
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.SortType
+import de.dercodeling.pizzacounter.domain.model.ThemeOption
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,7 +23,13 @@ class PizzaListViewModel(
     private val dao: PizzaTypeDao
 ): ViewModel() {
 
-    private var initialTypes = MutableStateFlow(
+    private var _windowSizeClass = MutableStateFlow<WindowSizeClass?>(null)
+
+    private var _language = MutableStateFlow(LanguageOption.SYSTEM)
+
+    private var _theme = MutableStateFlow(ThemeOption.SYSTEM)
+
+    private var _initialTypes = MutableStateFlow(
         listOf(
             "Margherita",
             "Prosciutto",
@@ -28,7 +37,7 @@ class PizzaListViewModel(
             "Tonno e cipolla",
             "Regina",
             "Dalla casa",
-            "Arrabiata",
+            "Arrabbiata",
             "Funghi",
             "Quattro stagioni"*/
         )
@@ -46,9 +55,29 @@ class PizzaListViewModel(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
 
+
     private val _state = MutableStateFlow(PizzaListState())
-    val state = combine(_state, _sortType, _pizzaTypes) {state, sortType, pizzaTypes ->
+
+    val state = combine(
+        _state,
+        _windowSizeClass,
+        _language,
+        _theme,
+        _sortType,
+        _pizzaTypes
+    ) { flows: Array<*> ->
+        val state = flows[0] as PizzaListState
+        val windowSizeClass = flows[1] as WindowSizeClass
+        val language = flows[2] as LanguageOption
+        val theme = flows[3] as ThemeOption
+        val sortType = flows[4] as SortType
+        @Suppress("UNCHECKED_CAST")
+        val pizzaTypes = flows[5] as List<PizzaType>
+
         state.copy(
+            windowSizeClass = windowSizeClass,
+            language = language,
+            theme = theme,
             pizzaTypes = pizzaTypes,
             sortType = sortType
         )
@@ -57,9 +86,21 @@ class PizzaListViewModel(
 
     fun onEvent(event: PizzaListEvent) {
         when(event) {
+            is PizzaListEvent.SetWindowSizeClass -> {
+                _windowSizeClass.value = event.windowSizeClass
+            }
+
+            is PizzaListEvent.SetLanguage -> {
+                _language.value = event.languageOption
+            }
+
+            is PizzaListEvent.SetTheme -> {
+                _theme.value = event.themeOption
+            }
+
             PizzaListEvent.LoadInitialPizzaTypes -> {
                 viewModelScope.launch {
-                    for (initialType in initialTypes.value) {
+                    for (initialType in _initialTypes.value) {
                         dao.insertPizzaType(PizzaType(initialType,0))
                     }
                 }
@@ -108,7 +149,7 @@ class PizzaListViewModel(
             PizzaListEvent.ResetTypes -> {
                 viewModelScope.launch {
                     dao.clearTypes()
-                    for (initialType in initialTypes.value) {
+                    for (initialType in _initialTypes.value) {
                         dao.insertPizzaType(PizzaType(initialType,0))
                     }
                 }

@@ -7,7 +7,6 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,14 +15,12 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
@@ -39,11 +36,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
-import de.dercodeling.pizzacounter.domain.model.BottomSheetOption
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.domain.model.ResetOption
 import de.dercodeling.pizzacounter.domain.model.SortType
-import de.dercodeling.pizzacounter.ui.screens.components.OptionsBottomSheet
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
 import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
 import kotlinx.coroutines.launch
@@ -61,8 +55,6 @@ fun MainScreen(
     var showAddTypeBottomSheet by remember { mutableStateOf(false) }
     var showSortBottomSheet by remember { mutableStateOf(false) }
     var showResetBottomSheet by remember { mutableStateOf(false) }
-    var showResetQuantitiesDialog by remember { mutableStateOf(false) }
-    var showResetTypesDialog by remember { mutableStateOf(false) }
 
     if (state.pizzaTypes.isEmpty()) {
         onEvent(PizzaListEvent.LoadInitialPizzaTypes)
@@ -92,7 +84,6 @@ fun MainScreen(
                         )
                     }
                 },
-                //colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
                 scrollBehavior = scrollBehavior
             )
         },
@@ -189,140 +180,24 @@ fun MainScreen(
             AddTypeBottomSheet(state, onDismiss)
         }
 
-        if (showSortBottomSheet) {
-            val onDismiss: (BottomSheetOption?) -> Unit = { bottomSheetOption ->
-                showSortBottomSheet = false
-
+        SortBottomSheet(
+            visible = showSortBottomSheet,
+            currentSortType = state.sortType,
+            onDismiss = { bottomSheetOption ->
                 if (bottomSheetOption is SortType) {
                     onEvent(PizzaListEvent.SetSortType(bottomSheetOption))
                 }
+
+                showSortBottomSheet = false
             }
+        )
 
-            OptionsBottomSheet(
-                onDismiss = onDismiss,
-                heading = stringResource(id = R.string.heading_sort),
-                optionsMap = mapOf(
-                    Pair(
-                        SortType.NAME,
-                        stringResource(R.string.sorting_option_name)
-                    ),
-                    Pair(
-                        SortType.QUANTITY_ASC,
-                        stringResource(R.string.sorting_option_quantity_ascending)
-                    ),
-                    Pair(
-                        SortType.QUANTITY_DESC,
-                        stringResource(R.string.sorting_option_quantity_descending)
-                    )
-                )
-            ) { option, closeAndApply ->
-                RadioButton(
-                    selected = (state.sortType == option.first),
-                    onClick = {
-                        closeAndApply(option.first)
-                    })
-            }
-        }
-
-        if (showResetBottomSheet) {
-            val onDismiss: (BottomSheetOption?) -> Unit = {
-                when (it) {
-                    ResetOption.RESET_QUANTITIES -> showResetQuantitiesDialog = true
-                    ResetOption.RESET_TYPES -> showResetTypesDialog = true
-                    else -> {}
-                }
-
+        ResetBottomSheet(
+            visible = showResetBottomSheet,
+            onDismiss = {
                 showResetBottomSheet = false
-            }
-
-            OptionsBottomSheet(
-                onDismiss = onDismiss,
-                heading = "",
-                optionsMap = mapOf(
-                    Pair(
-                        ResetOption.RESET_QUANTITIES,
-                        stringResource(R.string.reset_option_quantities)
-                    ),
-                    Pair(
-                        ResetOption.RESET_TYPES,
-                        stringResource(R.string.reset_option_types)
-                    )
-                )
-            )
-        }
-
-        val onDismissResetQuantitiesDialog = {
-            showResetQuantitiesDialog = false
-        }
-
-        if (showResetQuantitiesDialog) {
-            AlertDialog(
-                title = {
-                    Text(text = stringResource(R.string.reset_quantities_dialog_header))
-                },
-                text = {
-                    Text(text = stringResource(R.string.reset_quantities_dialog_text))
-                },
-                onDismissRequest = {
-                    onDismissResetQuantitiesDialog()
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            onEvent(PizzaListEvent.ResetQuantities)
-                            onDismissResetQuantitiesDialog()
-                        }
-                    ) {
-                        Text(stringResource(R.string.reset_option_quantities))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            onDismissResetQuantitiesDialog()
-                        }
-                    ) {
-                        Text(stringResource(R.string.dialog_cancel))
-                    }
-                }
-            )
-        }
-
-        val onDismissResetTypesDialog = {
-            showResetTypesDialog = false
-        }
-
-        if (showResetTypesDialog) {
-            AlertDialog(
-                title = {
-                    Text(text = stringResource(R.string.reset_types_dialog_header))
-                },
-                text = {
-                    Text(text = stringResource(R.string.reset_types_dialog_text))
-                },
-                onDismissRequest = {
-                    onDismissResetTypesDialog()
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            onEvent(PizzaListEvent.ResetTypes)
-                            onDismissResetTypesDialog()
-                        }
-                    ) {
-                        Text(stringResource(R.string.reset_option_types))
-                    }
-                },
-                dismissButton = {
-                    TextButton(
-                        onClick = {
-                            onDismissResetTypesDialog()
-                        }
-                    ) {
-                        Text(stringResource(R.string.dialog_cancel))
-                    }
-                }
-            )
-        }
+            },
+            onEvent = onEvent
+        )
     }
 }

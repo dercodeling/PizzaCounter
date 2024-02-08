@@ -8,7 +8,7 @@
 
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
-  using Jetpack WindowManager library
+  (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
 
 - Settings:
   - create new database table + handle database migration:
