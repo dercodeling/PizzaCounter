@@ -16,6 +16,8 @@
   - use database table via changes in view model, dao, etc. (new view model and state?)
   - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
 
+- Add notes field to pizza types that can be edited with text field in expanded PizzaListItem (onClick or onLongPress)
+
 ### UI
 
 - Improve AddTypeBottomSheet's animations
