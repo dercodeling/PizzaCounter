@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.ui.screens.components.SwipeToDeleteContainer
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
 import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 
 @Composable
 fun PizzaListItem(
     pizzaType: PizzaType,
-    onEvent: (PizzaListEvent) -> Unit,
+    onEvent: (PizzaCounterEvent) -> Unit,
     onCompressLayout: () -> Unit,
     isCompactLayout: Boolean,
     modifier: Modifier = Modifier
@@ -46,7 +46,7 @@ fun PizzaListItem(
     SwipeToDeleteContainer(
         item = pizzaType,
         onDelete = {
-            onEvent(PizzaListEvent.DeletePizzaType(pizzaType))
+            onEvent(PizzaCounterEvent.DeletePizzaType(pizzaType))
         },
         modifier = modifier.padding(0.dp, 8.dp)
     ) {
@@ -77,19 +77,31 @@ fun PizzaListItem(
                         style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier.padding(separatorPadding)
                     )
-                    Text( // Type
-                        text = pizzaType.name,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis,
-                        onTextLayout = { textLayoutResult ->
-                            // This doesn't allow for layout to expand again if all overly long names get deleted,
-                            // but that is intended in order to to hide the layout changes from the user
-                            // and prevent unnecessary visual disturbances.
-                            if (textLayoutResult.lineCount > 1) onCompressLayout()
+                    Column {
+                        Text( // Type
+                            text = pizzaType.name,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            style = MaterialTheme.typography.titleMedium,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            onTextLayout = { textLayoutResult ->
+                                // This doesn't allow for layout to expand again if all overly long names get deleted,
+                                // but that is intended in order to to hide the layout changes from the user
+                                // and prevent unnecessary visual disturbances.
+                                if (textLayoutResult.lineCount > 1) onCompressLayout()
+                            }
+                        )
+                        if(pizzaType.notes.isNotEmpty()) {
+                            Text(
+                                pizzaType.notes,
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                style = MaterialTheme.typography.bodySmall,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
                         }
-                    )
+                    }
+
                 }
 
                 val buttonColor = MaterialTheme.colorScheme.primaryContainer
@@ -102,7 +114,7 @@ fun PizzaListItem(
                 ) {
                     Button(
                         modifier = Modifier.padding(5.dp),
-                        onClick = { onEvent(PizzaListEvent.IncreaseQuantity(pizzaType)) },
+                        onClick = { onEvent(PizzaCounterEvent.IncreaseQuantity(pizzaType)) },
                         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                     ) {
                         Icon(
@@ -113,7 +125,7 @@ fun PizzaListItem(
                     }
 
                     Button(
-                        onClick = { onEvent(PizzaListEvent.DecreaseQuantity(pizzaType)) },
+                        onClick = { onEvent(PizzaCounterEvent.DecreaseQuantity(pizzaType)) },
                         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
                     ) {
                         Icon(

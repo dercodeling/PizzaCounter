@@ -17,14 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PizzaList(
-    state: PizzaListState,
-    onEvent: (PizzaListEvent) -> Unit,
+    state: PizzaCounterState,
+    onEvent: (PizzaCounterEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var isCompactLayout by remember { mutableStateOf(false) }
@@ -51,14 +51,14 @@ fun PizzaList(
 @Preview
 @Composable
 fun PizzaListPreview() {
-    val state = PizzaListState(
+    val state = PizzaCounterState(
         pizzaTypes = listOf(
             PizzaType("Margherita",2),
             PizzaType("Salami", 8),
             PizzaType("Tonno", 4)
         )
     )
-    val onEvent: (PizzaListEvent) -> Unit = { _ -> }
+    val onEvent: (PizzaCounterEvent) -> Unit = { _ -> }
 
     Box (
         Modifier.background(MaterialTheme.colorScheme.surface)

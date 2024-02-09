@@ -40,11 +40,10 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun PizzaCounterTheme(
     themeSetting: ThemeOption,
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    
+
     val darkTheme = when(themeSetting) {
         ThemeOption.LIGHT -> false
         ThemeOption.DARK -> true
@@ -52,14 +51,17 @@ fun PizzaCounterTheme(
     }
 
     val colorScheme = when {
+        // Dynamic color is available on Android 12+
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (darkTheme) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
         }
 
         darkTheme -> DarkColorScheme
         else -> LightColorScheme
     }
+
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {

@@ -41,15 +41,15 @@ import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.SortType
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun MainScreen(
-    state: PizzaListState,
-    onEvent: (PizzaListEvent) -> Unit,
+    state: PizzaCounterState,
+    onEvent: (PizzaCounterEvent) -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
     val isLargeScreenLayout = state.windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
@@ -62,7 +62,7 @@ fun MainScreen(
     var showResetBottomSheet by remember { mutableStateOf(false) }
 
     if (state.pizzaTypes.isEmpty()) {
-        onEvent(PizzaListEvent.LoadInitialPizzaTypes)
+        onEvent(PizzaCounterEvent.LoadInitialPizzaTypes)
     }
 
     Scaffold(
@@ -112,7 +112,7 @@ fun MainScreen(
                     val shareStringPrefix = stringResource(R.string.share_string_prefix)
                     val context = LocalContext.current
                     IconButton(
-                        onClick = { onEvent(PizzaListEvent.ShareList(shareStringPrefix, context)) }
+                        onClick = { onEvent(PizzaCounterEvent.ShareList(shareStringPrefix, context)) }
                     ) {
                         Icon(
                             Icons.Rounded.Share,
@@ -146,8 +146,8 @@ fun MainScreen(
         val snackbarMessageNamePrefix = stringResource(R.string.snackbar_delete_message_name_prefix)
         val snackbarMessageNameSuffix = stringResource(R.string.snackbar_delete_message_name_suffix)
 
-        val pizzaListOnEvent: (PizzaListEvent) -> Unit = { event ->
-            if (event is PizzaListEvent.DeletePizzaType && event.pizzaType.quantity > 0) {
+        val pizzaListOnEvent: (PizzaCounterEvent) -> Unit = { event ->
+            if (event is PizzaCounterEvent.DeletePizzaType && event.pizzaType.quantity > 0) {
                 val pizzaType = event.pizzaType
 
                 snackbarScope.launch {
@@ -159,7 +159,7 @@ fun MainScreen(
                         )
                     when (result) {
                         SnackbarResult.ActionPerformed -> {
-                            onEvent(PizzaListEvent.AddPizzaType(pizzaType))
+                            onEvent(PizzaCounterEvent.AddPizzaType(pizzaType))
                         }
                         else -> {}
                     }
@@ -184,7 +184,7 @@ fun MainScreen(
             val onDismiss: (PizzaType?) -> Unit = { newPizzaType ->
 
                 if (newPizzaType != null) {
-                    onEvent(PizzaListEvent.AddPizzaType(newPizzaType))
+                    onEvent(PizzaCounterEvent.AddPizzaType(newPizzaType))
                 }
 
                 showAddTypeBottomSheet = false
@@ -197,7 +197,7 @@ fun MainScreen(
             currentSortType = state.sortType,
             onDismiss = { bottomSheetOption ->
                 if (bottomSheetOption is SortType) {
-                    onEvent(PizzaListEvent.SetSortType(bottomSheetOption))
+                    onEvent(PizzaCounterEvent.SetSortType(bottomSheetOption))
                 }
 
                 showSortBottomSheet = false
@@ -209,6 +209,7 @@ fun MainScreen(
             onDismiss = {
                 showResetBottomSheet = false
             },
+            state = state,
             onEvent = onEvent
         )
     }

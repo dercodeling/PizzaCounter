@@ -2,6 +2,10 @@
 
 ## Fixes
 
+- Figure out how to change the window background (set from parent in themes.xml), in order to change
+  color of splash screen (maybe implement that properly?) and to prevent white transition artefacts
+  (which are caused by the fade in/out of the transition making the window background visible)
+
 ## Features
 
 ### Functionality
@@ -10,13 +14,7 @@
   menu with bottom app bar and permanently shown add-type-dialog on the other
   (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
 
-- Settings:
-  - create new database table + handle database migration:
-    - table should have only columns key and value and a row for each settings can then be added flexibly;
-  - use database table via changes in view model, dao, etc. (new view model and state?)
-  - apply default types, warnings, theme and language (in-app setting + system per-app settings https://developer.android.com/guide/topics/resources/localization https://developer.android.com/guide/topics/resources/app-languages#auto-localeconfig)
-
-- Add notes field to pizza types that can be edited with text field in expanded PizzaListItem (onClick or onLongPress)
+- Add notes field to pizza types that can be edited with text field in expanded PizzaListItem (expand on click)
 
 ### UI
 
@@ -44,7 +42,9 @@
 
 - Check .ui.screens for potentially needed refactoring
 
-- Recreate tests for new database and add other tests like UI tests
+- Recreate tests for new database 
+- Add test for combine function in view model
+- Add other tests like UI tests
 
 # Notes
 

@@ -49,6 +49,8 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    sourceSets.getByName("androidTest").assets.srcDirs("$projectDir/schema")
 }
 
 room {
@@ -70,6 +72,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.7.6")
     //implementation("androidx.compose.ui:ui-text-google-fonts:1.6.0")
     implementation("androidx.compose.material3:material3-window-size-class:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -1,8 +1,11 @@
 package de.dercodeling.pizzacounter.domain.model
 
-//@Entity
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
 data class Setting(
-    //@PrimaryKey
+    @PrimaryKey
     val key: String,
     val value: String
 )
@@ -10,8 +13,8 @@ data class Setting(
 const val languageSettingKey = "language"
 const val themeSettingKey = "theme"
 const val defaultTypesSettingKey = "defaultTypes"
-const val resetQuantitiesWarningSettingKey = "resetQuantitiesWarning"
-const val resetTypesWarningSettingKey = "resetTypesWarning"
+const val showResetQuantitiesWarningSettingKey = "showResetQuantitiesWarning"
+const val showResetTypesWarningSettingKey = "showResetTypesWarning"
 
 fun settingFrom(languageOption: LanguageOption):Setting {
     return Setting(key = languageSettingKey, value = languageOption.toSettingsValue())
@@ -25,10 +28,10 @@ fun defaultTypesSettingFrom(names: List<String>):Setting {
     return Setting(key = defaultTypesSettingKey, value = names.joinToString(","))
 }
 
-fun resetQuantitiesWarningSettingFrom(enabled: Boolean):Setting {
-    return Setting(key = resetQuantitiesWarningSettingKey, value = enabled.toString())
+fun showResetQuantitiesWarningSettingFrom(enabled: Boolean):Setting {
+    return Setting(key = showResetQuantitiesWarningSettingKey, value = enabled.toString())
 }
 
-fun resetTypesWarningSettingFrom(enabled: Boolean):Setting {
-    return Setting(key = resetTypesWarningSettingKey, value = enabled.toString())
+fun showResetTypesWarningSettingFrom(enabled: Boolean):Setting {
+    return Setting(key = showResetTypesWarningSettingKey, value = enabled.toString())
 }

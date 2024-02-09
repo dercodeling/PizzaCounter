@@ -31,13 +31,15 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ResetWarningsBottomSheet(
+    currentShowResetQuantitiesWarning: Boolean,
+    currentShowResetTypesWarning: Boolean,
     onDismiss: (Boolean, Boolean) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    var isClearQuantitiesWarningEnabled by remember { mutableStateOf(false) }
-    var isClearTypesWarningEnabled by remember { mutableStateOf(true) }
+    var isClearQuantitiesWarningEnabled by remember { mutableStateOf(currentShowResetQuantitiesWarning) }
+    var isClearTypesWarningEnabled by remember { mutableStateOf(currentShowResetTypesWarning) }
 
     val closeAndApply: () -> Unit = {
         scope.launch { sheetState.hide() }.invokeOnCompletion {

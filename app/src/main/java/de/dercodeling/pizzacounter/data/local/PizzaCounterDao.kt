@@ -6,11 +6,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import de.dercodeling.pizzacounter.domain.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.Setting
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface PizzaTypeDao {
+interface PizzaCounterDao {
+    // Table: pizzaType
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertPizzaType(pizzaType: PizzaType)
 
@@ -34,4 +37,12 @@ interface PizzaTypeDao {
 
     @Query("DELETE FROM pizzatype")
     suspend fun clearTypes()
+
+    // Table: setting
+
+    @Upsert()
+    suspend fun upsertSetting(setting: Setting)
+
+    @Query("SELECT * FROM setting WHERE `key`=:key")
+    fun getSettingByKey(key: String): Flow<Setting>
 }

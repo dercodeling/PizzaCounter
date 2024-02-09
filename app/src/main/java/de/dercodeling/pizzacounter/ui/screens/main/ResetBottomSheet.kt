@@ -10,23 +10,45 @@ import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.BottomSheetOption
 import de.dercodeling.pizzacounter.domain.model.ResetOption
 import de.dercodeling.pizzacounter.ui.screens.components.OptionsBottomSheet
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 
 @Composable
 fun ResetBottomSheet(
     visible: Boolean,
     onDismiss: (BottomSheetOption?) -> Unit,
-    onEvent: (PizzaListEvent) -> Unit
+    state: PizzaCounterState,
+    onEvent: (PizzaCounterEvent) -> Unit
 ) {
     var showResetQuantitiesDialog by remember { mutableStateOf(false) }
     var showResetTypesDialog by remember { mutableStateOf(false) }
+
+    val onConfirmResetQuantities = {
+        onEvent(PizzaCounterEvent.ResetQuantities)
+    }
+
+    val onConfirmResetTypes = {
+        onEvent(PizzaCounterEvent.ResetTypes)
+    }
 
     if (visible) {
         OptionsBottomSheet(
             onDismiss = {
                 when (it) {
-                    ResetOption.RESET_QUANTITIES -> showResetQuantitiesDialog = true
-                    ResetOption.RESET_TYPES -> showResetTypesDialog = true
+                    ResetOption.RESET_QUANTITIES -> {
+                        if (state.showResetQuantitiesWarning) {
+                            showResetQuantitiesDialog = true
+                        } else {
+                            onConfirmResetQuantities()
+                        }
+                    }
+                    ResetOption.RESET_TYPES -> {
+                        if (state.showResetTypesWarning) {
+                            showResetTypesDialog = true
+                        } else {
+                            onConfirmResetTypes()
+                        }
+                    }
                     else -> {}
                 }
                 onDismiss(it)
@@ -51,7 +73,7 @@ fun ResetBottomSheet(
             showResetQuantitiesDialog = false
         },
         onConfirm = {
-            onEvent(PizzaListEvent.ResetQuantities)
+            onConfirmResetQuantities()
             showResetQuantitiesDialog = false
         }
     )
@@ -62,7 +84,7 @@ fun ResetBottomSheet(
             showResetTypesDialog = false
         },
         onConfirm = {
-            onEvent(PizzaListEvent.ResetTypes)
+            onConfirmResetTypes()
             showResetTypesDialog = false
         }
     )

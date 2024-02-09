@@ -30,12 +30,12 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListState
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AddTypeBottomSheet(state: PizzaListState, onDismiss: (PizzaType?) -> Unit) {
+fun AddTypeBottomSheet(state: PizzaCounterState, onDismiss: (PizzaType?) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 

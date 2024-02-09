@@ -1,20 +1,27 @@
 package de.dercodeling.pizzacounter.ui.main
 
+import android.app.LocaleManager
+import android.os.Build
+import android.os.Build.VERSION
 import android.os.Bundle
+import android.os.LocaleList
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import de.dercodeling.pizzacounter.data.local.PizzaCounterDatabase
 import de.dercodeling.pizzacounter.ui.main.navigation.Navigation
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListEvent
-import de.dercodeling.pizzacounter.ui.screens.main.viewmodel.PizzaListViewModel
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterViewModel
 import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 
 class MainActivity : ComponentActivity() {
@@ -22,12 +29,12 @@ class MainActivity : ComponentActivity() {
     private val db by lazy {
         PizzaCounterDatabase.getDatabase(context = applicationContext)
     }
-    private val viewModel by viewModels<PizzaListViewModel>(
+    private val viewModel by viewModels<PizzaCounterViewModel>(
         factoryProducer = {
             object : ViewModelProvider.Factory {
                 override fun <T : ViewModel> create(modelClass: Class<T>): T {
                     @Suppress("UNCHECKED_CAST")
-                    return PizzaListViewModel(db.getDao()) as T
+                    return PizzaCounterViewModel(db.getDao()) as T
                 }
             }
         }
@@ -40,19 +47,36 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-
-
         setContent {
             val state by viewModel.state.collectAsState()
 
+            setLocale(state)
+
             val windowSizeClass = calculateWindowSizeClass(this)
-            viewModel.onEvent(PizzaListEvent.SetWindowSizeClass(windowSizeClass))
+            viewModel.onEvent(PizzaCounterEvent.SetWindowSizeClass(windowSizeClass))
 
             val themeSetting = state.theme
 
             PizzaCounterTheme(themeSetting) {
                 Navigation(applicationContext, state, viewModel::onEvent)
             }
+        }
+    }
+
+    private fun setLocale(state: PizzaCounterState) {
+        val languageTag = state.language.toLanguageTag()
+
+        if (VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val localeManager = applicationContext.getSystemService(LocaleManager::class.java)
+
+            if (languageTag == null) {
+                localeManager.applicationLocales = LocaleList.getEmptyLocaleList()
+            } else {
+                localeManager.applicationLocales = LocaleList.forLanguageTags(languageTag)
+            }
+        } else {
+            val appLocale = LocaleListCompat.forLanguageTags(languageTag)
+            AppCompatDelegate.setApplicationLocales(appLocale)
         }
     }
 }

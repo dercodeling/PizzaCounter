@@ -32,11 +32,15 @@ import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.LanguageOption
 import de.dercodeling.pizzacounter.domain.model.ThemeOption
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
+import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
     context: Context,
+    state: PizzaCounterState,
+    onEvent: (PizzaCounterEvent) -> Unit,
     onNavigateUp: () -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
@@ -94,9 +98,10 @@ fun SettingsScreen(
                                 stringResource(R.string.language_option_de)
                             )
                         ),
-                        LanguageOption.SYSTEM, // TODO: Get actual current setting
-                        onSelected = {
-                            // TODO: Save and apply
+                        state.language,
+                        onSelected = { bottomSheetOption ->
+                            if(bottomSheetOption is LanguageOption)
+                                onEvent(PizzaCounterEvent.SetLanguage(bottomSheetOption))
                         }
                     )
 
@@ -117,9 +122,10 @@ fun SettingsScreen(
                                 stringResource(R.string.theme_option_dark)
                             )
                         ),
-                        currentOption = ThemeOption.SYSTEM, // TODO: Get actual current setting
-                        onSelected = {
-                            // TODO: Save and apply
+                        currentOption = state.theme,
+                        onSelected = { bottomSheetOption ->
+                            if(bottomSheetOption is ThemeOption)
+                                onEvent(PizzaCounterEvent.SetTheme(bottomSheetOption))
                         }
                     )
                 }
@@ -132,9 +138,16 @@ fun SettingsScreen(
                         label = stringResource(R.string.setting_label_default_types)
                     ) { onDismiss ->
                         DefaultTypesBottomSheet (
-                            onDismiss = { _ -> //initialTypesInput ->
+                            currentValue = state.defaultTypes,
+                            onDismiss = { defaultTypesInput ->
+                                if (defaultTypesInput != null) {
+                                    val names = defaultTypesInput.split(",")
+                                    val namesClean = names.map { name -> name.trim() }
+
+                                    onEvent(PizzaCounterEvent.SetDefaultTypes(namesClean))
+                                }
+
                                 onDismiss()
-                                // TODO: Save and apply
                             }
                         )
                     }
@@ -146,9 +159,13 @@ fun SettingsScreen(
                         label = stringResource(R.string.setting_reset_warnings_label)
                     ) { onDismiss ->
                         ResetWarningsBottomSheet (
-                            onDismiss = { _, _ -> //isQuantitiesWarningEnabled, isTypesWarningEnabled ->
+                            state.showResetQuantitiesWarning,
+                            state.showResetTypesWarning,
+                            onDismiss = { showResetQuantitiesWarning, showResetTypesWarning ->
+                                onEvent(PizzaCounterEvent.SetShowResetQuantitiesWarning(showResetQuantitiesWarning))
+                                onEvent(PizzaCounterEvent.SetShowResetTypesWarning(showResetTypesWarning))
+
                                 onDismiss()
-                                // TODO: Save and apply
                             }
                         )
                     }

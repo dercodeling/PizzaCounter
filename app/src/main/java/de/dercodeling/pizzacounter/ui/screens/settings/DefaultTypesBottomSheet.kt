@@ -32,23 +32,24 @@ import kotlinx.coroutines.launch
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun DefaultTypesBottomSheet(
+    currentValue: List<String>,
     onDismiss: (String?) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
-    var input by remember { mutableStateOf( "Margherita, Prosciutto, Tonno" ) }
+    var input by remember { mutableStateOf( currentValue.joinToString(", ")) }
 
-    val closeAndApply: () -> Unit = {
+    val closeAndApply: (String?) -> Unit = { inputString ->
         scope.launch { sheetState.hide() }.invokeOnCompletion {
             if (!sheetState.isVisible) {
-                onDismiss(input)
+                onDismiss(inputString)
             }
         }
     }
 
     ModalBottomSheet(
-        onDismissRequest = { closeAndApply() },
+        onDismissRequest = { closeAndApply(null) },
         sheetState = sheetState,
         dragHandle = {},
         windowInsets = WindowInsets(0, 0, 0, 0)
@@ -69,7 +70,7 @@ fun DefaultTypesBottomSheet(
             // text field in order to let the user read the explanations above and because
             // it's less necessary here and therefore not worth the ugly opening animation
             OutlinedTextField(
-                label = { Text(stringResource(R.string.setting_default_types_input_label)) },
+                placeholder = { Text(stringResource(R.string.setting_default_types_input_label)) },
                 value = input,
                 onValueChange = { input = it },
                 modifier = Modifier
@@ -79,7 +80,7 @@ fun DefaultTypesBottomSheet(
                 ),
                 keyboardActions = KeyboardActions(
                     onDone = {
-                        closeAndApply()
+                        closeAndApply(input)
                     }
                 )
             )
@@ -90,7 +91,7 @@ fun DefaultTypesBottomSheet(
             ) {
                 TextButton(
                     onClick = {
-                        closeAndApply()
+                        closeAndApply(input)
                     },
                 ) {
                     Text(stringResource(R.string.button_save))

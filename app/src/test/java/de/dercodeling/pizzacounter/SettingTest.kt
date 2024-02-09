@@ -6,10 +6,10 @@ import de.dercodeling.pizzacounter.domain.model.ThemeOption
 import de.dercodeling.pizzacounter.domain.model.defaultTypesSettingFrom
 import de.dercodeling.pizzacounter.domain.model.defaultTypesSettingKey
 import de.dercodeling.pizzacounter.domain.model.languageSettingKey
-import de.dercodeling.pizzacounter.domain.model.resetQuantitiesWarningSettingFrom
-import de.dercodeling.pizzacounter.domain.model.resetQuantitiesWarningSettingKey
-import de.dercodeling.pizzacounter.domain.model.resetTypesWarningSettingFrom
-import de.dercodeling.pizzacounter.domain.model.resetTypesWarningSettingKey
+import de.dercodeling.pizzacounter.domain.model.showResetQuantitiesWarningSettingFrom
+import de.dercodeling.pizzacounter.domain.model.showResetQuantitiesWarningSettingKey
+import de.dercodeling.pizzacounter.domain.model.showResetTypesWarningSettingFrom
+import de.dercodeling.pizzacounter.domain.model.showResetTypesWarningSettingKey
 import de.dercodeling.pizzacounter.domain.model.settingFrom
 import de.dercodeling.pizzacounter.domain.model.themeSettingKey
 import org.junit.Test
@@ -59,13 +59,13 @@ class SettingTest {
     fun resetWarningSettingsTest() {
         for (value in listOf(true, false)) {
             assertEquals(
-                Setting(resetQuantitiesWarningSettingKey, value.toString()),
-                resetQuantitiesWarningSettingFrom(value)
+                Setting(showResetQuantitiesWarningSettingKey, value.toString()),
+                showResetQuantitiesWarningSettingFrom(value)
             )
 
             assertEquals(
-                Setting(resetTypesWarningSettingKey, value.toString()),
-                resetTypesWarningSettingFrom(value)
+                Setting(showResetTypesWarningSettingKey, value.toString()),
+                showResetTypesWarningSettingFrom(value)
             )
         }
     }
