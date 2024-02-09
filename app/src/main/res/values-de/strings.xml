@@ -37,7 +37,7 @@
     <string name="settings_group_behavior">Verhalten</string>
     <string name="settings_option_system">Systemstandard</string>
     <string name="setting_default_types">Standardsorten</string>
-    <string name="setting_explanation_default_types">Dies ist die Liste von Pizzasorten, auf die die App zurückgesetzt werden kann. Trenne Sortennamen dabei mit Kommas.</string>
+    <string name="setting_explanation_default_types">Dies ist die Liste von Pizzasorten, auf welche die App zurückgesetzt werden kann. Trenne Sortennamen dabei mit Kommas.</string>
     <string name="setting_label_default_types">Lege die Pizzasorten fest, auf die zurückgesetzt werden soll</string>
     <string name="heading_settings">Einstellungen</string>
     <string name="info_dialog_developer">Entwickelt von dercodeling</string>
