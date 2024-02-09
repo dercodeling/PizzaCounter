@@ -1,6 +1,8 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Sort
 import androidx.compose.material.icons.rounded.Add
@@ -23,6 +25,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +52,8 @@ fun MainScreen(
     onEvent: (PizzaListEvent) -> Unit,
     onNavigateToSettings: () -> Unit
 ) {
+    val isLargeScreenLayout = state.windowSizeClass?.widthSizeClass == WindowWidthSizeClass.Expanded
+    val topAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     val snackbarScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -59,8 +64,6 @@ fun MainScreen(
     if (state.pizzaTypes.isEmpty()) {
         onEvent(PizzaListEvent.LoadInitialPizzaTypes)
     }
-
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
 
     Scaffold(
         topBar = {
@@ -84,7 +87,7 @@ fun MainScreen(
                         )
                     }
                 },
-                scrollBehavior = scrollBehavior
+                scrollBehavior = topAppBarScrollBehavior
             )
         },
         bottomBar = {
@@ -130,43 +133,52 @@ fun MainScreen(
                             contentDescription = stringResource(R.string.button_add)
                         )
                     }
-                }
+                },
+                contentPadding = if(isLargeScreenLayout) PaddingValues(20.dp, 0.dp) else PaddingValues()
             )
         },
         snackbarHost = {
             SnackbarHost (snackbarHostState)
         },
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+        modifier = Modifier.nestedScroll(topAppBarScrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         val snackbarActionLabel = stringResource(R.string.snackbar_delete_button)
         val snackbarMessageNamePrefix = stringResource(R.string.snackbar_delete_message_name_prefix)
         val snackbarMessageNameSuffix = stringResource(R.string.snackbar_delete_message_name_suffix)
 
-        PizzaList(
-            state,
-            onEvent = { event ->
-                if (event is PizzaListEvent.DeletePizzaType && event.pizzaType.quantity > 0) {
-                    val pizzaType = event.pizzaType
+        val pizzaListOnEvent: (PizzaListEvent) -> Unit = { event ->
+            if (event is PizzaListEvent.DeletePizzaType && event.pizzaType.quantity > 0) {
+                val pizzaType = event.pizzaType
 
-                    snackbarScope.launch {
-                        val result = snackbarHostState
-                            .showSnackbar(
-                                message = snackbarMessageNamePrefix + pizzaType.name + snackbarMessageNameSuffix,
-                                actionLabel = snackbarActionLabel,
-                                duration = SnackbarDuration.Long
-                            )
-                        when (result) {
-                            SnackbarResult.ActionPerformed -> {
-                                onEvent(PizzaListEvent.AddPizzaType(pizzaType))
-                            }
-                            else -> {}
+                snackbarScope.launch {
+                    val result = snackbarHostState
+                        .showSnackbar(
+                            message = snackbarMessageNamePrefix + pizzaType.name + snackbarMessageNameSuffix,
+                            actionLabel = snackbarActionLabel,
+                            duration = SnackbarDuration.Long
+                        )
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            onEvent(PizzaListEvent.AddPizzaType(pizzaType))
                         }
+                        else -> {}
                     }
                 }
+            }
 
-                onEvent(event)
-            },
-            Modifier.padding(innerPadding))
+            onEvent(event)
+        }
+
+        var pizzaListModifier = Modifier.padding(innerPadding)
+        if (isLargeScreenLayout) {
+            pizzaListModifier = pizzaListModifier.safeContentPadding().padding(30.dp)
+        }
+
+        PizzaList(
+            state,
+            onEvent = pizzaListOnEvent,
+            pizzaListModifier
+        )
 
         if (showAddTypeBottomSheet) {
             val onDismiss: (PizzaType?) -> Unit = { newPizzaType ->
