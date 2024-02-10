@@ -10,11 +10,11 @@
 
 ### Functionality
 
+- Release 1.2.0
+
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
   (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
-
-- Add notes field to pizza types that can be edited with text field in expanded PizzaListItem (expand on click)
 
 ### UI
 

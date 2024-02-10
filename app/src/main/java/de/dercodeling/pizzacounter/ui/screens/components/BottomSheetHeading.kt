@@ -9,12 +9,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun BottomSheetHeading(text: String){
+fun BottomSheetHeading(
+    text: String,
+    modifier: Modifier = Modifier
+){
     Text(
         text = text,
         style = MaterialTheme.typography.titleSmall,
         color = MaterialTheme.colorScheme.primary,
-        modifier = Modifier.padding(5.dp)
+        modifier = modifier.padding(5.dp)
     )
 }
 

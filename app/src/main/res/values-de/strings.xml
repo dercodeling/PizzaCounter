@@ -10,7 +10,7 @@
     <string name="sorting_option_quantity_descending">Anzahl (absteigend)</string>
     <string name="button_increase">Erhöhen</string>
     <string name="button_decrease">Verringern</string>
-    <string name="hint_new_type">Neue Sorte</string>
+    <string name="label_new_type">Neue Sorte</string>
     <string name="button_settings">Einstellungen</string>
     <string name="reset_option_quantities">Mengen zurücksetzen</string>
     <string name="reset_option_types">Sorten zurücksetzen</string>
@@ -56,4 +56,12 @@
     <string name="snackbar_delete_button">Rückgängig</string>
     <string name="snackbar_delete_message_name_prefix">Sorte „</string>
     <string name="snackbar_delete_message_name_suffix">“ gelöscht</string>
+    <string name="long_press_label_edit_notes">Notizen bearbeiten</string>
+    <string name="label_edit_notes">Notizen</string>
+    <string name="heading_edit">Sorte bearbeiten</string>
+    <string name="label_edit_name">Name</string>
+    <string name="label_edit_quantity">Menge</string>
+    <string name="edit_name_already_exists">Eine Sorte mit diesem Namen existiert bereits!</string>
+    <string name="edit_name_is_empty">Name darf nicht leer sein!</string>
+    <string name="edit_quantity_is_not_valid">Menge ist nicht gültig!</string>
 </resources>

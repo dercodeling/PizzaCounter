@@ -147,7 +147,7 @@ fun MainScreen(
         val snackbarMessageNameSuffix = stringResource(R.string.snackbar_delete_message_name_suffix)
 
         val pizzaListOnEvent: (PizzaCounterEvent) -> Unit = { event ->
-            if (event is PizzaCounterEvent.DeletePizzaType && event.pizzaType.quantity > 0) {
+            if (event is PizzaCounterEvent.DeletePizzaType && event.showSnackbar && event.pizzaType.quantity > 0) {
                 val pizzaType = event.pizzaType
 
                 snackbarScope.launch {
@@ -189,7 +189,9 @@ fun MainScreen(
 
                 showAddTypeBottomSheet = false
             }
-            AddTypeBottomSheet(state, onDismiss)
+            AddTypeBottomSheet(
+                currentPizzaTypes = state.pizzaTypes,
+                onDismiss)
         }
 
         SortBottomSheet(

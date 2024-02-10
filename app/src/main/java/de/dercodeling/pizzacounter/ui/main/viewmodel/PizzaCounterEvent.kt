@@ -20,7 +20,8 @@ sealed interface PizzaCounterEvent {
     // PizzaList
     data object LoadInitialPizzaTypes: PizzaCounterEvent
     data class AddPizzaType(val pizzaType: PizzaType): PizzaCounterEvent
-    data class DeletePizzaType(val pizzaType: PizzaType): PizzaCounterEvent
+    data class DeletePizzaType(val pizzaType: PizzaType, val showSnackbar: Boolean): PizzaCounterEvent
+    data class UpdatePizzaType(val pizzaType: PizzaType): PizzaCounterEvent
     data class IncreaseQuantity(val pizzaType: PizzaType): PizzaCounterEvent
     data class DecreaseQuantity(val pizzaType: PizzaType): PizzaCounterEvent
     data class SetSortType(val sortType: SortType): PizzaCounterEvent

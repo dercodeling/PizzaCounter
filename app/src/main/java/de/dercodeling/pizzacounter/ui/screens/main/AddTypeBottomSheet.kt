@@ -30,12 +30,11 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
-import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
 import kotlinx.coroutines.launch
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-fun AddTypeBottomSheet(state: PizzaCounterState, onDismiss: (PizzaType?) -> Unit) {
+fun AddTypeBottomSheet(currentPizzaTypes: List<PizzaType>, onDismiss: (PizzaType?) -> Unit) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
 
@@ -64,7 +63,7 @@ fun AddTypeBottomSheet(state: PizzaCounterState, onDismiss: (PizzaType?) -> Unit
 
             TextField(
                 value = textFieldValue,
-                placeholder = { Text(stringResource(R.string.hint_new_type)) },
+                label = { Text(stringResource(R.string.label_new_type)) },
 
                 singleLine = true,
                 onValueChange = { textFieldValue = it },
@@ -96,7 +95,7 @@ fun AddTypeBottomSheet(state: PizzaCounterState, onDismiss: (PizzaType?) -> Unit
                 textFieldFocusRequester.requestFocus()
             }
 
-            val currentPizzaTypeNames = state.pizzaTypes.map { pizzaType -> pizzaType.name }
+            val currentPizzaTypeNames = currentPizzaTypes.map { pizzaType -> pizzaType.name }
 
             TextButton(
                 onClick = {

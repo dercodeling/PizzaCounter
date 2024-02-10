@@ -37,8 +37,11 @@ fun PizzaList(
             items = state.pizzaTypes,
             key = { it.name }
         ) { pizzaType ->
+            val otherPizzaTypes = state.pizzaTypes.filter { it != pizzaType }
+
             PizzaListItem(
                 pizzaType,
+                otherPizzaTypes = otherPizzaTypes,
                 onEvent,
                 onCompressLayout = { isCompactLayout = true },
                 isCompactLayout,

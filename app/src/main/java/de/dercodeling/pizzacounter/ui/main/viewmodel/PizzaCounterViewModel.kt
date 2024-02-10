@@ -186,6 +186,12 @@ class PizzaCounterViewModel(
                 }
             }
 
+            is PizzaCounterEvent.UpdatePizzaType -> {
+                viewModelScope.launch {
+                    dao.updatePizzaType(event.pizzaType)
+                }
+            }
+
             is PizzaCounterEvent.IncreaseQuantity -> {
                 viewModelScope.launch {
                     val current = event.pizzaType
