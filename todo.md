@@ -10,6 +10,8 @@
 
 ### Functionality
 
+- Check if share works as intended
+
 - Release 1.2.0
 
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
