@@ -230,7 +230,12 @@ class PizzaCounterViewModel(
                     var outString = event.shareStringPrefix
 
                     for (pizzaType in _pizzaTypes.value) {
-                        if(pizzaType.quantity>0) outString += "\n${pizzaType.quantity}× ${pizzaType.name}"
+                        if(pizzaType.quantity>0) {
+                            outString += "\n${pizzaType.quantity}× ${pizzaType.name}"
+                            if(pizzaType.notes.isNotEmpty()) {
+                                outstring += "\n(${pizzaType.notes})"
+                            }
+                        }
                     }
 
                     val sendIntent: Intent = Intent().apply {
