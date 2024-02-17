@@ -10,9 +10,9 @@
 
 ### Functionality
 
-- Check if share works as intended
-
 - Release 1.2.0
+
+- Add support for predictive back gesture (https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
 
 - Add adaptive layout for windowSizeClass.Medium with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
@@ -37,6 +37,8 @@
 (- Update app icon to reflect (hopefully :)) stable status)
 
 ## Implementation
+
+- Add multi-previews where useful (https://developer.android.com/jetpack/compose/tooling/previews#preview-multiple)
 
 - Organize and extract Padding values (and other style values?) into respective dedicated files in .ui.theme
 

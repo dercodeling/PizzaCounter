@@ -232,8 +232,9 @@ class PizzaCounterViewModel(
                     for (pizzaType in _pizzaTypes.value) {
                         if(pizzaType.quantity>0) {
                             outString += "\n${pizzaType.quantity}× ${pizzaType.name}"
+
                             if(pizzaType.notes.isNotEmpty()) {
-                                outstring += "\n(${pizzaType.notes})"
+                                outString += " (${pizzaType.notes})"
                             }
                         }
                     }
