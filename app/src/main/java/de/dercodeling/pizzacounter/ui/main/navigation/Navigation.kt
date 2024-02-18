@@ -54,5 +54,4 @@ fun Navigation(
             SettingsScreen(state, onEvent, onNavigateUpFromSettings, appVersion)
         }
     }
-
 }

@@ -43,12 +43,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
+import de.dercodeling.pizzacounter.domain.model.ThemeOption
 import de.dercodeling.pizzacounter.ui.screens.components.SwipeToDeleteContainer
 import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
 import de.dercodeling.pizzacounter.ui.screens.components.BottomSheetHeading
+import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 import kotlinx.coroutines.launch
 
@@ -344,26 +348,24 @@ fun EditNotesBottomSheet(
     }
 }
 
-@Preview
+class CompactParameterProvider: PreviewParameterProvider<Boolean> {
+    override val values: Sequence<Boolean>
+        get() = sequenceOf(false, true)
+}
+
+@Preview(apiLevel = 33)
 @Composable
-fun PizzaListItemPreview() {
+fun PizzaListItemPreview(
+    @PreviewParameter(CompactParameterProvider::class) isCompactLayout: Boolean
+) {
     val name = "Margherita"
     val quantity = 4
+    val notes = "Notes that are too long for one line"
 
-    val pizzaType = PizzaType(name, quantity)
-    val pizzaTypeWithNotes = PizzaType(name, quantity, "Notes that are too long for one line")
-
-    Column {
-        Text("Normal", color = Color.Gray)
-        PizzaListItem(pizzaType,emptyList(),{},{},false)
-
-        Text("Normal with notes", color = Color.Gray)
-        PizzaListItem(pizzaTypeWithNotes,emptyList(),{},{},false)
-
-        Text("Compressed", color = Color.Gray)
-        PizzaListItem(pizzaType,emptyList(),{},{},true)
-
-        Text("Compressed with notes", color = Color.Gray)
-        PizzaListItem(pizzaTypeWithNotes,emptyList(),{},{},true)
+    PizzaCounterTheme(themeSetting = ThemeOption.SYSTEM) {
+        Column {
+            PizzaListItem(PizzaType(name, quantity), emptyList(), {}, {}, isCompactLayout)
+            PizzaListItem(PizzaType(name, quantity, notes), emptyList(), {}, {}, isCompactLayout)
+        }
     }
 }
