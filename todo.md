@@ -1,10 +1,17 @@
+<style>
+  priority {
+    color: red;
+    font-weight: Bold;
+  }
+</style>
+
 # Todo
 
 ## Fixes
 
-- **Figure out how to change the window background (set from parent in themes.xml), in order to change
+- <priority>Figure out how to change the window background (set from parent in themes.xml), in order to change
   color of splash screen (maybe implement that properly?) and to prevent white transition artefacts
-  (which are caused by the fade in/out of the transition making the window background visible)**
+  (which are caused by the fade in/out of the transition making the window background visible)</priority>
 
 - Figure out why predictive back gestures aren't working between settings and main screen
 
@@ -33,6 +40,8 @@
 
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
 
+- Maybe add isExpanded to pizzaType, so that types (notes) stay expanded after relaunch
+
 (- Update app icon to reflect (hopefully :)) stable status)
 
 ## Implementation
@@ -46,9 +55,9 @@
 
 - Check .ui.screens for potentially needed refactoring
 
-- **Recreate tests for new database**
-- **Add test for combine function in view model**
-- **Add other tests like UI tests**
+- <priority>Recreate tests for new database</priority>
+- <priority>Add test for combine function in view model</priority>
+- <priority>Add other tests like UI tests</priority>
 
 # Notes
 
@@ -58,17 +67,16 @@
 
 Format:
 
-```markdown
+```
 <type>[optional scope]: <description>
 ```
 
-with type being on of the
-following: `feat:, fix:, build:, chore:, ci:, docs:, style:, refactor:, perf:, test:`
+with type being `feat`, `fix`, `build`, `chore`, `ci`, `docs`, `style`, `refactor`, `perf` or ` test`
 
 For details see [https://www.conventionalcommits.org/en/v1.0.0/#summary]
 
 ## Release checklist
 
 - [ ] Update version number and code
-- [ ] Build apk
+- [ ] Build APK
 - [ ] Create new release on GitHub
