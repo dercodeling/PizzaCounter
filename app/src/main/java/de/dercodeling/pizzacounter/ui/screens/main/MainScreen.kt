@@ -37,12 +37,15 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
 import de.dercodeling.pizzacounter.domain.model.SortType
+import de.dercodeling.pizzacounter.domain.model.ThemeOption
 import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
 import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
+import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 import kotlinx.coroutines.launch
 
 @Composable
@@ -171,7 +174,9 @@ fun MainScreen(
 
         var pizzaListModifier = Modifier.padding(innerPadding)
         if (isLargeScreenLayout) {
-            pizzaListModifier = pizzaListModifier.safeContentPadding().padding(30.dp)
+            pizzaListModifier = pizzaListModifier
+                .safeContentPadding()
+                .padding(30.dp)
         }
 
         PizzaList(
@@ -214,5 +219,20 @@ fun MainScreen(
             state = state,
             onEvent = onEvent
         )
+    }
+}
+
+@Preview(apiLevel = 33)
+@Composable
+fun MainScreenPreview() {
+    PizzaCounterTheme (themeSetting = ThemeOption.SYSTEM) {
+        MainScreen(PizzaCounterState(
+            pizzaTypes = listOf(
+                PizzaType("Arrabbiata",1),
+                PizzaType("Margherita",4),
+                PizzaType("Salami",0),
+                PizzaType("Tonno",3,"con cipolla rossa"),
+            )
+        ), {}, {})
     }
 }

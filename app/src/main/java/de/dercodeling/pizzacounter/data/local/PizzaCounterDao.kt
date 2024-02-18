@@ -40,7 +40,7 @@ interface PizzaCounterDao {
 
     // Table: setting
 
-    @Upsert()
+    @Upsert
     suspend fun upsertSetting(setting: Setting)
 
     @Query("SELECT * FROM setting WHERE `key`=:key")

@@ -18,20 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.dercodeling.pizzacounter.R
 
-/*val fontProvider = GoogleFont.Provider(
-    providerAuthority = "com.google.android.gms.fonts",
-    providerPackage = "com.google.android.gms",
-    certificates = R.array.com_google_android_gms_fonts_certs
-)
-
-val displayFontName = GoogleFont("Sansita Swashed") // Fugaz One
-val displayFontFamily = FontFamily(
-    Font(googleFont = displayFontName,
-        fontProvider = fontProvider,
-        weight = FontWeight.Black
-    )
-)*/
-
 @OptIn(ExperimentalTextApi::class)
 val displayLargeFontFamily = FontFamily(
     Font(
@@ -56,7 +42,7 @@ val displayMediumFontFamily = FontFamily(
     )
 )
 
-val Typography = Typography(
+val typography = Typography(
     displayLarge = TextStyle(
         fontFamily = displayLargeFontFamily,
         fontWeight = FontWeight.Black,
@@ -102,12 +88,12 @@ fun TypographyPreview() {
     Card {
         Column (Modifier.padding(15.dp))
         {
-            Text("$prefix Title large", style = Typography.displayLarge)
-            Text("$prefix Title large", style = Typography.displayMedium)
-            Text("$prefix Title large", style = Typography.titleLarge)
-            Text("$prefix Title large", style = Typography.titleMedium)
-            Text("$prefix Title small", style = Typography.titleSmall)
-            Text("$prefix Body large", style = Typography.bodyLarge)
+            Text("$prefix Title large", style = typography.displayLarge)
+            Text("$prefix Title large", style = typography.displayMedium)
+            Text("$prefix Title large", style = typography.titleLarge)
+            Text("$prefix Title large", style = typography.titleMedium)
+            Text("$prefix Title small", style = typography.titleSmall)
+            Text("$prefix Body large", style = typography.bodyLarge)
         }
     }
 }

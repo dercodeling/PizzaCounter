@@ -1,8 +1,5 @@
 package de.dercodeling.pizzacounter.ui.screens.settings
 
-import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -28,20 +25,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.LanguageOption
 import de.dercodeling.pizzacounter.domain.model.ThemeOption
 import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterEvent
 import de.dercodeling.pizzacounter.ui.main.viewmodel.PizzaCounterState
+import de.dercodeling.pizzacounter.ui.theme.PizzaCounterTheme
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun SettingsScreen(
-    context: Context,
     state: PizzaCounterState,
     onEvent: (PizzaCounterEvent) -> Unit,
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    appVersion: String?,
 ) {
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
 
@@ -178,24 +177,15 @@ fun SettingsScreen(
         }
 
         if (showInfoDialog) {
-            InfoDialog(getAppVersion(context), onDismissInfoDialog)
+            InfoDialog(appVersion, onDismissInfoDialog)
         }
     }
 }
 
-fun getAppVersion(
-    context: Context,
-): String? {
-    return try {
-        val packageManager = context.packageManager
-        val packageName = context.packageName
-        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
-        } else {
-            packageManager.getPackageInfo(packageName, 0)
-        }
-        packageInfo.versionName
-    } catch (e: Exception) {
-        null
+@Preview(apiLevel = 33)
+@Composable
+fun SettingsScreenPreview() {
+    PizzaCounterTheme(themeSetting = ThemeOption.SYSTEM) {
+        SettingsScreen(state = PizzaCounterState(), onEvent = {}, {}, appVersion = "x.y.z")
     }
 }

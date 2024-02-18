@@ -1,6 +1,5 @@
 package de.dercodeling.pizzacounter.ui.main.navigation
 
-import android.content.Context
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.EaseIn
 import androidx.compose.animation.core.EaseOut
@@ -16,9 +15,9 @@ import de.dercodeling.pizzacounter.ui.screens.settings.SettingsScreen
 
 @Composable
 fun Navigation(
-    context: Context,
     state: PizzaCounterState,
-    onEvent: (PizzaCounterEvent) -> Unit
+    onEvent: (PizzaCounterEvent) -> Unit,
+    appVersion: String?,
 ) {
     val navController = rememberNavController()
 
@@ -52,7 +51,7 @@ fun Navigation(
                 )
             }
         ) {
-            SettingsScreen(context, state, onEvent, onNavigateUpFromSettings)
+            SettingsScreen(state, onEvent, onNavigateUpFromSettings, appVersion)
         }
     }
 

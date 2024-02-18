@@ -1,6 +1,8 @@
 package de.dercodeling.pizzacounter.ui.main
 
 import android.app.LocaleManager
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION
 import android.os.Bundle
@@ -58,7 +60,7 @@ class MainActivity : ComponentActivity() {
             val themeSetting = state.theme
 
             PizzaCounterTheme(themeSetting) {
-                Navigation(applicationContext, state, viewModel::onEvent)
+                Navigation(state, viewModel::onEvent, getAppVersion(applicationContext))
             }
         }
     }
@@ -77,6 +79,23 @@ class MainActivity : ComponentActivity() {
         } else {
             val appLocale = LocaleListCompat.forLanguageTags(languageTag)
             AppCompatDelegate.setApplicationLocales(appLocale)
+        }
+    }
+
+    private fun getAppVersion(
+        context: Context,
+    ): String? {
+        return try {
+            val packageManager = context.packageManager
+            val packageName = context.packageName
+            val packageInfo = if (VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0))
+            } else {
+                packageManager.getPackageInfo(packageName, 0)
+            }
+            packageInfo.versionName
+        } catch (e: Exception) {
+            null
         }
     }
 }

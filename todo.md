@@ -2,23 +2,22 @@
 
 ## Fixes
 
-- Figure out how to change the window background (set from parent in themes.xml), in order to change
+- **Figure out how to change the window background (set from parent in themes.xml), in order to change
   color of splash screen (maybe implement that properly?) and to prevent white transition artefacts
-  (which are caused by the fade in/out of the transition making the window background visible)
+  (which are caused by the fade in/out of the transition making the window background visible)**
+
+- Figure out why predictive back gestures aren't working between settings and main screen
 
 ## Features
 
-### Functionality
+### Up next
 
 - Release 1.2.0
 
-- Add support for predictive back gesture (https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
-
-- Add adaptive layout for windowSizeClass.Medium with list on one side and 
+- Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
+  using Accompanist's TwoPane composable
   (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
-
-### UI
 
 - Improve AddTypeBottomSheet's animations
   - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a
@@ -38,7 +37,8 @@
 
 ## Implementation
 
-- Add multi-previews where useful (https://developer.android.com/jetpack/compose/tooling/previews#preview-multiple)
+- Add multi-previews to screen level composables once Android Studio bug has been fixed 
+  (https://issuetracker.google.com/issues/324732800)
 
 - Organize and extract Padding values (and other style values?) into respective dedicated files in .ui.theme
 
@@ -46,9 +46,9 @@
 
 - Check .ui.screens for potentially needed refactoring
 
-- Recreate tests for new database 
-- Add test for combine function in view model
-- Add other tests like UI tests
+- **Recreate tests for new database**
+- **Add test for combine function in view model**
+- **Add other tests like UI tests**
 
 # Notes
 
@@ -66,3 +66,9 @@ with type being on of the
 following: `feat:, fix:, build:, chore:, ci:, docs:, style:, refactor:, perf:, test:`
 
 For details see [https://www.conventionalcommits.org/en/v1.0.0/#summary]
+
+## Release checklist
+
+- [ ] Update version number and code
+- [ ] Build apk
+- [ ] Create new release on GitHub
