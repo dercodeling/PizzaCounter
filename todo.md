@@ -12,7 +12,7 @@
 
 ### Up next
 
-- Release 1.2.0
+- Once transition animation is fixed: Release 1.2.0
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
