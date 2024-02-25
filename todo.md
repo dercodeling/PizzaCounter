@@ -9,17 +9,13 @@
 
 ## Fixes
 
-- <priority>Figure out how to change the window background (set from parent in themes.xml), in order to change
-  color of splash screen (maybe implement that properly?) and to prevent white transition artefacts
-  (which are caused by the fade in/out of the transition making the window background visible)</priority>
-
 - Figure out why predictive back gestures aren't working between settings and main screen
 
 ## Features
 
 ### Up next
 
-- Once transition animation is fixed: Release 1.2.0
+- Release 1.2.0
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
@@ -28,7 +24,7 @@
 
 - Improve AddTypeBottomSheet's animations
   - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a
-    moment ) in LaunchEffect towards the end of AddTypeBottomSheet
+    moment) in LaunchEffect towards the end of AddTypeBottomSheet
   - Closing: Somehow hide keyboard in closeAndAddPizzaType for smoother animation without it
     causing a transparent screen to remain after closing of bottom sheet (this screen can be
     removed via back gesture)
@@ -41,6 +37,8 @@
 - Bottom navigation bar is not borderless on Samsung Galaxy Tab S7 FE like it is on OnePlus 8 Pro (https://developer.android.com/jetpack/compose/layouts/insets)
 
 - Maybe add isExpanded to pizzaType, so that types (notes) stay expanded after relaunch
+
+- Learn how to use backup_rules.xml and data_extraction_rules.xml
 
 (- Update app icon to reflect (hopefully :)) stable status)
 
