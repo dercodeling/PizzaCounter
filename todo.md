@@ -9,6 +9,8 @@
 
 ## Fixes
 
+- <priority>Figure out why Material You generates wrong colorScheme on Samsung Tablet (colorScheme already wrong in Theme.kt)</priority>
+
 - Figure out why predictive back gestures aren't working between settings and main screen
 
 ## Features

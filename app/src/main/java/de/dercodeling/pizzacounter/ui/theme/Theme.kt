@@ -76,4 +76,6 @@ fun PizzaCounterTheme(
         typography = typography,
         content = content
     )
+
+    //println(colorScheme)
 }
