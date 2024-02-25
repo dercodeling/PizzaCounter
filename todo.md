@@ -75,6 +75,6 @@ For details see [https://www.conventionalcommits.org/en/v1.0.0/#summary]
 
 ## Release checklist
 
-- [ ] Update version number and code
+- [x] Update version number and code
 - [ ] Build APK
 - [ ] Create new release on GitHub
