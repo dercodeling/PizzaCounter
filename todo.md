@@ -75,6 +75,10 @@ For details see [https://www.conventionalcommits.org/en/v1.0.0/#summary]
 
 ## Release checklist
 
-- [x] Update version number and code
-- [ ] Build APK
-- [ ] Create new release on GitHub
+1. [ ] Update version number and code
+2. [ ] Build APK
+3. [ ] Rename APK (`pizza_counter-vx.y.z.apk`)
+4. [ ] Create new release on GitHub
+   - [ ] Name release ("Version x.y.z - _[core changes]_")
+   - [ ] Summarize changes
+   - [ ] Attach APK
