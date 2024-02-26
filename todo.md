@@ -11,13 +11,17 @@
 
 - <priority>Figure out why Material You generates wrong colorScheme on Samsung Tablet (colorScheme already wrong in Theme.kt)</priority>
 
+- <priority>Figure out why list resets when all types are deleted individually</priority>
+
 - Figure out why predictive back gestures aren't working between settings and main screen
+
+- Save button of DefaultTypesBottomSheet is covered by keyboard on Tablet
 
 ## Features
 
 ### Up next
 
-- Release 1.2.0
+- Add setting for default quantity (e.g. 1 instead of 0 on add - implement with slider or textfield)
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
