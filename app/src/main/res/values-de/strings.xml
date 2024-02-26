@@ -13,11 +13,11 @@
     <string name="label_new_type">Neue Sorte</string>
     <string name="button_settings">Einstellungen</string>
     <string name="reset_option_quantities">Mengen zurücksetzen</string>
-    <string name="reset_option_types">Sorten zurücksetzen</string>
+    <string name="reset_option_types">Liste zurücksetzen</string>
     <string name="reset_quantities_dialog_header">Alle Mengen zurücksetzen?</string>
     <string name="reset_quantities_dialog_text">Sicher, dass du die Mengen aller Sorten auf null zurücksetzen willst?</string>
     <string name="dialog_cancel">Abbrechen</string>
-    <string name="reset_types_dialog_header">Alle Sorten zurücksetzen?</string>
+    <string name="reset_types_dialog_header">Liste zurücksetzen?</string>
     <string name="reset_types_dialog_text">Sicher, dass du die gesamte Liste zurücksetzen willst, inklusive aller Sorten und Mengen?</string>
     <string name="button_share">Teilen</string>
     <string name="share_string_prefix">Pizzen:</string>
@@ -27,7 +27,7 @@
     <string name="language_option_de">Deutsch</string>
     <string name="dialog_close">Schließen</string>
     <string name="info_dialog_version">Version %1$s</string>
-    <string name="info_dialog_github">Gib gerne auf GitHub Feedback:</string>
+    <string name="info_dialog_github">Gib mir gerne Feedback:</string>
     <string name="theme_option_light">Hell</string>
     <string name="theme_option_dark">Dunkel</string>
     <string name="settings_group_appearance">Erscheinungsbild</string>
@@ -63,4 +63,5 @@
     <string name="edit_name_already_exists">Eine Sorte mit diesem Namen existiert bereits!</string>
     <string name="edit_name_is_empty">Name darf nicht leer sein!</string>
     <string name="edit_quantity_is_not_valid">Menge ist nicht gültig!</string>
+    <string name="empty_list_hint">"Füge mit dem Knopf unten rechts die erste Sorte hinzu "</string>
 </resources>

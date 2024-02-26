@@ -18,7 +18,7 @@ sealed interface PizzaCounterEvent {
     data class SetShowResetTypesWarning(val showWarning: Boolean): PizzaCounterEvent
 
     // PizzaList
-    data object LoadInitialPizzaTypes: PizzaCounterEvent
+    data object LoadDefaultPizzaTypes: PizzaCounterEvent
     data class AddPizzaType(val pizzaType: PizzaType): PizzaCounterEvent
     data class DeletePizzaType(val pizzaType: PizzaType, val showSnackbar: Boolean): PizzaCounterEvent
     data class UpdatePizzaType(val pizzaType: PizzaType): PizzaCounterEvent

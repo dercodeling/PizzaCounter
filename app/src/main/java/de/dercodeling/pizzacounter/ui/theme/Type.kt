@@ -88,10 +88,10 @@ fun TypographyPreview() {
     Card {
         Column (Modifier.padding(15.dp))
         {
-            Text("$prefix Title large", style = typography.displayLarge)
-            Text("$prefix Title large", style = typography.displayMedium)
+            Text("$prefix Display large", style = typography.displayLarge)
+            Text("$prefix Display medium", style = typography.displayMedium)
             Text("$prefix Title large", style = typography.titleLarge)
-            Text("$prefix Title large", style = typography.titleMedium)
+            Text("$prefix Title medium", style = typography.titleMedium)
             Text("$prefix Title small", style = typography.titleSmall)
             Text("$prefix Body large", style = typography.bodyLarge)
         }

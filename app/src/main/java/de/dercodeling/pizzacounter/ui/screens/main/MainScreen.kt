@@ -64,10 +64,6 @@ fun MainScreen(
     var showSortBottomSheet by remember { mutableStateOf(false) }
     var showResetBottomSheet by remember { mutableStateOf(false) }
 
-    if (state.pizzaTypes.isEmpty()) {
-        onEvent(PizzaCounterEvent.LoadInitialPizzaTypes)
-    }
-
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -160,11 +156,8 @@ fun MainScreen(
                             actionLabel = snackbarActionLabel,
                             duration = SnackbarDuration.Long
                         )
-                    when (result) {
-                        SnackbarResult.ActionPerformed -> {
-                            onEvent(PizzaCounterEvent.AddPizzaType(pizzaType))
-                        }
-                        else -> {}
+                    if (result == SnackbarResult.ActionPerformed) {
+                        onEvent(PizzaCounterEvent.AddPizzaType(pizzaType))
                     }
                 }
             }
@@ -180,7 +173,7 @@ fun MainScreen(
         }
 
         PizzaList(
-            state,
+            state.pizzaTypes,
             onEvent = pizzaListOnEvent,
             pizzaListModifier
         )
@@ -231,6 +224,7 @@ fun MainScreenPreview() {
                 PizzaType("Arrabbiata",1),
                 PizzaType("Margherita",4),
                 PizzaType("Salami",0),
+                @Suppress("SpellCheckingInspection")
                 PizzaType("Tonno",3,"con cipolla rossa"),
             )
         ), {}, {})

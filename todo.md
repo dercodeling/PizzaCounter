@@ -3,15 +3,17 @@
     color: red;
     font-weight: Bold;
   }
+  optional {
+    color: gray;
+  }
 </style>
 
 # Todo
 
 ## Fixes
 
-- <priority>Figure out why Material You generates wrong colorScheme on Samsung Tablet (colorScheme already wrong in Theme.kt)</priority>
-
-- <priority>Figure out why list resets when all types are deleted individually</priority>
+- Figure out why Material You generates wrong colorScheme on Samsung Tablet 
+  (dynamicLightColorScheme() already wrong in Theme.kt → seems not to be caused by this module)
 
 - Figure out why predictive back gestures aren't working between settings and main screen
 
@@ -21,12 +23,18 @@
 
 ### Up next
 
-- Add setting for default quantity (e.g. 1 instead of 0 on add - implement with slider or textfield)
+- <priority>Add banner informing of new app version using GitHub API to see if version with current version number ("Get a release by tag name") is older ("created_at") than newest version ("Get the latest release")
+  (https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#get-the-latest-release)
+
+- Release 1.2.1
+
+- Add setting for default quantity (e.g. 1 instead of 0 on add - implement with slider or textField)
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
   menu with bottom app bar and permanently shown add-type-dialog on the other
   using Accompanist's TwoPane composable
   (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
+  \+ maybe do the same for settings with selection bottom sheet opening on the right
 
 - Improve AddTypeBottomSheet's animations
   - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a
@@ -37,6 +45,8 @@
 
 ### Down the road
 
+- Learn how to use backup_rules.xml and data_extraction_rules.xml
+
 - Improve smoothness of keyboard opening and closing animations → if smooth enough: automatically
   open keyboard too (code exists near the end of AddTypeBottomSheet as a LaunchedEffect)
 
@@ -44,9 +54,7 @@
 
 - Maybe add isExpanded to pizzaType, so that types (notes) stay expanded after relaunch
 
-- Learn how to use backup_rules.xml and data_extraction_rules.xml
-
-(- Update app icon to reflect (hopefully :)) stable status)
+- <optional>Update app icon to reflect (hopefully :)) stable status)</optional>
 
 ## Implementation
 
@@ -59,9 +67,9 @@
 
 - Check .ui.screens for potentially needed refactoring
 
-- <priority>Recreate tests for new database</priority>
-- <priority>Add test for combine function in view model</priority>
-- <priority>Add other tests like UI tests</priority>
+- <priority>Recreate tests for new database
+- <priority>Add test for combine function in view model
+- <priority>Add other tests like UI tests
 
 # Notes
 

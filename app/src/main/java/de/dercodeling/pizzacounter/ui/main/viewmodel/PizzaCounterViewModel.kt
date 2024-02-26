@@ -164,7 +164,7 @@ class PizzaCounterViewModel(
 
             // PizzaList
 
-            PizzaCounterEvent.LoadInitialPizzaTypes -> {
+            PizzaCounterEvent.LoadDefaultPizzaTypes -> {
                 viewModelScope.launch {
                     for (defaultType in state.value.defaultTypes) {
                         dao.insertPizzaType(PizzaType(defaultType,0))
@@ -221,7 +221,7 @@ class PizzaCounterViewModel(
             PizzaCounterEvent.ResetTypes -> {
                 viewModelScope.launch {
                     dao.clearTypes()
-                    onEvent(PizzaCounterEvent.LoadInitialPizzaTypes)
+                    onEvent(PizzaCounterEvent.LoadDefaultPizzaTypes)
                 }
             }
 
