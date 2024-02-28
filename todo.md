@@ -28,6 +28,8 @@
 
 - Release 1.2.1
 
+- Add button to lock/unlock list to main screen bottomAppBar
+
 - Add setting for default quantity (e.g. 1 instead of 0 on add - implement with slider or textField)
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
