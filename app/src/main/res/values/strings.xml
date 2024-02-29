@@ -63,4 +63,6 @@
     <string name="edit_name_is_empty">Name cannot be empty!</string>
     <string name="edit_quantity_is_not_valid">Quantity is not valid!</string>
     <string name="empty_list_hint">Add your first type with the button below</string>
+    <string name="new_version_banner_heading">New version available!</string>
+    <string name="new_version_banner_content">Download version %1$s now from GitHub</string>
 </resources>

@@ -10,6 +10,8 @@ import de.dercodeling.pizzacounter.domain.model.ThemeOption
 sealed interface PizzaCounterEvent {
     data class SetWindowSizeClass(val windowSizeClass: WindowSizeClass): PizzaCounterEvent
 
+    data class ReloadNewestVersionInfo(val currentVersionNumber: String?): PizzaCounterEvent
+
     // Settings
     data class SetLanguage(val languageOption: LanguageOption): PizzaCounterEvent
     data class SetTheme(val themeOption: ThemeOption): PizzaCounterEvent

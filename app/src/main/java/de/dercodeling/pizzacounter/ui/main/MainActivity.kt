@@ -51,16 +51,19 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val state by viewModel.state.collectAsState()
+            val appVersion = getAppVersion(applicationContext)
 
             setLocale(state)
 
             val windowSizeClass = calculateWindowSizeClass(this)
             viewModel.onEvent(PizzaCounterEvent.SetWindowSizeClass(windowSizeClass))
 
+            viewModel.onEvent(PizzaCounterEvent.ReloadNewestVersionInfo(appVersion))
+
             val themeSetting = state.theme
 
             PizzaCounterTheme(themeSetting) {
-                Navigation(state, viewModel::onEvent, getAppVersion(applicationContext))
+                Navigation(state, viewModel::onEvent, appVersion)
             }
         }
     }

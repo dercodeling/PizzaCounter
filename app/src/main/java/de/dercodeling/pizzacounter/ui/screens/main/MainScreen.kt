@@ -1,6 +1,9 @@
 package de.dercodeling.pizzacounter.ui.screens.main
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeContentPadding
 import androidx.compose.material.icons.Icons
@@ -10,6 +13,8 @@ import androidx.compose.material.icons.rounded.RestartAlt
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -35,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -175,7 +181,15 @@ fun MainScreen(
         PizzaList(
             state.pizzaTypes,
             onEvent = pizzaListOnEvent,
-            pizzaListModifier
+            pizzaListModifier,
+            prefixItem = {
+                val newestVersionInfo = state.newestVersionInfo
+                if(newestVersionInfo.isNewestVersion == false)
+                    NewVersionBanner(
+                        releaseUrl = newestVersionInfo.newestReleaseUrl,
+                        versionNumber = newestVersionInfo.newestVersionNumber
+                    )
+            }
         )
 
         if (showAddTypeBottomSheet) {
@@ -212,6 +226,38 @@ fun MainScreen(
             state = state,
             onEvent = onEvent
         )
+    }
+}
+
+@Composable
+fun NewVersionBanner(
+    versionNumber: String?,
+    releaseUrl: String?
+) {
+    val uriHandler = LocalUriHandler.current
+
+    Card (
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                if(!releaseUrl.isNullOrEmpty()) uriHandler.openUri(releaseUrl)
+            }
+            .padding(0.dp, 0.dp, 0.dp, 30.dp)
+    ) {
+        Column (
+            Modifier.padding(15.dp)
+        ) {
+            Text(
+                stringResource(R.string.new_version_banner_heading),
+                style = MaterialTheme.typography.headlineSmall
+            )
+            val safeVersionNumber = versionNumber ?: ""
+            Text(stringResource(R.string.new_version_banner_content,safeVersionNumber))
+        }
     }
 }
 

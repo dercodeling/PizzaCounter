@@ -23,8 +23,10 @@
 
 ### Up next
 
-- <priority>Add banner informing of new app version using GitHub API to see if version with current version number ("Get a release by tag name") is older ("created_at") than newest version ("Get the latest release")
-  (https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28#get-the-latest-release)
+- <priority>Check whether version checking works correctly and doesn't trigger rate limit quickly
+    → try inputing different "current version numbers" into second API call and watch result
+
+- Check whether all retrofit and coroutine dependencies are actually used
 
 - Release 1.2.1
 

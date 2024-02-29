@@ -64,4 +64,6 @@
     <string name="edit_name_is_empty">Name darf nicht leer sein!</string>
     <string name="edit_quantity_is_not_valid">Menge ist nicht gültig!</string>
     <string name="empty_list_hint">"Füge mit dem Knopf unten rechts die erste Sorte hinzu "</string>
+    <string name="new_version_banner_heading">Neue Version verfügbar!</string>
+    <string name="new_version_banner_content">Lade Version %1$s jetzt von GitHub herunter</string>
 </resources>

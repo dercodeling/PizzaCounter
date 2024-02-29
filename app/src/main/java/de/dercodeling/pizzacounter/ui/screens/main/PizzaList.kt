@@ -38,7 +38,8 @@ import de.dercodeling.pizzacounter.ui.theme.makeDeemphasizedVariant
 fun PizzaList(
     pizzaTypes: List<PizzaType>,
     onEvent: (PizzaCounterEvent) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    prefixItem: @Composable () -> Unit = {}
 ) {
     var isCompactLayout by remember { mutableStateOf(false) }
 
@@ -46,6 +47,11 @@ fun PizzaList(
         modifier.fillMaxWidth(),
         contentPadding = PaddingValues(15.dp,20.dp),
     ) {
+
+        item {
+            prefixItem()
+        }
+
         items(
             items = pizzaTypes,
             key = { it.name }
