@@ -12,8 +12,11 @@
 
 ## Fixes
 
-- <priority>Figure out why Material You generates wrong colorScheme on PreviewDynamicColors and Samsung Tablet 
-  (dynamicLightColorScheme() already wrong in Theme.kt → seems to be caused by some wrong configuration)
+- Figure out why Material You generates wrong colorScheme on PreviewDynamicColors and Samsung Tablet 
+  → dynamicLightColorScheme() already wrong in Theme.kt → seems to be caused by some wrong configuration;
+  at least on Tablet this seems to be caused by Samsung, because the official Material Catalog and
+  numerous Google apps (e.g. Gmail) also don't get it right
+  → https://github.com/material-components/material-components-android/issues/3924
 
 - Figure out why predictive back gestures aren't working between settings and main screen
 
@@ -66,6 +69,8 @@ using Accompanist's TwoPane composable
 - Check .ui.screens for potentially needed refactoring
 
 - <priority>Add tests for new view model
+  - Flow-logic
+  - Dao/onEvent-logic with instrumented test or mocked dao (https://developer.android.com/training/testing/local-tests#mocking-dependencies)
 - <priority>Add other tests like UI tests
 
 # Notes
