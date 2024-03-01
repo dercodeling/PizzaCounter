@@ -23,6 +23,12 @@
 
 ### Up next
 
+- Get Pairs for Map from LAnguageOption directly without strings.xml and hardcoded list
+
+- Add spanish locale
+
+- Replace time-based check in newestVersionInfo with simple binary alreadyCheckedThisSession by remember to really only call API once on launch
+
 - <priority>Check whether version checking works correctly and doesn't trigger rate limit quickly
     → try inputing different "current version numbers" into second API call and watch result
 

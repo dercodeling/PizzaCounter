@@ -23,7 +23,7 @@
     <string name="share_string_prefix">Pizzen:</string>
     <string name="button_back">Zurück</string>
     <string name="button_about">Über diese App</string>
-    <string name="language_option_en">Englisch</string>
+    <string name="language_option_en">English</string>
     <string name="language_option_de">Deutsch</string>
     <string name="dialog_close">Schließen</string>
     <string name="info_dialog_version">Version %1$s</string>
@@ -66,4 +66,5 @@
     <string name="empty_list_hint">"Füge mit dem Knopf unten rechts die erste Sorte hinzu "</string>
     <string name="new_version_banner_heading">Neue Version verfügbar!</string>
     <string name="new_version_banner_content">Lade Version %1$s jetzt von GitHub herunter</string>
+    <string name="language_option_es">Español</string>
 </resources>

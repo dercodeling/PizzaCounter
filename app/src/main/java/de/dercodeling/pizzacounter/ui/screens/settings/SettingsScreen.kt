@@ -95,6 +95,10 @@ fun SettingsScreen(
                             Pair(
                                 LanguageOption.DE,
                                 stringResource(R.string.language_option_de)
+                            ),
+                            Pair(
+                                LanguageOption.ES,
+                                stringResource(R.string.language_option_es)
                             )
                         ),
                         state.language,
