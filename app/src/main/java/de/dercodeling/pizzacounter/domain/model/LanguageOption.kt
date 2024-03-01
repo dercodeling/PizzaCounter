@@ -11,13 +11,14 @@ const val languageSettingsValueSystem = "lang_system"
 
 const val languageNameEn = "English"
 const val languageNameDe = "Deutsch"
+@Suppress("SpellCheckingInspection")
 const val languageNameEs = "Español"
 
 enum class LanguageOption: BottomSheetOption {
-    EN,
+    SYSTEM,
     DE,
-    ES,
-    SYSTEM;
+    EN,
+    ES;
 
     companion object {
         fun fromSettingsValue(fromString: String): LanguageOption? {
@@ -42,10 +43,19 @@ enum class LanguageOption: BottomSheetOption {
 
     fun toLanguageTag(): String? {
         return when(this) {
+            SYSTEM -> null
             EN -> languageTagEn
             DE -> languageTagDe
             ES -> languageTagEs
-            else -> null
+        }
+    }
+
+    fun toLanguageName(): String {
+        return when(this) {
+            SYSTEM -> ""
+            EN -> languageNameEn
+            DE -> languageNameDe
+            ES -> languageNameEs
         }
     }
 }

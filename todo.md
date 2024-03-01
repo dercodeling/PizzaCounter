@@ -23,16 +23,10 @@
 
 ### Up next
 
-- Get Pairs for Map from LAnguageOption directly without strings.xml and hardcoded list
-
-- Add spanish locale
-
 - Replace time-based check in newestVersionInfo with simple binary alreadyCheckedThisSession by remember to really only call API once on launch
 
 - <priority>Check whether version checking works correctly and doesn't trigger rate limit quickly
     → try inputing different "current version numbers" into second API call and watch result
-
-- Check whether all retrofit and coroutine dependencies are actually used
 
 - Release 1.2.1
 
@@ -41,10 +35,10 @@
 - Add setting for default quantity (e.g. 1 instead of 0 on add - implement with slider or textField)
 
 - Add adaptive layout for WindowWidthSizeClass.Expanded with list on one side and 
-  menu with bottom app bar and permanently shown add-type-dialog on the other
-  using Accompanist's TwoPane composable
-  (https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
-  \+ maybe do the same for settings with selection bottom sheet opening on the right
+menu with bottom app bar and permanently shown add-type-dialog on the other
+using Accompanist's TwoPane composable
+(https://developer.android.com/guide/topics/large-screens/large-screen-canonical-layouts#supporting_pane)
+\+ maybe do the same for settings with selection bottom sheet opening on the right
 
 - Improve AddTypeBottomSheet's animations
   - Opening: deal with lacking smoothness of animation (keyboard overlaps bottom sheet for a

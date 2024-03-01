@@ -23,8 +23,6 @@
     <string name="share_string_prefix">Pizzen:</string>
     <string name="button_back">Zurück</string>
     <string name="button_about">Über diese App</string>
-    <string name="language_option_en">English</string>
-    <string name="language_option_de">Deutsch</string>
     <string name="dialog_close">Schließen</string>
     <string name="info_dialog_version">Version %1$s</string>
     <string name="info_dialog_github">Gib mir gerne Feedback:</string>
@@ -50,7 +48,7 @@
     <string name="setting_reset_types_warning">Bei Sorten zurücksetzen</string>
     <string name="setting_reset_warnings">Warnungen vor dem Zurücksetzen</string>
     <string name="setting_reset_warnings_label">Bestätigung vor dem Zurücksetzen aktivieren oder deaktivieren</string>
-    <string name="setting_explanation_reset_warnings">Zeige vor dem Zurücksetzeen eine Warnung an</string>
+    <string name="setting_explanation_reset_warnings">Zeige vor dem Zurücksetzen eine Warnung an</string>
     <string name="info_dialog_version_long_press">Versionsnummer kopieren</string>
     <string name="snackbar_delete_button">Rückgängig</string>
     <string name="snackbar_delete_message_name_prefix">Sorte „</string>
@@ -63,8 +61,7 @@
     <string name="edit_name_already_exists">Eine Sorte mit diesem Namen existiert bereits!</string>
     <string name="edit_name_is_empty">Name darf nicht leer sein!</string>
     <string name="edit_quantity_is_not_valid">Menge ist nicht gültig!</string>
-    <string name="empty_list_hint">"Füge mit dem Knopf unten rechts die erste Sorte hinzu "</string>
+    <string name="empty_list_hint">Füge mit dem Knopf unten rechts die erste Sorte hinzu</string>
     <string name="new_version_banner_heading">Neue Version verfügbar!</string>
     <string name="new_version_banner_content">Lade Version %1$s jetzt von GitHub herunter</string>
-    <string name="language_option_es">Español</string>
 </resources>

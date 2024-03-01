@@ -22,8 +22,6 @@
     <string name="share_string_prefix">Pizzas:</string>
     <string name="button_back">Back</string>
     <string name="button_about">About</string>
-    <string name="language_option_en">English</string>
-    <string name="language_option_de">Deutsch</string>
     <string name="dialog_close">Close</string>
     <string name="info_dialog_version">Version %1$s</string>
     <string name="info_dialog_github">Give feedback on GitHub:</string>
@@ -65,5 +63,4 @@
     <string name="empty_list_hint">Add your first type with the button below</string>
     <string name="new_version_banner_heading">New version available!</string>
     <string name="new_version_banner_content">Download version %1$s now from GitHub</string>
-    <string name="language_option_es">Español</string>
 </resources>

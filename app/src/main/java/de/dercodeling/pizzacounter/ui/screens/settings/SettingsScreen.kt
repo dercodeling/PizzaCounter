@@ -80,27 +80,20 @@ fun SettingsScreen(
         ){
             item {
                 SettingsGroup (stringResource(R.string.settings_group_appearance)) {
+                    val languageOptionsMap = mutableMapOf(
+                        Pair(
+                            LanguageOption.SYSTEM,
+                            stringResource(R.string.settings_option_system)
+                        )
+                    )
+
+                    for (option in LanguageOption.entries.filter { it != LanguageOption.SYSTEM }) {
+                        languageOptionsMap[option] = option.toLanguageName()
+                    }
 
                     OptionsBottomSheetSetting(
                         stringResource(R.string.setting_language),
-                        mapOf(
-                            Pair(
-                                LanguageOption.SYSTEM,
-                                stringResource(R.string.settings_option_system)
-                            ),
-                            Pair(
-                                LanguageOption.EN,
-                                stringResource(R.string.language_option_en)
-                            ),
-                            Pair(
-                                LanguageOption.DE,
-                                stringResource(R.string.language_option_de)
-                            ),
-                            Pair(
-                                LanguageOption.ES,
-                                stringResource(R.string.language_option_es)
-                            )
-                        ),
+                        languageOptionsMap.toMap(),
                         state.language,
                         onSelected = { bottomSheetOption ->
                             if(bottomSheetOption is LanguageOption)
