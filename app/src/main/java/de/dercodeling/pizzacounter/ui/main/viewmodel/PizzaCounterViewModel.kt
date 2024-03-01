@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import de.dercodeling.pizzacounter.data.local.PizzaCounterDao
+import de.dercodeling.pizzacounter.data.remote.Release
 import de.dercodeling.pizzacounter.data.remote.RetrofitInstance
 import de.dercodeling.pizzacounter.domain.model.LanguageOption
 import de.dercodeling.pizzacounter.domain.model.NewestVersionInfo
@@ -30,15 +31,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import okhttp3.internal.http2.Header
-import okhttp3.internal.toHeaderList
+import okhttp3.Headers
 import retrofit2.HttpException
 import java.io.IOException
-import java.nio.charset.Charset
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.temporal.ChronoUnit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class PizzaCounterViewModel(
@@ -144,59 +142,45 @@ class PizzaCounterViewModel(
 
 
     fun onEvent(event: PizzaCounterEvent) {
-        when(event) {
-            is PizzaCounterEvent.ReloadNewestVersionInfo -> {
-                if (event.currentVersionNumber == null) return
+        val logOutput = true
+        val logTag = "PizzaCounterViewModel"
 
-                val dontCheckBefore = state.value.newestVersionInfo.dontCheckBefore
-                if (dontCheckBefore != null) {
-                    Log.i(
-                        "PizzaCounterViewModel",
-                        "Checked GitHub API recently, will retry in ${ChronoUnit.MINUTES.between(LocalDateTime.now(),dontCheckBefore)} minutes."
+        when (event) {
+            is PizzaCounterEvent.ReloadNewestVersionInfo -> {
+                val currentNewestVersionInfo = state.value.newestVersionInfo
+
+                if (event.currentVersionNumber == null) return
+                if (currentNewestVersionInfo.dontCheckAgain) {
+                    if (logOutput) Log.i(
+                        logTag,
+                        "Already checked GitHub API this session, using stored values $currentNewestVersionInfo"
                     )
-                    if (LocalDateTime.now().isBefore(dontCheckBefore)) return
+                    return
                 }
 
                 viewModelScope.launch {
-                    val timeoutMinutes: Long = 15
-
                     try {
-                        val latestReleaseResponse = RetrofitInstance.api.getLatestRelease()
+                        val latestRelease = RetrofitInstance.api.getLatestRelease()
+
                         val currentTag = "v${event.currentVersionNumber}"
-                        val currentReleaseResponse = RetrofitInstance.api.getReleaseByTag(currentTag)
+                        val currentRelease = RetrofitInstance.api.getReleaseByTag(currentTag)
 
-                        if (!latestReleaseResponse.isSuccessful || !currentReleaseResponse.isSuccessful) {
-                            val headers = currentReleaseResponse.headers().toHeaderList()
-                            val isBlockedByRateLimit = headers.contains(Header("x-ratelimit-remaining","0"))
+                        val headers = currentRelease.headers()
+                        val callsRemaining = headers["x-ratelimit-remaining"]?.toInt()
 
-                            if (isBlockedByRateLimit) {
-                                Log.w("PizzaCounterViewModel","GitHub API rate limit (60 calls per hour) has been reached")
+                        val bothCallsSuccessful = latestRelease.isSuccessful && currentRelease.isSuccessful
 
-                                val rateLimitResetHeader = headers.find { it.name.string(Charset.defaultCharset()).contentEquals("x-ratelimit-reset") }
-                                val resetEpochMillis = rateLimitResetHeader?.value?.string(Charset.defaultCharset())?.toLong() ?: 0
-                                val resetDateTime = Instant.ofEpochMilli(resetEpochMillis).atZone(ZoneId.systemDefault()).toLocalTime()
-                                Log.i("PizzaCounterViewModel","The API limit will reset at: $resetDateTime")
-
-                                _newestVersionInfo.value = _newestVersionInfo.value.copy(dontCheckBefore = LocalDateTime.now().plusMinutes(timeoutMinutes))
-                            } else {
-                                Log.w("PizzaCounterViewModel","GitHub API Call Response not successful")
-                            }
+                        if (!bothCallsSuccessful) {
+                            handleUnsuccessfulResponses(logOutput, logTag, headers)
                             return@launch
                         }
 
-                        val latestRelease = latestReleaseResponse.body()
-                        val currentRelease = currentReleaseResponse.body()
+                        if (logOutput)
+                            Log.i(logTag, "$callsRemaining calls remaining for GitHub API")
 
-                        if (latestRelease == null || currentRelease == null) return@launch
-
-                        val latestCreatedAt = LocalDateTime.parse(latestRelease.created_at.trimEnd('Z'))
-                        val currentCreatedAt = LocalDateTime.parse(currentRelease.created_at.trimEnd('Z'))
-
-                        _newestVersionInfo.value = NewestVersionInfo(
-                            isNewestVersion = !currentCreatedAt.isBefore(latestCreatedAt),
-                            newestVersionNumber = latestRelease.tag_name.trimStart('v'),
-                            newestReleaseUrl = latestRelease.html_url,
-                            dontCheckBefore = LocalDateTime.now().plusMinutes(timeoutMinutes)
+                        setNewestVersionInfo(
+                            latestRelease = latestRelease.body(),
+                            currentRelease = currentRelease.body()
                         )
                     } catch (e: IOException) {
                         e.printStackTrace()
@@ -246,7 +230,7 @@ class PizzaCounterViewModel(
             PizzaCounterEvent.LoadDefaultPizzaTypes -> {
                 viewModelScope.launch {
                     for (defaultType in state.value.defaultTypes) {
-                        dao.insertPizzaType(PizzaType(defaultType,0))
+                        dao.insertPizzaType(PizzaType(defaultType, 0))
                     }
                 }
             }
@@ -274,7 +258,7 @@ class PizzaCounterViewModel(
             is PizzaCounterEvent.IncreaseQuantity -> {
                 viewModelScope.launch {
                     val current = event.pizzaType
-                    dao.updatePizzaType(current.copy(quantity = current.quantity+1))
+                    dao.updatePizzaType(current.copy(quantity = current.quantity + 1))
                 }
             }
 
@@ -282,7 +266,7 @@ class PizzaCounterViewModel(
                 viewModelScope.launch {
                     val current = event.pizzaType
                     if (current.quantity > 0) {
-                        dao.updatePizzaType(current.copy(quantity = current.quantity-1))
+                        dao.updatePizzaType(current.copy(quantity = current.quantity - 1))
                     }
                 }
             }
@@ -309,10 +293,10 @@ class PizzaCounterViewModel(
                     var outString = event.shareStringPrefix
 
                     for (pizzaType in _pizzaTypes.value) {
-                        if(pizzaType.quantity>0) {
+                        if (pizzaType.quantity > 0) {
                             outString += "\n${pizzaType.quantity}× ${pizzaType.name}"
 
-                            if(pizzaType.notes.isNotEmpty()) {
+                            if (pizzaType.notes.isNotEmpty()) {
                                 outString += " (${pizzaType.notes})"
                             }
                         }
@@ -330,5 +314,43 @@ class PizzaCounterViewModel(
             }
 
         }
+    }
+
+    @Suppress("SameParameterValue")
+    private fun handleUnsuccessfulResponses(
+        logOutput: Boolean,
+        logTag: String,
+        headers: Headers
+    ) {
+        val rateLimitCallsRemaining = headers["x-ratelimit-remaining"]?.toInt()
+
+        if (rateLimitCallsRemaining == 0) {
+            if(logOutput) Log.w(logTag,"GitHub API rate limit (60 calls per hour) has been reached")
+
+            val resetEpochMillis = headers["x-ratelimit-reset"]?.toLong() ?: 0
+            val resetTime = Instant.ofEpochMilli(resetEpochMillis).atZone(ZoneId.systemDefault()).toLocalTime()
+            if(logOutput) Log.i(logTag,"The API limit will reset at: $resetTime")
+
+            _newestVersionInfo.value = _newestVersionInfo.value.copy(dontCheckAgain = true)
+        } else {
+            Log.w(logTag,"GitHub API Call Response not successful")
+        }
+    }
+
+    private fun setNewestVersionInfo(
+        latestRelease: Release?,
+        currentRelease: Release?
+    ) {
+        if (latestRelease == null || currentRelease == null) return
+
+        val latestCreatedAt = LocalDateTime.parse(latestRelease.created_at.trimEnd('Z'))
+        val currentCreatedAt = LocalDateTime.parse(currentRelease.created_at.trimEnd('Z'))
+
+        _newestVersionInfo.value = NewestVersionInfo(
+            isNewestVersion = !currentCreatedAt.isBefore(latestCreatedAt),
+            newestVersionNumber = latestRelease.tag_name.trimStart('v'),
+            newestReleaseUrl = latestRelease.html_url,
+            dontCheckAgain = true
+        )
     }
 }

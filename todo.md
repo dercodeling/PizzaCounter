@@ -23,12 +23,7 @@
 
 ### Up next
 
-- Replace time-based check in newestVersionInfo with simple binary alreadyCheckedThisSession by remember to really only call API once on launch
-
-- <priority>Check whether version checking works correctly and doesn't trigger rate limit quickly
-    → try inputing different "current version numbers" into second API call and watch result
-
-- Release 1.2.1
+- Release 1.2.1 and check new version banner
 
 - Add button to lock/unlock list to main screen bottomAppBar
 
