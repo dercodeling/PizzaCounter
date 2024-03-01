@@ -348,15 +348,15 @@ fun EditNotesBottomSheet(
     }
 }
 
-class CompactParameterProvider: PreviewParameterProvider<Boolean> {
+class IsCompactParameterProvider: PreviewParameterProvider<Boolean> {
     override val values: Sequence<Boolean>
         get() = sequenceOf(false, true)
 }
 
-@Preview(apiLevel = 33)
+@Preview
 @Composable
 fun PizzaListItemPreview(
-    @PreviewParameter(CompactParameterProvider::class) isCompactLayout: Boolean
+    @PreviewParameter(IsCompactParameterProvider::class) isCompactLayout: Boolean
 ) {
     val name = "Margherita"
     val quantity = 4

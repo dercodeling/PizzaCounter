@@ -12,8 +12,8 @@
 
 ## Fixes
 
-- Figure out why Material You generates wrong colorScheme on Samsung Tablet 
-  (dynamicLightColorScheme() already wrong in Theme.kt → seems not to be caused by this module)
+- <priority>Figure out why Material You generates wrong colorScheme on PreviewDynamicColors and Samsung Tablet 
+  (dynamicLightColorScheme() already wrong in Theme.kt → seems to be caused by some wrong configuration)
 
 - Figure out why predictive back gestures aren't working between settings and main screen
 
@@ -57,8 +57,7 @@ using Accompanist's TwoPane composable
 
 ## Implementation
 
-- Add multi-previews to screen level composables once Android Studio bug has been fixed 
-  (https://issuetracker.google.com/issues/324732800)
+- <priority>Add multi-previews to screen level composables
 
 - Organize and extract Padding values (and other style values?) into respective dedicated files in .ui.theme
 
@@ -66,8 +65,7 @@ using Accompanist's TwoPane composable
 
 - Check .ui.screens for potentially needed refactoring
 
-- <priority>Recreate tests for new database
-- <priority>Add test for combine function in view model
+- <priority>Add tests for new view model
 - <priority>Add other tests like UI tests
 
 # Notes

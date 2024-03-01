@@ -44,6 +44,10 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.PizzaType
@@ -261,10 +265,15 @@ fun NewVersionBanner(
     }
 }
 
-@Preview(apiLevel = 33)
+//@PreviewLightDark
+@PreviewDynamicColors
+//@PreviewFontScale
+//@PreviewScreenSizes
 @Composable
 fun MainScreenPreview() {
-    PizzaCounterTheme (themeSetting = ThemeOption.SYSTEM) {
+    PizzaCounterTheme (
+        themeSetting = ThemeOption.SYSTEM
+    ) {
         MainScreen(PizzaCounterState(
             pizzaTypes = listOf(
                 PizzaType("Arrabbiata",1),

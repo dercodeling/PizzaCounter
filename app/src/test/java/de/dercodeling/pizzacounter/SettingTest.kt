@@ -15,7 +15,6 @@ import de.dercodeling.pizzacounter.domain.model.themeSettingKey
 import org.junit.Test
 import org.junit.Assert.*
 
-
 class SettingTest {
     @Test
     fun languageOptionTest() {

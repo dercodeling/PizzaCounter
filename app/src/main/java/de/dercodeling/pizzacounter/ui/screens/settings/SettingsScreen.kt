@@ -26,6 +26,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewDynamicColors
+import androidx.compose.ui.tooling.preview.PreviewFontScale
+import androidx.compose.ui.tooling.preview.PreviewLightDark
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import de.dercodeling.pizzacounter.R
 import de.dercodeling.pizzacounter.domain.model.LanguageOption
@@ -179,7 +183,10 @@ fun SettingsScreen(
     }
 }
 
-@Preview(apiLevel = 33)
+@PreviewLightDark
+@PreviewDynamicColors
+@PreviewFontScale
+@PreviewScreenSizes
 @Composable
 fun SettingsScreenPreview() {
     PizzaCounterTheme(themeSetting = ThemeOption.SYSTEM) {

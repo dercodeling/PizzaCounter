@@ -142,7 +142,7 @@ class PizzaCounterViewModel(
 
 
     fun onEvent(event: PizzaCounterEvent) {
-        val logOutput = true
+        val logOutput = false
         val logTag = "PizzaCounterViewModel"
 
         when (event) {
