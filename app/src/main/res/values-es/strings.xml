@@ -24,7 +24,7 @@
     <string name="button_back">Volver</string>
     <string name="button_about">Sobre</string>
     <string name="language_option_en">English</string>
-    <string name="language_option_de">Deutsch</string>
+    <string name="language_option_de">Deuch</string>
     <string name="dialog_close">Cerrar</string>
     <string name="info_dialog_version">Versión %1$s</string>
     <string name="info_dialog_github">Danos tu opinión:</string>
